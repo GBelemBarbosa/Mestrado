@@ -12,8 +12,8 @@ out=5 #Number of outliers
 α=λ #α-strongly convex
 η=1
 β=m*η+λ #β-smoothness (gradiente β-Lipschitz)
-ϵ=10^-10 #Critério de parada caso tamanho do passo menor que ϵ
-t_max=100 #Número máximo de iterações
+ϵ=eps() #Critério de parada caso tamanho do passo menor que ϵ
+k_max=100 #Número máximo de iterações
 
 #Variáveis aleatórias
 xₒₚₜ=randn(n)

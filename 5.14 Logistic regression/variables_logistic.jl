@@ -9,7 +9,7 @@ n=50
 α=λ #α-strongly convex
 β=100 #β-smoothness (gradiente β-Lipschitz)
 ϵ=eps() #Critério de parada caso tamanho do passo menor que ϵ
-t_max=100 #Número máximo de iterações
+k_max=100 #Número máximo de iterações
 
 #Variáveis aleatórias
 θₒₚₜ=ones(n)

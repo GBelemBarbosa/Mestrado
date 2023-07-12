@@ -7,12 +7,14 @@ function ∇f(θ:: Vector{Float64}; X=X, y=y, λ=λ)
     return λ.*θ.-aux./(1 .+exp.(aux.*θ))
 end
 
-include("../Métodos/gradient_descent_plot.jl")
+tₖ(k:: Int64)=1/β #Stepsize rule p/ subgradient descent
 
-p₁=gradient_descent(f, ∇f, β, θ₀, t_max)
+include("../Métodos/subgradient_descent_plot.jl")
 
-include("../Métodos/acc_gradient_descent_plot.jl")
+p₁=subgradient_descent(f, ∇f, tₖ, copy(θ₀), k_max, ϵ)
 
-p₂=acc_gradient_descent(f, ∇f, β, θ₀, t_max)
+include("../Métodos/acc_subgradient_descent_plot.jl")
+
+p₂=acc_subgradient_descent(f, ∇f, β, copy(θ₀), k_max, ϵ)
 
 plot(p₁, p₂)
