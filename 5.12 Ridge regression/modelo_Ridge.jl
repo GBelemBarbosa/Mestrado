@@ -11,13 +11,13 @@ end
 
 ∇f(x:: Vector{Float64}; A=A, y=y, λ=λ)=A'*(A*x.-y).+λ.*x
 
-tₖ(k:: Int64)=1/β #Stepsize rule p/ subgradient descent
+tₖ(k:: Int64, ∂f:: Vector{Float64})=1/β #Stepsize rule p/ subgradient descent
 
-include("../Métodos/subgradient_descent_plot.jl")
+include("../Métodos/Descent methods/subgradient_descent_plot.jl")
 
 p₁=subgradient_descent(f, ∇f, tₖ, copy(x₀), k_max, ϵ)
 
-include("../Métodos/acc_subgradient_descent_plot.jl")
+include("../Métodos/Descent methods/acc_subgradient_descent_plot.jl")
 
 p₂=acc_subgradient_descent(f, ∇f, β, copy(x₀), k_max, ϵ)
 

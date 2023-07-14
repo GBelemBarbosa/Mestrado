@@ -63,12 +63,12 @@ PC(x:: Vector{Float64})=min.(max.(x, -1), 1) #Projeção de x em C
 
 tₖ(k:: Int64)=1/sqrt(k+1) #Stepsize rule
 
-include("../Métodos/stochastic_projected_subgradient_plot.jl")
+include("../Métodos/Projected methods/stochastic_projected_subgradient_plot.jl")
 
-p₁=projected_subgradient(Σfᵢ, E∂f, PC, tₖ, x₀, k_max)
+p₁=stochastic_projected_subgradient(Σfᵢ, E∂f, PC, tₖ, x₀, k_max)
 
 E∂f(x:: Vector{Float64}; m=m, Θ=Θ, Lf=Lf, ∂f=∂f)=(sqrt(2*Θ)*m/Lf).*∂f(x, rand(1:m))
 
-p₂=projected_subgradient(Σfᵢ, E∂f, PC, tₖ, x₀, k_max)
+p₂=stochastic_projected_subgradient(Σfᵢ, E∂f, PC, tₖ, x₀, k_max)
 
 plot(p₁, p₂)

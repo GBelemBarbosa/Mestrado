@@ -16,7 +16,7 @@ out=5 #Number of outliers
 k_max=100 #Número máximo de iterações
 
 #Variáveis aleatórias
-xₒₚₜ=randn(n)
+xₒₚₜ=randn(Float64, n)
 A=randn(Float64, (m, n))
 y=A*xₒₚₜ
 P=randperm(m) #Permutação para decidir quais serão outliers

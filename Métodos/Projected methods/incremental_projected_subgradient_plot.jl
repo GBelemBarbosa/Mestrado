@@ -14,7 +14,7 @@ function incremental_projected_subgradient(f:: Function, ∂f:: Function, PC:: F
             if ∂fmax<aux
                 ∂fmax=aux
             end
-            x=PC(x.-tₖ(k).*∂fxᵢ)
+            x=PC(x.-tₖ(k, ∂f).*∂fxᵢ)
 
             push!(hist, f(x))
         end
