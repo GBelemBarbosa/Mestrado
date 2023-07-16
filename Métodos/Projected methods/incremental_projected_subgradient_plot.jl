@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function incremental_projected_subgradient(f:: Function, ∂f:: Function, PC:: Function, m:: Int64, tₖ:: Function, x₀:: Array{T, N}, k_max:: Int64, ϵ:: K) where {T, N, K}
+function incremental_projected_subgradient(f:: Function, ∂f:: Function, PC:: Function, m:: Int64, tₖ:: Function, x₀:: Array{T, N}, k_max:: Int64, ϵ:: Number) where {T, N}
     x=x₀
     hist=[f(x)]
     
@@ -14,7 +14,7 @@ function incremental_projected_subgradient(f:: Function, ∂f:: Function, PC:: F
             if ∂fmax<aux
                 ∂fmax=aux
             end
-            x=PC(x.-tₖ(k, ∂f).*∂fxᵢ)
+            x=PC(x.-tₖ(k, ∂fxᵢ).*∂fxᵢ)
 
             push!(hist, f(x))
         end

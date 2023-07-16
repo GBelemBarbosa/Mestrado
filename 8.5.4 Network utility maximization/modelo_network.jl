@@ -8,7 +8,7 @@ g(x:: Vector{Float64}; cℓ=cℓ, 𝒮ℓ=𝒮ℓ, L=L)=[sum(x[i for i=𝒮ℓ(l
 
 oracle(λ:: Vector{Float64}; r=r, M=M, ℒ𝓈=ℒ𝓈, S=S)=[max(r(s)*M(s), 0) for s=1:S] 
 
-γₖ(k:: Int64, ∂f:: Vector{Float64})=1/sqrt(k+1) #Stepsize rule
+γₖ(k:: Int64, gx:: Vector{Float64})=1/sqrt(k+1) #Stepsize rule
 
 include("../Métodos/Projected methods/dual_projected_subgradient_plot.jl")
 

@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function subgradient_descent(f:: Function, ∂f:: Function, tₖ:: Function, x₀:: Array{T, N}, k_max:: Int64, ϵ:: K) where {T, N, K}
+function subgradient_descent(f:: Function, ∂f:: Function, tₖ:: Function, x₀:: Array{T, N}, k_max:: Int64, ϵ:: Number) where {T, N}
     x=x₀
     hist=[f(x)]
     
@@ -12,7 +12,7 @@ function subgradient_descent(f:: Function, ∂f:: Function, tₖ:: Function, x�
             break
         end
         
-        x.-=tₖ(k, ∂f).*∂fx
+        x.-=tₖ(k, ∂fx).*∂fx
 
         push!(hist, f(x))
     end 

@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function greedy_projection(PS:: Function, d:: Function, x₀:: Array{T, N}, k_max:: Int64, ϵ:: K) where {T, N, K}
+function greedy_projection(PS:: Function, d:: Function, x₀:: Array{T, N}, k_max:: Int64, ϵ:: Number) where {T, N}
     x=x₀
     hist=Float64[]
     

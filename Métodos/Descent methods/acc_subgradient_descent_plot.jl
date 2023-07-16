@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function acc_subgradient_descent(f:: Function, ∂f:: Function, β:: Number, x₀:: Array{T, N}, k_max:: Int64, ϵ:: K) where {T, N, K}
+function acc_subgradient_descent(f:: Function, ∂f:: Function, β:: Number, x₀:: Array{T, N}, k_max:: Int64, ϵ:: Number) where {T, N}
     x₋, x=x₀, x₀
     a₋, a=1, 1
     u=0

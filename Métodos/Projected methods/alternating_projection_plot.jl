@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function alternating_projection(PS₁:: Function, PS₂:: Function, d₁:: Function, x₀:: Array{T, N}, k_max:: Int64, ϵ:: K)  where {T, N, K}
+function alternating_projection(PS₁:: Function, PS₂:: Function, d₁:: Function, x₀:: Array{T, N}, k_max:: Int64, ϵ:: Number)  where {T, N}
     x=x₀
     hist=[d₁(x)]
     

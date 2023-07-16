@@ -36,7 +36,7 @@ dual_norm(x:: Vector{Float64})=norm(x, Inf)
 
 tₖ(k:: Int64, ∂f:: Vector{Float64})=sqrt(2/(k+1))/norm(∂f, Inf) #Stepsize rule p/ mirror descent
 
-include("../Métodos/Non-Euclidean Methods/mirror_descent_plot.jl")
+include("../Métodos/Non-Euclidean methods/mirror_descent_plot.jl")
 
 p₂=mirror_descent(f, ∂f, ∇ω, step, tₖ, dual_norm, x₀, k_max, ϵ)
 
