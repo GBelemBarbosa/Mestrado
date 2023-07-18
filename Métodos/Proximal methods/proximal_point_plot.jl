@@ -15,7 +15,7 @@ function proximal_point(g:: Function, prox_cg:: Function, c:: Number, x₀:: Arr
         end
     end 
 
-    println(dual_norm(∂f(x)), " ", f(x))
+    println(norm(x.-x_, Inf), " ", f(x))
     scatter(eachindex(hist), hist, 
                 title=L"g(x^{(k)})",
                 label=false)

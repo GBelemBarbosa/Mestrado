@@ -23,7 +23,6 @@ function acc_subgradient_descent(f:: Function, ∂f:: Function, β:: Number, x�
 
     println(norm(∂f(x), Inf), " ", f(x))
     scatter(eachindex(hist), hist, 
-                yscale=:log10,
                 title=L"f(x^{(k)})\ (accelerated)",
                 label=false)
 end

@@ -19,7 +19,6 @@ function subgradient_descent(f:: Function, ∂f:: Function, tₖ:: Function, x�
 
     println(norm(∂f(x), Inf), " ", f(x))
     scatter(eachindex(hist), hist, 
-                yscale=:log10,
                 title=L"f(x^{(k)})",
                 label=false)
 end

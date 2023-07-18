@@ -15,14 +15,12 @@ function NE_subgradient_descent(f:: Function, Λ∂f:: Function, Lₖ:: Function
         end
 
         L, x=Lₖ(L, k, x, ∂fx⃰, d∂x) #Backtracking mais atualização
-        x.-=step.*∂fx⃰
 
         push!(hist, f(x))
     end 
 
     println(norm(Λ∂f(x), Inf), " ", f(x))
     scatter(eachindex(hist), hist, 
-                yscale=:log10,
                 title=L"f(x^{(k)})",
                 label=false)
 end

@@ -19,6 +19,6 @@ p₁=subgradient_descent(f, ∇f, tₖ, copy(x₀), k_max, ϵ)
 
 include("../Métodos/Descent methods/acc_subgradient_descent_plot.jl")
 
-p₂=acc_subgradient_descent(f, ∇f, β, copy(x₀), k_max, ϵ)
+p₂=acc_subgradient_descent(f, ∇f, β, x₀, k_max, ϵ)
 
 plot(p₁, p₂)

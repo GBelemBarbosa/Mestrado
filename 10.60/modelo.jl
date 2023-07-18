@@ -1,5 +1,4 @@
 using LinearAlgebra
-using Roots
 
 include("variables.jl")
 

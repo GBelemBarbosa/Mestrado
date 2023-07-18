@@ -19,7 +19,7 @@ function proximal_subgradient(f:: Function, g:: Function, ∂f:: Function, Lₖ:
         push!(hist, fx+g(x))
     end 
 
-    println(dual_norm(∂f(x)), " ", f(x)+g(x))
+    println(norm(∂f(x), Inf), " ", f(x)+g(x))
     scatter(eachindex(hist), hist, 
                 title=L"F(x^{(k)})",
                 label=false)
