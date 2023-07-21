@@ -20,6 +20,6 @@ sp=sqrt(p)
 μ=2*nD*ϵ/(nD*sp+sqrt(p*nD^2+2*ϵ*Lf))/sp #Smoothing parameter p/ obter convergência em 𝛰(1/ϵ) iterações
 α=1 #Smooth approximation parameter
 Lhμ=α/μ #Smooth constant de hμ
-L=Lf+Lhμ #Smooth constant de Fμ
+L̃=Lf+Lhμ #Smooth constant de Fμ
 
 x₀=randn(Float64, n)

@@ -19,10 +19,10 @@ end
 
 proxμh(x:: Vector{Float64}; μ=μ)=(1-μ/max(norm(x, 2), μ)).*x
 
-proxμhfalse(x:: Vector{Float64}; L=L, proxμh=proxμh)=x.-proxμh(x) #Toma lugar de ∇f para que x.-∇fx./L=proxμh com L=1 (incorreto) na chamada
+proxμhfalse(L:: Number, x:: Vector{Float64}; proxμh=proxμh)=x.-proxμh(x) #Toma lugar de ∇Fμ para que y.-∇Fμy./L̃=proxμh(y) (com L̃=1 forçado)
 
 PC(x:: Vector{Float64})=min.(max.(x, -1), 1) #Projeção de x em C que é a caixa [-e, e]
     
 include("../Métodos/Proximal methods/S-FISTA_plot.jl")
 
-p=SFISTA(f, f, h, hμ, proxμhfalse, PC, 1, μ, α, x₀, k_max, eps())
+p=SFISTA(f, f, h, hμ, proxμhfalse, PC, 1-Lhμ, μ, α, x₀, k_max, eps()) #Lf=1-Lhμ=Lf-α/μ na chamada p/ q forçadamente L̃=Lf+α/μ=1 

@@ -2,8 +2,7 @@ using Distributions
 using LinearAlgebra
 
 #Dimensões & constantes
-n=30
-p=15
+n=5
 ϵ=eps() #Critério de parada
 k_max=100 #Número máximo de iterações
 

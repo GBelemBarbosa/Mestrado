@@ -33,8 +33,8 @@ function ∇Fμ(x:: Vector{Float64}; A=A, b=b, D=D, μ=μ, Τ=Τ)
     return A'*(A*x.-b).+D'*(Dx.-Τ(μ, Dx))./μ
 end
 
-proxgL(x:: Vector{Float64}; L=L, λ=λ, Τ=Τ)=Τ(λ/L, x)
+proxgL(L, x:: Vector{Float64}, λ=λ, Τ=Τ)=Τ(λ/L, x)
     
 include("../Métodos/Proximal methods/S-FISTA_plot.jl")
 
-p=SFISTA(f, g, h, hμ, ∇Fμ, proxgL, L, μ, α, x₀, k_max, eps())
+p=SFISTA(f, g, h, hμ, ∇Fμ, proxgL, Lf, μ, α, x₀, k_max, eps())

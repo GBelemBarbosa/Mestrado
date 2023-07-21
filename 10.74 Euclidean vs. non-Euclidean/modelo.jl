@@ -10,7 +10,7 @@ tₖ(k:: Int64, ∂f:: Vector{Float64}; Lf₂=Lf₂)=1/Lf₂
 
 include("../Métodos/Descent methods/subgradient_descent_plot.jl")
 
-p₁=subgradient_descent(f, ∂f, tₖ, copy(x₀), k_max, ϵ)
+p₁=subgradient_descent(f, ∂f, tₖ, copy(x₀), Int64(ceil(k_max/n)), ϵ) #Para entender o k_max/n, ver Remark 10.75
 
 function Λ∂f(x:: Vector{Float64}; A=A, b=b, n=n)
     maxabs, max=0.0, 0.0
