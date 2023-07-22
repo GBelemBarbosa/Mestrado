@@ -2,7 +2,7 @@ using Plots
 using LaTeXStrings
 
 #Versão para operador multiplicação por matriz
-function fast_dual_proximal_subgradient(f:: Function, g:: Function, step:: Function, Α:: Array{K, M}, Lₖ:: Function, y₀:: Array{T, N}, s:: Number, k_max:: Int64, ϵ:: Number) where {K, M, T, N}
+function fast_dual_proximal_subgradient(f:: Function, g:: Function, step:: Function, Α:: Array{Number, M}, Lₖ:: Function, y₀:: Array{Number, N}, s:: Number, k_max:: Int64, ϵ:: Number) where {M, N}
     w, y=y₀, y₀
     u=A'*y
     u_=u
@@ -35,7 +35,7 @@ function fast_dual_proximal_subgradient(f:: Function, g:: Function, step:: Funct
 end
 
 #Versão operador genérico
-function fast_dual_proximal_subgradient(f:: Function, g:: Function, step:: Function, Α:: Function, ΑT:: Function, Lₖ:: Function, y₀:: Array{T, N}, s:: Number, k_max:: Int64, ϵ:: Number) where {T, N}
+function fast_dual_proximal_subgradient(f:: Function, g:: Function, step:: Function, Α:: Function, ΑT:: Function, Lₖ:: Function, y₀:: Array{Number, N}, s:: Number, k_max:: Int64, ϵ:: Number) where {N}
     w, y=y₀, y₀
     u=ΑT(y)
     u_=u

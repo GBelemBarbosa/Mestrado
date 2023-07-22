@@ -15,11 +15,11 @@ step(x:: Vector{Float64}; d=d)=x.+d
 PC(x:: Vector{Float64}; n=n)=[min(x[1], 0); x[2:n]; x[n+1:2*n-1]; max(x[2*n], 0); x[2*n+1:end]./norm(x[2*n+1:end], 2)] #=Projeção no set 
 cuja primeira coordenada é não negativa, cuja última é não negativa, e na esfera unitária, respectivamente=#
 
-Lₖ(L:: Number, k:: Int64, y:: Vector{Float64}, Αx:: Vector{Float64}; b=b, PC=PC)=L, PC(Αx.-L*y)
+Lₖ(L:: Number, k:: Int64, y:: Vector{Float64}, Αx:: Vector{Float64}; PC=PC)=L, PC(Αx.-L*y)
 
 include("../Métodos/Proximal methods/dual_proximal_subgradient_plot.jl")
 
-p₁=dual_proximal_subgradient(f, g, step, Α, ΑT, Lₖ, y₀, LF, k_max, ϵ)
+p₁=dual_proximal_subgradient(f, g, step, Α, ΑT, Lₖ, copy(y₀), LF, k_max, ϵ)
 
 include("../Métodos/Proximal methods/fast_dual_proximal_subgradient_plot.jl")
 

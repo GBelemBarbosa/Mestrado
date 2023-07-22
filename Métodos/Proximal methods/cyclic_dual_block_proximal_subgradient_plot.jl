@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function C_DBPG(f:: Function, g:: Function, step:: Function, Lₖ:: Function, y₀:: Array{T, N}, s:: Vector{Number}, p:: Int64, n:: Int64, k_max:: Int64, ϵ:: Number) where  {T, N}
+function CDBPG(f:: Function, g:: Function, step:: Function, Lₖ:: Function, y₀:: Array{Number, N}, s:: Vector{Number}, p:: Int64, n:: Int64, k_max:: Int64, ϵ:: Number) where {N}
     y=y₀
     x=sumy=sum(y[i*n+1:(i+1)*n] for i=0:p-1)
     x_=x
@@ -20,9 +20,9 @@ function C_DBPG(f:: Function, g:: Function, step:: Function, Lₖ:: Function, y�
             if ∂xmax<aux
                 ∂xmax=aux
             end 
-            L[i], prox=Lₖ(L[i], i, k, y, x) #Backtracking mais prox computation
+            L[i], proxgᵢ=Lₖ(L[i], i, k, y, x) #Backtracking mais prox computation
             sumy.-=y[(i-1)*n+1:i*n]
-            aux=y[(i-1)*n+1:i*n].+=(prox.-x)./L[i]
+            aux=y[(i-1)*n+1:i*n].+=(proxgᵢ.-x)./L[i]
             sumy.+=aux
         end
 
@@ -33,6 +33,6 @@ function C_DBPG(f:: Function, g:: Function, step:: Function, Lₖ:: Function, y�
 
     println(norm(x.-x_, Inf), " ", f(x)+g(x))
     scatter(eachindex(hist), hist, 
-                title=L"F(x^{(k)})",
+                title=L"F(x^{(k, i)})",
                 label=false)
 end

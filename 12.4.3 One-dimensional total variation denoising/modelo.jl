@@ -28,6 +28,6 @@ p=scatter(eachindex(d), d, label=L"\textbf{d}")
 
 p₃=scatter(p, eachindex(x⃰), x⃰, label=L"\textbf{x*}")
 
-p₄=scatter(p, eachindex(x⃰f), x⃰f, label=L"\textbf{x*}"*" "*L"(fast)")
+p₄=scatter(p, eachindex(x⃰f), x⃰f, label=L"\textbf{x*}\ (fast)")
 
 plot(p₃, p₄)

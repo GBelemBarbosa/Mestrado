@@ -2,17 +2,18 @@ using Plots
 using LaTeXStrings
 using Random
 
-function randomized_proximal_subgradient(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{T, N}, s:: Vector{Number}, p:: Int64, k_max:: Int64) where {T, N}
+function randomized_proximal_subgradient(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{Number, N}, s:: Vector{Number}, p:: Int64, k_max:: Int64) where {N}
     x=x₀
     L=s
-    hist=[f(x)+g(x)]
+    fx=f(x)
+    hist=[fx+g(x)]
     
     for k=0:k_max
         iₖ=rand(1:p)
 
         ∂fxᵢ=∂f(x, iₖ)
-        fx=f(x)
         L[iₖ], x=Lₖ(L[iₖ], iₖ, k, x, fx, ∂fxᵢ) #Backtracking mais atualização
+        fx=f(x)
 
         push!(hist, fx+g(x))
     end 

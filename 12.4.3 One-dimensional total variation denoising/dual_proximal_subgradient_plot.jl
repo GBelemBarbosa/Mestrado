@@ -2,7 +2,7 @@ using Plots
 using LaTeXStrings
 
 #Versão para operador multiplicação por matriz
-function dual_proximal_subgradient(f:: Function, g:: Function, step:: Function, Α:: Array{K, M}, Lₖ:: Function, y₀:: Array{T, N}, s:: Number, k_max:: Int64, ϵ:: Number) where  {K, M, T, N}
+function dual_proximal_subgradient(f:: Function, g:: Function, step:: Function, Α:: Array{Number, M}, Lₖ:: Function, y₀:: Array{Number, N}, s:: Number, k_max:: Int64, ϵ:: Number) where  {M, N}
     y=y₀
     x=A'*y
     x_=x

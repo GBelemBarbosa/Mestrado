@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function R_DBPG(f:: Function, G:: Function, step:: Function, Lₖ:: Function, y₀:: Array{T, N}, s:: Vector{Number}, p:: Int64, n:: Int64, k_max:: Int64) where  {T, N}
+function RDBPG(f:: Function, G:: Function, step:: Function, Lₖ:: Function, y₀:: Array{Number, N}, s:: Vector{Number}, p:: Int64, n:: Int64, k_max:: Int64) where {N}
     y=y₀
     x=sumy=sum(y[i*n+1:(i+1)*n] for i=0:p-1)
     x_=x
@@ -14,9 +14,9 @@ function R_DBPG(f:: Function, G:: Function, step:: Function, Lₖ:: Function, y�
 
         push!(hist, f(x)+G(x))
 
-        L[iₖ], prox=Lₖ(L[iₖ], iₖ, k, y, x) #Backtracking mais prox computation
+        L[iₖ], proxgᵢ=Lₖ(L[iₖ], iₖ, k, y, x) #Backtracking mais prox computation
         sumy.-=y[(iₖ-1)*n+1:i*n]
-        aux=y[(iₖ-1)*n+1:i*n].+=(prox.-x)./L[iₖ]
+        aux=y[(iₖ-1)*n+1:i*n].+=(proxgᵢ.-x)./L[iₖ]
         sumy.+=aux
     end 
 

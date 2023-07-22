@@ -1,10 +1,11 @@
 using Plots
 using LaTeXStrings
 
-function proximal_subgradient(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{T, N}, s:: Vector{Number}, p:: Int64, k_max:: Int64, ϵ:: Number) where {T, N}
+function CBPG(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{Number, N}, s:: Vector{Number}, p:: Int64, block_index:: Vector{Tuple{Int64, Int64}}, k_max:: Int64, ϵ:: Number) where {N}
     x=x₀
     L=s
-    hist=[f(x)+g(x)]
+    fx=f(x)
+    hist=[fx+g(x)]
     
     for k=0:k_max
         ∂fmax=0.0
@@ -15,8 +16,8 @@ function proximal_subgradient(f:: Function, g:: Function, ∂f:: Function, Lₖ:
             if ∂fmax<aux
                 ∂fmax=aux
             end
+            L[i], x[block_index[i][1]:block_index[i][2]]=Lₖ(L[i], i, k, x, fx, ∂fxᵢ) #Backtracking mais atualização
             fx=f(x)
-            L[i], x=Lₖ(L[i], i, k, x, fx, ∂fxᵢ) #Backtracking mais atualização
 
             push!(hist, fx+g(x))
         end
