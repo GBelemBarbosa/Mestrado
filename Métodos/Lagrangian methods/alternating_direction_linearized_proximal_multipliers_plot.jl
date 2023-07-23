@@ -1,0 +1,34 @@
+using Plots
+using LaTeXStrings
+
+function AD_LPMM(H:: Function, A:: Array{<:Number, M}, B:: Array{<:Number, M}, c:: Array{<:Number, N}, proxh₁α:: Function, proxh₂β:: Function, ρ:: Number, α:: Number, β:: Number, y₀:: Array{<:Number, N}, k_max:: Int64, ϵ:: Number) where {M, N}
+    y=y₀
+    x=A'*y
+    Ax=A*x
+    z=B'*y
+    Bz=B*z
+    Aux=Ax.+Bz
+    hist=[H(x)]
+    
+    for k=0:k_max 
+        aux=y./ρ.-c       
+        x_, x=x, proxh₁α(x.-(ρ/α).*A'*(Aux.+aux))
+        Ax=A*x
+        z_, z=z, proxh₂β(z.-(ρ/β).*B'*(Ax.+Bz.+aux))
+        Bz=B*z
+
+        push!(hist, H(x))
+
+        if max(norm(x.-x_, Inf), norm(z.-z_, Inf))<ϵ
+            break
+        end
+
+        Aux=Ax.+Bz
+        y.+=ρ.*(Aux.-c)
+    end 
+
+    println(H(x))
+    scatter(eachindex(hist), hist, 
+                title=L"H(x^{(k)})",
+                label=false)
+end

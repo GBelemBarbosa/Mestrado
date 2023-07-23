@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function mirror_C(f:: Function, ∂f:: Function, ∇ω:: Function, step:: Function, tₖ:: Function, dual_norm:: Function, x₀:: Array{Number, N}, k_max:: Int64, ϵ:: Number) where {N}
+function mirror_C(f:: Function, ∂f:: Function, ∇ω:: Function, step:: Function, tₖ:: Function, dual_norm:: Function, x₀:: Array{<:Number, N}, k_max:: Int64, ϵ:: Number) where {N}
     x=x₀
     hist=[f(x)]
     

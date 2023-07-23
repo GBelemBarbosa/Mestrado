@@ -68,7 +68,7 @@ end
 @btime repeval(h₂, A, y, λ)
 
 #=
-function l(t:: Type{T}) where T
+function l(t:: Type{<:Number}) where T
     x=ones(T, 10)
 
     return sum(map(sin, x))

@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function CBPG(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{Number, N}, s:: Vector{Number}, p:: Int64, block_index:: Vector{Tuple{Int64, Int64}}, k_max:: Int64, ϵ:: Number) where {N}
+function CBPG(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number, N}, s:: Vector{<:Number}, p:: Int64, block_index:: Vector{<:Numberuple{Int64, Int64}}, k_max:: Int64, ϵ:: Number) where {N}
     x=x₀
     L=s
     fx=f(x)

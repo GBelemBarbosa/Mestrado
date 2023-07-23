@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function RGBCG(f:: Function, g:: Function, ∂f:: Function, ∂:: Function, tₖ:: Function, x₀:: Array{Number, N}, p:: Int64, block_index:: Vector{Tuple{Int64, Int64}}, k_max:: Int64) where {N}
+function RGBCG(f:: Function, g:: Function, ∂f:: Function, ∂:: Function, tₖ:: Function, x₀:: Array{<:Number, N}, p:: Int64, block_index:: Vector{<:Numberuple{Int64, Int64}}, k_max:: Int64) where {N}
     x=x₀
     hist=[f(x)+g(x)]
     

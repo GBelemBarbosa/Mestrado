@@ -2,8 +2,8 @@ using Distributions
 using LinearAlgebra
 
 #Dimensões & constantes
-n=50
 p=30
+n=50
 ϵ=eps() #Critério de parada
 k_max=20 #Número máximo de iterações
 σ=1

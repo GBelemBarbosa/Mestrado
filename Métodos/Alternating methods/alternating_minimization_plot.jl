@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function alternating_minimization(F:: Function, minimize:: Function, x₀:: Array{Number, N}, p:: Int64, block_index:: Vector{Tuple{Int64, Int64}}, k_max:: Int64, ϵ:: Number) where {N}
+function alternating_minimization(F:: Function, minimize:: Function, x₀:: Array{<:Number, N}, p:: Int64, block_index:: Vector{<:Numberuple{Int64, Int64}}, k_max:: Int64, ϵ:: Number) where {N}
     x=x₀
     Fx=F(x)
     hist=[Fx]
