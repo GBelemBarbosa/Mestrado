@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function CBPG(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number, N}, s:: Vector{<:Number}, p:: Int64, block_index:: Vector{<:Numberuple{Int64, Int64}}, k_max:: Int64, ϵ:: Number) where {N}
+function CBPG(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Vector{<:Number}, p:: Int64, block_index:: Vector{UnitRange{Int64}}, k_max:: Int64, ϵ:: Number) where {N}
     x=x₀
     L=s
     fx=f(x)
@@ -16,7 +16,7 @@ function CBPG(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀
             if ∂fmax<aux
                 ∂fmax=aux
             end
-            L[i], x[block_index[i][1]:block_index[i][2]]=Lₖ(L[i], i, k, x, fx, ∂fxᵢ) #Backtracking mais atualização
+            L[i], x[block_index[i]]=Lₖ(L[i], i, k, x, fx, ∂fxᵢ) #Backtracking mais atualização
             fx=f(x)
 
             push!(hist, fx+g(x))

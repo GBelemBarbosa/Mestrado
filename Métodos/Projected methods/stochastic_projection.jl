@@ -1,6 +1,6 @@
 using Random
 
-function sthocastic_projection(PS:: Function, x₀:: Array{<:Number, N}, m:: Int64, k_max:: Int64) where {N}
+function sthocastic_projection(PS:: Function, x₀:: Array{<:Number}, m:: Int64, k_max:: Int64) where {N}
     x=x₀
     
     for k=0:k_max

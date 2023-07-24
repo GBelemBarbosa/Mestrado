@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function SFISTA(f:: Function, g:: Function, h:: Function, hμ:: Function, ∇Fμ:: Function, prox_gL:: Function, Lf:: Number, μ:: Number, α:: Number, x₀:: Array{<:Number, N}, k_max:: Int64, ϵ:: Number) where {N}
+function SFISTA(f:: Function, g:: Function, h:: Function, hμ:: Function, ∇Fμ:: Function, prox_gL:: Function, Lf:: Number, μ:: Number, α:: Number, x₀:: Array{<:Number}, k_max:: Int64, ϵ:: Number) where {N}
     y, x=x₀, x₀
     t=1
     fx=f(x)+g(x)

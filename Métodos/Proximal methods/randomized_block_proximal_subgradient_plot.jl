@@ -2,7 +2,7 @@ using Plots
 using LaTeXStrings
 using Random
 
-function randomized_proximal_subgradient(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number, N}, s:: Vector{<:Number}, p:: Int64, k_max:: Int64) where {N}
+function randomized_proximal_subgradient(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Vector{<:Number}, p:: Int64, k_max:: Int64) where {N}
     x=x₀
     L=s
     fx=f(x)

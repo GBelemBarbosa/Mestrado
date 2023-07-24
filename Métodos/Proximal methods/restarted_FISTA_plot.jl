@@ -3,7 +3,7 @@ using LaTeXStrings
 
 include("FISTA.jl")
 
-function restarted_FISTA(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number, N}, s:: Number, k_max:: Int64, N:: Int64, ϵ:: Number) where {N}
+function restarted_FISTA(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Number, k_max:: Int64, N:: Int64, ϵ:: Number) where {N}
     z=x₀
     hist=[f(z)+g(z)]
     

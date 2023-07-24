@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function CDBPG(f:: Function, g:: Function, step:: Function, Lₖ:: Function, y₀:: Array{<:Number, N}, s:: Vector{<:Number}, p:: Int64, n:: Int64, k_max:: Int64, ϵ:: Number) where {N}
+function CDBPG(f:: Function, g:: Function, step:: Function, Lₖ:: Function, y₀:: Array{<:Number}, s:: Vector{<:Number}, p:: Int64, n:: Int64, k_max:: Int64, ϵ:: Number) where {N}
     y=y₀
     x=sumy=sum(y[i*n+1:(i+1)*n] for i=0:p-1)
     x_=x

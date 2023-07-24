@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function FISTA(∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number, N}, s:: Number, k_max:: Int64, ϵ:: Number) where {N}
+function FISTA(∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Number, k_max:: Int64, ϵ:: Number) where {N}
     y, x=x₀, x₀
     t=1
     L=s

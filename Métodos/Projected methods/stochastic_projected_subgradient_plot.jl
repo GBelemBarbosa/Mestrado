@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function stochastic_projected_subgradient(f:: Function, E∂f:: Function, PC:: Function, tₖ:: Function, x₀:: Array{<:Number, N}, k_max:: Int64) where {N}
+function stochastic_projected_subgradient(f:: Function, E∂f:: Function, PC:: Function, tₖ:: Function, x₀:: Array{<:Number}, k_max:: Int64) where {N}
     x=x₀
     hist=[f(x)]
     

@@ -14,8 +14,6 @@ p₁=subgradient_descent(f, ∇f, tₖ, copy(x₀), k_max, ϵ)
 
 include("../Métodos/Descent methods/acc_subgradient_descent_plot.jl")
 
-println(x₀[1])
 p₂=acc_subgradient_descent(f, ∇f, β, x₀, k_max, ϵ)
-println(x₀[1])
 
 plot(p₁, p₂)

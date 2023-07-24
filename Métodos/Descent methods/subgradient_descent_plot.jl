@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function subgradient_descent(f:: Function, ∂f:: Function, tₖ:: Function, x₀:: Array{<:Number, N}, k_max:: Int64, ϵ:: Number) where {N}
+function subgradient_descent(f:: Function, ∂f:: Function, tₖ:: Function, x₀:: Array{<:Number}, k_max:: Int64, ϵ:: Number)
     x=x₀
     hist=[f(x)]
     
