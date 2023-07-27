@@ -3,11 +3,11 @@ using Roots
 
 include("variables.jl")
 
-f(x:: Vector{Float64})=0
+f(x:: Vector{<:Number})=0
 
-h(x:: Vector{Float64})=norm(x, 2)
+h(x:: Vector{<:Number})=norm(x, 2)
 
-function hμ(x:: Vector{Float64}; μ=μ)
+function hμ(x:: Vector{<:Number}; μ=μ)
     nx=norm(x, 2)
     
     if nx>μ
@@ -17,11 +17,11 @@ function hμ(x:: Vector{Float64}; μ=μ)
     return (nx^2)/(2*μ)
 end
 
-proxμh(x:: Vector{Float64}; μ=μ)=(1-μ/max(norm(x, 2), μ)).*x
+proxμh(x:: Vector{<:Number}; μ=μ)=(1-μ/max(norm(x, 2), μ)).*x
 
-proxμhfalse(L:: Number, x:: Vector{Float64}; proxμh=proxμh)=x.-proxμh(x) #Toma lugar de ∇Fμ para que y.-∇Fμy./L̃=proxμh(y) (com L̃=1 forçado)
+proxμhfalse(L:: Number, x:: Vector{<:Number}; proxμh=proxμh)=x.-proxμh(x) #Toma lugar de ∇Fμ para que y.-∇Fμy./L̃=proxμh(y) (com L̃=1 forçado)
 
-PC(x:: Vector{Float64})=min.(max.(x, -1), 1) #Projeção de x em C que é a caixa [-e, e]
+PC(x:: Vector{<:Number})=min.(max.(x, -1), 1) #Projeção de x em C que é a caixa [-e, e]
     
 include("../Métodos/Proximal methods/S-FISTA_plot.jl")
 

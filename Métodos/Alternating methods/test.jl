@@ -1,11 +1,11 @@
 using BenchmarkTools
 
-function f(x:: Vector{Float64})
+function f(x:: Vector{<:Number})
     x_=ones(100)
     x_, x[1:20]=x, zeros(20)
 end
 
-function f₂(x:: Vector{Float64})
+function f₂(x:: Vector{<:Number})
     x_=ones(100)
     x_[1:20], x[1:20]=x[1:20], zeros(20)
 end

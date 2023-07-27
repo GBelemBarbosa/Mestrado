@@ -1,13 +1,13 @@
 include("variables_logistic.jl")
 using BenchmarkTools
 
-function ∇f(θ:: Vector{Float64}; X=X, y=y, λ=λ)
+function ∇f(θ:: Vector{<:Number}; X=X, y=y, λ=λ)
     aux=X'y
     e=exp.(-θ.*aux)
     return θ.*(λ.+aux.^2 .*e./(1 .+e))
 end
 
-function ∇g(θ:: Vector{Float64}; X=X, y=y, λ=λ)
+function ∇g(θ:: Vector{<:Number}; X=X, y=y, λ=λ)
     aux=X'y
     return θ.*(λ.+aux.^2 .*(1 .-1 ./(1 .+exp.(-θ.*aux))))
 end

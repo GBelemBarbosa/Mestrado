@@ -1,23 +1,23 @@
 include("variables_Ridge.jl")
 using BenchmarkTools
 
-f(x:: Vector{Float64})=((A*x.-y)⋅(A*x.-y)+λ*x⋅x)/2
-f(x:: Vector{Float64}, A:: Matrix{Float64}, y:: Vector{Float64}, λ:: Number)=((A*x.-y)⋅(A*x.-y)+λ*x⋅x)/2
-fᵣ(x:: Vector{Float64}; A=A, y=y, λ=λ)=((A*x.-y)⋅(A*x.-y)+λ*x⋅x)/2
+f(x:: Vector{<:Number})=((A*x.-y)⋅(A*x.-y)+λ*x⋅x)/2
+f(x:: Vector{<:Number}, A:: Matrix{Float64}, y:: Vector{<:Number}, λ:: Number)=((A*x.-y)⋅(A*x.-y)+λ*x⋅x)/2
+fᵣ(x:: Vector{<:Number}; A=A, y=y, λ=λ)=((A*x.-y)⋅(A*x.-y)+λ*x⋅x)/2
 
-g(x:: Vector{Float64})=(norm(A*x.-y)^2+λ*norm(x)^2)/2
-g(x:: Vector{Float64}, A:: Matrix{Float64}, y:: Vector{Float64}, λ:: Number)=(norm(A*x.-y)^2+λ*norm(x)^2)/2
-gᵣ(x:: Vector{Float64}; A=A, y=y, λ=λ)=(norm(A*x.-y)^2+λ*norm(x)^2)/2
+g(x:: Vector{<:Number})=(norm(A*x.-y)^2+λ*norm(x)^2)/2
+g(x:: Vector{<:Number}, A:: Matrix{Float64}, y:: Vector{<:Number}, λ:: Number)=(norm(A*x.-y)^2+λ*norm(x)^2)/2
+gᵣ(x:: Vector{<:Number}; A=A, y=y, λ=λ)=(norm(A*x.-y)^2+λ*norm(x)^2)/2
 
-function h(x:: Vector{Float64})
+function h(x:: Vector{<:Number})
     aux=A*x.-y
     return (aux⋅aux+λ*x⋅x)/2
 end
-function h(x:: Vector{Float64}, A:: Matrix{Float64}, y:: Vector{Float64}, λ:: Number)
+function h(x:: Vector{<:Number}, A:: Matrix{Float64}, y:: Vector{<:Number}, λ:: Number)
     aux=A*x.-y
     return (aux⋅aux+λ*x⋅x)/2
 end
-function hᵣ(x:: Vector{Float64}; A=A, y=y, λ=λ)
+function hᵣ(x:: Vector{<:Number}; A=A, y=y, λ=λ)
     aux=A*x.-y
     return (aux⋅aux+λ*x⋅x)/2
 end
@@ -43,7 +43,7 @@ function repeval(f:: Function)
     end
 end
 
-function repeval(f:: Function, A:: Matrix{Float64}, y:: Vector{Float64}, λ:: Number)
+function repeval(f:: Function, A:: Matrix{Float64}, y:: Vector{<:Number}, λ:: Number)
     for i in 1:10000
         res = f(randn(n), A, y, λ)
     end

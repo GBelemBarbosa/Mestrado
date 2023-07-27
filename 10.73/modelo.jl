@@ -1,11 +1,11 @@
-function Λ∂f(x:: Vector{Float64}, ∂f:: Function)
+function Λ∂f(x:: Vector{<:Number}, ∂f:: Function)
     ∂fx=∂f(x)
     iₖ=argmax(∂fx)
 
     return sign(∂fx[iₖ]).*Float64.(I[1:n, iₖ])
 end
 
-function Lₖ(L:: Number, k:: Int64, x:: Vector{Float64}, ∂fx⃰:: Vector{Float64}, d∂x:: Float64; η=η, γ=γ, f=f, dual_norm=dual_norm) #Backtracking procedure B4
+function Lₖ(L:: Number, k:: Int64, x:: Vector{<:Number}, ∂fx⃰:: Vector{<:Number}, d∂x:: Float64; η=η, γ=γ, f=f, dual_norm=dual_norm) #Backtracking procedure B4
     fx=f(x)
     step=d∂x/L
     aux=(γ/L)*d∂x^2

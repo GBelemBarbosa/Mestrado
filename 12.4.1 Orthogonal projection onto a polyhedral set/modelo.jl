@@ -2,13 +2,13 @@ using LinearAlgebra
 
 include("variables.jl")
 
-f(x:: Vector{Float64}; d=d)=norm(x.-d, 2)^2/2
+f(x:: Vector{<:Number}; d=d)=norm(x.-d, 2)^2/2
 
-g(x:: Vector{Float64})=0
+g(x:: Vector{<:Number})=0
 
-step(x:: Vector{Float64}; d=d)=x.+d
+step(x:: Vector{<:Number}; d=d)=x.+d
 
-Lₖ(L:: Number, k:: Int64, y:: Vector{Float64}, Ax:: Vector{Float64}; b=b)=L, min.(Ax.-L*y, b)
+Lₖ(L:: Number, k:: Int64, y:: Vector{<:Number}, Ax:: Vector{<:Number}; b=b)=L, min.(Ax.-L*y, b)
 
 include("../Métodos/Proximal methods/dual_proximal_subgradient_plot.jl")
 

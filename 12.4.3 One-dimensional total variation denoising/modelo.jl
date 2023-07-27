@@ -2,17 +2,17 @@ using LinearAlgebra
 
 include("variables.jl")
 
-f(x:: Vector{Float64}; d=d)=norm(x.-d, 2)^2/2
+f(x:: Vector{<:Number}; d=d)=norm(x.-d, 2)^2/2
 
-g(x:: Vector{Float64}; λ=λ)=λ*norm(x, 1)
+g(x:: Vector{<:Number}; λ=λ)=λ*norm(x, 1)
 
-step(x:: Vector{Float64}; d=d)=x.+d
+step(x:: Vector{<:Number}; d=d)=x.+d
 
 A=[(i==j)-(i+1==j) for i=1:n-1, j=1:n]
 
-Τ(λ:: Number, x:: Vector{Float64})=[max(abs(x[i])-λ, 0)*sign(x[i]) for i=1:length(x)] #Soft threshholding
+Τ(λ:: Number, x:: Vector{<:Number})=[max(abs(x[i])-λ, 0)*sign(x[i]) for i=1:length(x)] #Soft threshholding
 
-Lₖ(L:: Number, k:: Int64, y:: Vector{Float64}, Ax:: Vector{Float64}; b=b, Τ=Τ)=L, Τ(L*λ, Ax.-L*y)
+Lₖ(L:: Number, k:: Int64, y:: Vector{<:Number}, Ax:: Vector{<:Number}; b=b, Τ=Τ)=L, Τ(L*λ, Ax.-L*y)
 
 include("dual_proximal_subgradient_plot.jl")
 

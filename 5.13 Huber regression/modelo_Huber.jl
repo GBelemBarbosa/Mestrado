@@ -1,12 +1,12 @@
 include("variables_Huber.jl")
 
 hη(w:: Float64; η=η)=(abs(w)>η)*η*(abs(w)-η/2)+!(abs(w)>η)*w^2/2
-f(x:: Vector{Float64}; A=A, y=y, λ=λ, hη=hη)=sum(hη.(y.-A*x))+λ*norm(x)^2/2
+f(x:: Vector{<:Number}; A=A, y=y, λ=λ, hη=hη)=sum(hη.(y.-A*x))+λ*norm(x)^2/2
 
 ∂hη(w:: Float64; η=η)=(abs(w)>η)*η*sign(w)+!(abs(w)>η)*w
-∇f(x:: Vector{Float64}; A=A, y=y, λ=λ, ∂hη=∂hη)=λ.*x.-A'∂hη.(y.-A*x)
+∇f(x:: Vector{<:Number}; A=A, y=y, λ=λ, ∂hη=∂hη)=λ.*x.-A'∂hη.(y.-A*x)
 
-tₖ(k:: Int64, ∂f:: Vector{Float64})=1/β #Stepsize rule p/ subgradient descent
+tₖ(k:: Int64, ∂f:: Vector{<:Number})=1/β #Stepsize rule p/ subgradient descent
 
 include("../Métodos/Descent methods/subgradient_descent_plot.jl")
 

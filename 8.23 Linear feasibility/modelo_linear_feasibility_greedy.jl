@@ -1,6 +1,6 @@
 include("variables_linear_feasibility.jl")
 
-function PS(x:: Vector{Float64}, i:: Int64; A=A, b=b, m=m) #Projeções
+function PS(x:: Vector{<:Number}, i:: Int64; A=A, b=b, m=m) #Projeções
     if i>m
         return max.(x, 0)
     else
@@ -8,7 +8,7 @@ function PS(x:: Vector{Float64}, i:: Int64; A=A, b=b, m=m) #Projeções
     end
 end
 
-function d(x:: Vector{Float64}; A=A, b=b, m=m) #Distância máxima e índice da mesma
+function d(x:: Vector{<:Number}; A=A, b=b, m=m) #Distância máxima e índice da mesma
     d_max=0
 
     for i=1:m

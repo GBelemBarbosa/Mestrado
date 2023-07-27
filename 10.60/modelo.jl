@@ -2,13 +2,13 @@ using LinearAlgebra
 
 include("variables.jl")
 
-f(x:: Vector{Float64}; A=A, b=b)=norm(A*x.-b, 2)^2/2
+f(x:: Vector{<:Number}; A=A, b=b)=norm(A*x.-b, 2)^2/2
 
-g(x:: Vector{Float64}; λ=λ)=λ*norm(x, 1)
+g(x:: Vector{<:Number}; λ=λ)=λ*norm(x, 1)
 
-h(x:: Vector{Float64}; D=D)=norm(D*x, 1)
+h(x:: Vector{<:Number}; D=D)=norm(D*x, 1)
 
-function hμ(x:: Vector{Float64}; D=D, μ=μ, p=p)
+function hμ(x:: Vector{<:Number}; D=D, μ=μ, p=p)
     sum=0.0
     y=D*x
 
@@ -25,15 +25,15 @@ function hμ(x:: Vector{Float64}; D=D, μ=μ, p=p)
     return sum
 end
 
-Τ(λ:: Number, x:: Vector{Float64})=[max(abs(x[i])-λ, 0)*sign(x[i]) for i=1:length(x)] #Soft threshholding
+Τ(λ:: Number, x:: Vector{<:Number})=[max(abs(x[i])-λ, 0)*sign(x[i]) for i=1:length(x)] #Soft threshholding
 
-function ∇Fμ(x:: Vector{Float64}; A=A, b=b, D=D, μ=μ, Τ=Τ)
+function ∇Fμ(x:: Vector{<:Number}; A=A, b=b, D=D, μ=μ, Τ=Τ)
     Dx=D*x
 
     return A'*(A*x.-b).+D'*(Dx.-Τ(μ, Dx))./μ
 end
 
-proxgL(L, x:: Vector{Float64}, λ=λ, Τ=Τ)=Τ(λ/L, x)
+proxgL(L, x:: Vector{<:Number}, λ=λ, Τ=Τ)=Τ(λ/L, x)
     
 include("../Métodos/Proximal methods/S-FISTA_plot.jl")
 

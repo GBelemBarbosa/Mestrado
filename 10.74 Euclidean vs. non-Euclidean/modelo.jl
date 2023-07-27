@@ -2,17 +2,17 @@ using LinearAlgebra
 
 include("variables.jl")
 
-f(x:: Vector{Float64}; A=A, b=b)=x'*A*x/2+b'*x
+f(x:: Vector{<:Number}; A=A, b=b)=x'*A*x/2+b'*x
 
-∂f(x:: Vector{Float64}; A=A, b=b)=A*x.+b
+∂f(x:: Vector{<:Number}; A=A, b=b)=A*x.+b
 
-tₖ(k:: Int64, ∂f:: Vector{Float64}; Lf₂=Lf₂)=1/Lf₂
+tₖ(k:: Int64, ∂f:: Vector{<:Number}; Lf₂=Lf₂)=1/Lf₂
 
 include("../Métodos/Descent methods/subgradient_descent_plot.jl")
 
 p₁=subgradient_descent(f, ∂f, tₖ, copy(x₀), Int64(ceil(k_max/n)), ϵ) #Para entender o k_max/n, ver Remark 10.75
 
-function Λ∂f(x:: Vector{Float64}; A=A, b=b, n=n)
+function Λ∂f(x:: Vector{<:Number}; A=A, b=b, n=n)
     maxabs, max=0.0, 0.0
     iₖ=0
     
@@ -31,9 +31,9 @@ function Λ∂f(x:: Vector{Float64}; A=A, b=b, n=n)
     return vec
 end
 
-Lₖ(L:: Number, k:: Int64, x:: Vector{Float64}, ∂fx⃰:: Vector{Float64}, d∂x:: Float64)=L, x.-∂fx⃰./L
+Lₖ(L:: Number, k:: Int64, x:: Vector{<:Number}, ∂fx⃰:: Vector{<:Number}, d∂x:: Float64)=L, x.-∂fx⃰./L
 
-dual_norm(x:: Vector{Float64})=norm(x, Inf)
+dual_norm(x:: Vector{<:Number})=norm(x, Inf)
 
 include("../Métodos/Non-Euclidean methods/Non-Euclidean_subgradient_descent_plot.jl")
 
