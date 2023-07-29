@@ -11,10 +11,10 @@ tₖ(k:: Int64, ∂f:: Vector{<:Number})=1/β #Stepsize rule p/ subgradient desc
 
 include("../Métodos/Descent methods/subgradient_descent_plot.jl")
 
-p₁=subgradient_descent(f, ∇f, tₖ, copy(θ₀), k_max, ϵ)
+θ, p₁=subgradient_descent(f, ∇f, tₖ, copy(θ₀), k_max, ϵ)
 
 include("../Métodos/Descent methods/acc_subgradient_descent_plot.jl")
 
-p₂=acc_subgradient_descent(f, ∇f, β, θ₀, k_max, ϵ)
+θ, p₂=acc_subgradient_descent(f, ∇f, β, θ₀, k_max, ϵ)
 
 plot(p₁, p₂)

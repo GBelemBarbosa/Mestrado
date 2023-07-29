@@ -10,4 +10,4 @@ oracle(λ:: Vector{<:Number}; A=A, b=b, c=c, n=n)=Float64.(I[1:n, argmin(c+A'*λ
 
 include("../Métodos/Projected methods/dual_projected_subgradient_plot.jl")
 
-p=dual_projected_subgradient(f, g, oracle, γₖ, λ₀, k_max, ϵ)
+x, p=dual_projected_subgradient(f, g, oracle, γₖ, λ₀, k_max, ϵ)

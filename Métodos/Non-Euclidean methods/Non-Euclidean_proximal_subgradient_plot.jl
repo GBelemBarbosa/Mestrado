@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function NE_proximal_subgradient(f:: Function, g:: Function, ∂f:: Function, ∇ω:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Number, k_max:: Int64, ϵ:: Number) where {N}
+function NE_proximal_subgradient(f:: Function, g:: Function, ∂f:: Function, ∇ω:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Number, k_max:: Int64, ϵ:: Number) 
     x=x₀
     L=s
     hist=[f(x)+g(x)]
@@ -21,7 +21,7 @@ function NE_proximal_subgradient(f:: Function, g:: Function, ∂f:: Function, �
     end 
 
     println(dual_norm(∂f(x)), " ", f(x)+g(x))
-    scatter(eachindex(hist), hist, 
+    x, scatter(eachindex(hist), hist, 
                 title=L"F(x^{(k)})",
                 label=false)
 end

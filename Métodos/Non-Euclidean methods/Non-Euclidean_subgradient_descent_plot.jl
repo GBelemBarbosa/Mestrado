@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function NE_subgradient_descent(f:: Function, Λ∂f:: Function, Lₖ:: Function, dual_norm:: Function, x₀:: Array{<:Number}, s:: Number, k_max:: Int64, ϵ:: Number) where {N}
+function NE_subgradient_descent(f:: Function, Λ∂f:: Function, Lₖ:: Function, dual_norm:: Function, x₀:: Array{<:Number}, s:: Number, k_max:: Int64, ϵ:: Number) 
     x=x₀
     L=s
     hist=[f(x)]
@@ -20,7 +20,7 @@ function NE_subgradient_descent(f:: Function, Λ∂f:: Function, Lₖ:: Function
     end 
 
     println(norm(Λ∂f(x), Inf), " ", f(x))
-    scatter(eachindex(hist), hist, 
+    x, scatter(eachindex(hist), hist, 
                 title=L"f(x^{(k)})",
                 label=false)
 end

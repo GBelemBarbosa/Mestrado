@@ -10,7 +10,7 @@ tₖ(k:: Int64, ∂f:: Vector{<:Number}; Lf₂=Lf₂)=1/Lf₂
 
 include("../Métodos/Descent methods/subgradient_descent_plot.jl")
 
-p₁=subgradient_descent(f, ∂f, tₖ, copy(x₀), Int64(ceil(k_max/n)), ϵ) #Para entender o k_max/n, ver Remark 10.75
+x, p₁=subgradient_descent(f, ∂f, tₖ, copy(x₀), Int64(ceil(k_max/n)), ϵ) #Para entender o k_max/n, ver Remark 10.75
 
 function Λ∂f(x:: Vector{<:Number}; A=A, b=b, n=n)
     maxabs, max=0.0, 0.0
@@ -37,6 +37,6 @@ dual_norm(x:: Vector{<:Number})=norm(x, Inf)
 
 include("../Métodos/Non-Euclidean methods/Non-Euclidean_subgradient_descent_plot.jl")
 
-p₂=NE_subgradient_descent(f, Λ∂f, Lₖ, dual_norm, x₀, Lf₁, k_max, ϵ)
+x, p₂=NE_subgradient_descent(f, Λ∂f, Lₖ, dual_norm, x₀, Lf₁, k_max, ϵ)
 
 plot(p₁, p₂)

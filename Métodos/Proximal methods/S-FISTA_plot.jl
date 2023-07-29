@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function SFISTA(f:: Function, g:: Function, h:: Function, hμ:: Function, ∇Fμ:: Function, prox_gL:: Function, Lf:: Number, μ:: Number, α:: Number, x₀:: Array{<:Number}, k_max:: Int64, ϵ:: Number) where {N}
+function SFISTA(f:: Function, g:: Function, h:: Function, hμ:: Function, ∇Fμ:: Function, prox_gL:: Function, Lf:: Number, μ:: Number, α:: Number, x₀:: Array{<:Number}, k_max:: Int64, ϵ:: Number) 
     y, x=x₀, x₀
     t=1
     fx=f(x)+g(x)
@@ -26,7 +26,7 @@ function SFISTA(f:: Function, g:: Function, h:: Function, hμ:: Function, ∇Fμ
 
     fx=f(x)+g(x)
     println(norm(∇Fμ(y), Inf), " ", fx+h(x), " ", fx+hμ(x))
-    scatter(eachindex(hist[begin:2:end]), [hist[begin:2:end], hist[2:2:end]], 
+    x, scatter(eachindex(hist[begin:2:end]), [hist[begin:2:end], hist[2:2:end]], 
                 title=L"F(x^{(k)})"*" e "*L"F_\mu(x^{(k)})",
                 label=[L"F(x^{(k)})" L"F_\mu(x^{(k)})"])
 end

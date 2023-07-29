@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function alternating_minimization(F:: Function, minimize:: Function, x₀:: Array{<:Number}, p:: Int64, block_index:: Vector{UnitRange{Int64}}, k_max:: Int64, ϵ:: Number) where {N}
+function alternating_minimization(F:: Function, minimize:: Function, x₀:: Array{<:Number}, p:: Int64, block_index:: Vector{UnitRange{Int64}}, k_max:: Int64, ϵ:: Number) 
     x=x₀
     Fx=F(x)
     hist=[Fx]
@@ -27,7 +27,7 @@ function alternating_minimization(F:: Function, minimize:: Function, x₀:: Arra
     end 
 
     println(∂xᵢmax, " ", F(x))
-    scatter(eachindex(hist), hist, 
+    x, scatter(eachindex(hist), hist, 
                 title=L"F(x^{(k, i)})",
                 label=false)
 end

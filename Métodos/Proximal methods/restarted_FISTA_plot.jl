@@ -3,7 +3,7 @@ using LaTeXStrings
 
 include("FISTA.jl")
 
-function restarted_FISTA(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Number, k_max:: Int64, N:: Int64, ϵ:: Number) where {N}
+function restarted_FISTA(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Number, k_max:: Int64, N:: Int64, ϵ:: Number) 
     z=x₀
     hist=[f(z)+g(z)]
     
@@ -18,7 +18,7 @@ function restarted_FISTA(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Fun
     end 
 
     println(dual_norm(∂f(z)), " ", f(z)+g(z))
-    scatter(eachindex(hist), hist, 
+    x, scatter(eachindex(hist), hist, 
                 title=L"F(x^{(N*k)})",
                 label=false)
 end

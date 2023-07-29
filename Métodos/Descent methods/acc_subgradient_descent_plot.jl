@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function acc_subgradient_descent(f:: Function, ∂f:: Function, β:: Number, x₀:: Array{<:Number}, k_max:: Int64, ϵ:: Number) where {N}
+function acc_subgradient_descent(f:: Function, ∂f:: Function, β:: Number, x₀:: Array{<:Number}, k_max:: Int64, ϵ:: Number) 
     x₋, x=x₀, x₀
     a₋, a=1, 1
     u=0
@@ -22,7 +22,7 @@ function acc_subgradient_descent(f:: Function, ∂f:: Function, β:: Number, x�
     end 
 
     println(norm(∂f(x), Inf), " ", f(x))
-    scatter(eachindex(hist), hist, 
+    x, scatter(eachindex(hist), hist, 
                 title=L"f(x^{(k)})\ (accelerated)",
                 label=false)
 end

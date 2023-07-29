@@ -14,11 +14,11 @@ A=[(i==j)-(i+1==j) for i=1:n-1, j=1:n]
 
 Lₖ(L:: Number, k:: Int64, y:: Vector{<:Number}, Ax:: Vector{<:Number}; b=b, Τ=Τ)=L, Τ(L*λ, Ax.-L*y)
 
-include("dual_proximal_subgradient_plot.jl")
+include("../Métodos/Proximal methods/dual_proximal_subgradient_plot.jl")
 
 x⃰, p₁=dual_proximal_subgradient(f, g, step, A, Lₖ, y₀, LF, k_max, ϵ)
 
-include("fast_dual_proximal_subgradient_plot.jl")
+include("../Métodos/Proximal methods/fast_dual_proximal_subgradient_plot.jl")
 
 x⃰f, p₂=fast_dual_proximal_subgradient(f, g, step, A, Lₖ, y₀, LF, k_max, ϵ)
 

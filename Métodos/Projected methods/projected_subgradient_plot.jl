@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function projected_subgradient(f:: Function, ∂f:: Function, PC:: Function, tₖ:: Function, x₀:: Array{<:Number}, k_max:: Int64, ϵ:: Number) where {N}
+function projected_subgradient(f:: Function, ∂f:: Function, PC:: Function, tₖ:: Function, x₀:: Array{<:Number}, k_max:: Int64, ϵ:: Number) 
     x=x₀
     hist=[f(x)]
     
@@ -18,7 +18,7 @@ function projected_subgradient(f:: Function, ∂f:: Function, PC:: Function, t�
     end 
 
     println(norm(∂f(x), Inf), " ", f(x))
-    scatter(eachindex(hist), hist, 
+    x, scatter(eachindex(hist), hist, 
                 title=L"f(x^{(k)})",
                 label=false)
 end

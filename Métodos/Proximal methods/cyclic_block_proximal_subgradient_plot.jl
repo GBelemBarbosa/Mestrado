@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function CBPG(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Vector{<:Number}, p:: Int64, block_index:: Vector{UnitRange{Int64}}, k_max:: Int64, ϵ:: Number) where {N}
+function CBPG(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Vector{<:Number}, p:: Int64, block_index:: Vector{UnitRange{Int64}}, k_max:: Int64, ϵ:: Number) 
     x=x₀
     L=s
     fx=f(x)
@@ -28,7 +28,7 @@ function CBPG(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀
     end 
 
     println(max([norm(∂f(x, i), Inf) for i=1:p]), " ", f(x)+g(x))
-    scatter(eachindex(hist), hist, 
+    x, scatter(eachindex(hist), hist, 
                 title=L"F(x^{(k, i)})",
                 label=false)
 end

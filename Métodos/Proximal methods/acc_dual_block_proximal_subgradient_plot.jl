@@ -2,7 +2,7 @@ using Plots
 using LaTeXStrings
 
 #Versão para operador multiplicação por matriz
-function fast_dual_proximal_subgradient(f̃:: Function, g₂:: Function, step:: Function, Lₖ:: Function, y₀:: Array{<:Number}, s:: Number, k_max:: Int64, ϵ:: Number) where {N}
+function fast_dual_proximal_subgradient(f̃:: Function, g₂:: Function, step:: Function, Lₖ:: Function, y₀:: Array{<:Number}, s:: Number, k_max:: Int64, ϵ:: Number) 
     w, y=y₀, y₀
     u=A'*y
     u_=u
@@ -28,7 +28,7 @@ function fast_dual_proximal_subgradient(f̃:: Function, g₂:: Function, step:: 
 
     x=step(y)
     println(norm(u.-u_, Inf), " ", f̃(x)+g₂(x))
-    scatter(eachindex(hist), hist, 
+    x, scatter(eachindex(hist), hist, 
                 title=L"F(x^{(k)})",
                 label=false)
 end

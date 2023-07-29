@@ -65,10 +65,10 @@ tₖ(k:: Int64)=1/sqrt(k+1) #Stepsize rule
 
 include("../Métodos/Projected methods/stochastic_projected_subgradient_plot.jl")
 
-p₁=stochastic_projected_subgradient(Σfᵢ, E∂f, PC, tₖ, x₀, k_max)
+x, p₁=stochastic_projected_subgradient(Σfᵢ, E∂f, PC, tₖ, x₀, k_max)
 
 E∂f(x:: Vector{<:Number}; m=m, Θ=Θ, Lf=Lf, ∂f=∂f)=(sqrt(2*Θ)*m/Lf).*∂f(x, rand(1:m))
 
-p₂=stochastic_projected_subgradient(Σfᵢ, E∂f, PC, tₖ, x₀, k_max)
+x, p₂=stochastic_projected_subgradient(Σfᵢ, E∂f, PC, tₖ, x₀, k_max)
 
 plot(p₁, p₂)

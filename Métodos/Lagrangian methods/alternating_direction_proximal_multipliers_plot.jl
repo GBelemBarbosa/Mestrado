@@ -24,7 +24,7 @@ function AD_PMM(H:: Function, A:: Array{<:Number, M}, B:: Array{<:Number, M}, c:
     end 
 
     println(H(x))
-    scatter(eachindex(hist), hist, 
+    x, scatter(eachindex(hist), hist, 
                 title=L"H(x^{(k)})",
                 label=false)
 end

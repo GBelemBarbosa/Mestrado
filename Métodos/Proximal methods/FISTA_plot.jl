@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function FISTA(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Number, k_max:: Int64, ϵ:: Number) where {N}
+function FISTA(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Number, k_max:: Int64, ϵ:: Number) 
     y, x=x₀, x₀
     t=1
     L=s
@@ -23,7 +23,7 @@ function FISTA(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x�
     end 
 
     println(norm(∂f(x), Inf), " ", f(x)+g(x))
-    scatter(eachindex(hist), hist, 
+    x, scatter(eachindex(hist), hist, 
                 title=L"F(x^{(k)})",
                 label=false)
 end

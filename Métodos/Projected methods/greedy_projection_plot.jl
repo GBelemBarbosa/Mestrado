@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function greedy_projection(PS:: Function, d:: Function, x₀:: Array{<:Number}, k_max:: Int64, ϵ:: Number) where {N}
+function greedy_projection(PS:: Function, d:: Function, x₀:: Array{<:Number}, k_max:: Int64, ϵ:: Number) 
     x=x₀
     hist=Float64[]
     
@@ -18,7 +18,7 @@ function greedy_projection(PS:: Function, d:: Function, x₀:: Array{<:Number}, 
     end 
 
     println(d(x))
-    scatter(eachindex(hist), hist, 
+    x, scatter(eachindex(hist), hist, 
                 title=L"d_{max}(x^{(k)})",
                 label=false)
 end

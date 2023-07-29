@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function proximal_point(g:: Function, prox_cg:: Function, c:: Number, x₀:: Array{<:Number}, k_max:: Int64, ϵ:: Number) where {N}
+function proximal_point(g:: Function, prox_cg:: Function, c:: Number, x₀:: Array{<:Number}, k_max:: Int64, ϵ:: Number) 
     x=x₀
     hist=[g(x)]
     
@@ -16,7 +16,7 @@ function proximal_point(g:: Function, prox_cg:: Function, c:: Number, x₀:: Arr
     end 
 
     println(norm(x.-x_, Inf), " ", f(x))
-    scatter(eachindex(hist), hist, 
+    x, scatter(eachindex(hist), hist, 
                 title=L"g(x^{(k)})",
                 label=false)
 end

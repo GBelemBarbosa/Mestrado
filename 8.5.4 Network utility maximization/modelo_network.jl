@@ -12,4 +12,4 @@ oracle(λ:: Vector{<:Number}; r=r, M=M, ℒ𝓈=ℒ𝓈, S=S)=[max(r(s)*M(s), 0)
 
 include("../Métodos/Projected methods/dual_projected_subgradient_plot.jl")
 
-#p=dual_projected_subgradient(f, g, oracle, γₖ, λ₀, k_max, ϵ)
+#x, p=dual_projected_subgradient(f, g, oracle, γₖ, λ₀, k_max, ϵ)

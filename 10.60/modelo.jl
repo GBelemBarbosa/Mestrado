@@ -37,4 +37,4 @@ proxgL(L, x:: Vector{<:Number}, λ=λ, Τ=Τ)=Τ(λ/L, x)
     
 include("../Métodos/Proximal methods/S-FISTA_plot.jl")
 
-p=SFISTA(f, g, h, hμ, ∇Fμ, proxgL, Lf, μ, α, x₀, k_max, eps())
+x, p=SFISTA(f, g, h, hμ, ∇Fμ, proxgL, Lf, μ, α, x₀, k_max, eps())

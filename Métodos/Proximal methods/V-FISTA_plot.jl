@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function VFISTA(f:: Function, g:: Function, ∇f:: Function, prox_gLf:: Function, Lf:: Number, σ:: Number, x₀:: Array{<:Number}, k_max:: Int64, ϵ:: Number) where {N}
+function VFISTA(f:: Function, g:: Function, ∇f:: Function, prox_gLf:: Function, Lf:: Number, σ:: Number, x₀:: Array{<:Number}, k_max:: Int64, ϵ:: Number) 
     y, x=x₀, x₀
     rκ=sqrt(Lf/σ)
     step=(rκ-1)/(rκ+1)
@@ -21,7 +21,7 @@ function VFISTA(f:: Function, g:: Function, ∇f:: Function, prox_gLf:: Function
     end 
 
     println(dual_norm(∇f(x)), " ", f(x)+g(x))
-    scatter(eachindex(hist), hist, 
+    x, scatter(eachindex(hist), hist, 
                 title=L"F(x^{(k)})",
                 label=false)
 end

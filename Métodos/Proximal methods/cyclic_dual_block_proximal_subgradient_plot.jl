@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function CDBPG(f:: Function, g:: Function, step:: Function, Lₖ:: Function, y₀:: Array{<:Number}, s:: Vector{<:Number}, p:: Int64, n:: Int64, k_max:: Int64, ϵ:: Number) where {N}
+function CDBPG(f:: Function, g:: Function, step:: Function, Lₖ:: Function, y₀:: Array{<:Number}, s:: Vector{<:Number}, p:: Int64, n:: Int64, k_max:: Int64, ϵ:: Number) 
     y=y₀
     x=sumy=sum(y[i*n+1:(i+1)*n] for i=0:p-1)
     x_=x
@@ -32,7 +32,7 @@ function CDBPG(f:: Function, g:: Function, step:: Function, Lₖ:: Function, y�
     end 
 
     println(norm(x.-x_, Inf), " ", f(x)+g(x))
-    scatter(eachindex(hist), hist, 
+    x, scatter(eachindex(hist), hist, 
                 title=L"F(x^{(k, i)})",
                 label=false)
 end

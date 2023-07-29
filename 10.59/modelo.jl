@@ -25,4 +25,4 @@ PC(x:: Vector{<:Number})=min.(max.(x, -1), 1) #Projeção de x em C que é a cai
     
 include("../Métodos/Proximal methods/S-FISTA_plot.jl")
 
-p=SFISTA(f, f, h, hμ, proxμhfalse, PC, 1-Lhμ, μ, α, x₀, k_max, eps()) #Lf=1-Lhμ=Lf-α/μ na chamada p/ q forçadamente L̃=Lf+α/μ=1 
+x, p=SFISTA(f, f, h, hμ, proxμhfalse, PC, 1-Lhμ, μ, α, x₀, k_max, eps()) #Lf=1-Lhμ=Lf-α/μ na chamada p/ q forçadamente L̃=Lf+α/μ=1 

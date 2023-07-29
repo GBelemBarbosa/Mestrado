@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function RDBPG(f:: Function, G:: Function, step:: Function, Lₖ:: Function, y₀:: Array{<:Number}, s:: Vector{<:Number}, p:: Int64, n:: Int64, k_max:: Int64) where {N}
+function RDBPG(f:: Function, G:: Function, step:: Function, Lₖ:: Function, y₀:: Array{<:Number}, s:: Vector{<:Number}, p:: Int64, n:: Int64, k_max:: Int64) 
     y=y₀
     x=sumy=sum(y[i*n+1:(i+1)*n] for i=0:p-1)
     x_=x
@@ -21,7 +21,7 @@ function RDBPG(f:: Function, G:: Function, step:: Function, Lₖ:: Function, y�
     end 
 
     println(norm(x.-x_, Inf), " ", f(x)+G(x))
-    scatter(eachindex(hist), hist, 
+    x, scatter(eachindex(hist), hist, 
                 title=L"F(x^{(k)})",
                 label=false)
 end

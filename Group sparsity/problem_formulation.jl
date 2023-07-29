@@ -2,15 +2,15 @@ using LinearAlgebra
 
 n=[3, 8, 15]
 m=length(n)
-λ=1
-s=2
+λ=1 #Penalização de esparsidade de grupo
+s=2 #Limitação de esparsidade de grupo
+ϵ=eps() #Critério de parada caso tamanho do passo menor que ϵ
+k_max=50 #Número máximo de iterações
 
 pushfirst!(n, 0)
 group_indexs=[n[i]+1:n[i+1] for i=1:m]
 
 B(x:: Vector{<:Number})=(all(x[A(1)].<=0), all(x[A(2)].>=0), x[A(3)][3]>=-2)
-
-x=randn(Float64, n[m+1])
 
 function PDⱼ(xGⱼ:: Vector{<:Number}, j:: Int64; A=A)
     if j==1
@@ -75,4 +75,30 @@ function ωⱼ(x:: Vector{<:Number}, j:: Int64; A=A, dDⱼ=dDⱼ)
     return norm(xGⱼ, 2)^2-dDⱼ(xGⱼ, 3)^2
 end
 
-∇f(x:: Vector{<:Number})=x.-1
+d=randn(Float64, n[end])
+
+Lf=1/2
+
+f(x:: Vector{<:Number})=norm(x.-d, 2)^2/2
+
+F(x:: Vector{<:Number}; f=f, h=h)=f(x)+h(x)
+
+∇f(x:: Vector{<:Number})=x.-d
+
+x₀=randn(Float64, n[end])
+
+include("group_sparse_functions.jl")
+
+Lₖ(L:: Number, k:: Int64, x:: Array{<:Number}, fx:: Number, ∂fx:: Array{<:Number})=L, proxₕ(x.-∂fx./L)
+
+include("../Métodos/Proximal methods/proximal_subgradient_plot.jl")
+
+x, p₁=proximal_subgradient(f, h, ∇f, Lₖ, x₀, Lf, k_max, ϵ)
+
+minimize(T:: Vector{Int64}; UATPBTAT=UATPBTAT, A=A, d=d)=UATPBTAT(d, T)
+
+include("partial_group_coordinate_descent.jl")
+
+x, p₂=PGCD(F, minimize, Lf, x₀, k_max)
+
+plot(p₁, p₂)
