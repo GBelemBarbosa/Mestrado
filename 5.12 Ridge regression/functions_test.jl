@@ -39,13 +39,13 @@ end
 
 function repeval(f:: Function)
     for i in 1:10000
-        res = f(randn(n))
+        res=f(randn(n))
     end
 end
 
 function repeval(f:: Function, A:: Matrix{Float64}, y:: Vector{<:Number}, λ:: Number)
     for i in 1:10000
-        res = f(randn(n), A, y, λ)
+        res=f(randn(n), A, y, λ)
     end
 end
 

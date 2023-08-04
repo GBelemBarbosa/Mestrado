@@ -14,7 +14,7 @@ end
 
 function repeval(f:: Function)
     for i in 1:10000
-        res = f(ones(n))
+        res=f(ones(n))
     end
 end
 

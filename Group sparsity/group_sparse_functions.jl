@@ -44,6 +44,8 @@ end
 
 I₁(x:: Vector{<:Number})=findall(!iszero, g(x))
 
+I₀(x:: Vector{<:Number})=findall(iszero, g(x))
+
 function I₊(x:: Vector{<:Number}; s=s, λ=λ)
     ωx=ω(x)
     ωxₛ=partialsort(ωx, s, rev=true)
@@ -68,7 +70,3 @@ function proxₕ(x:: Vector{<:Number}; ω=ω, s=s, λ=λ)
 end
 
 TL(L:: Number, x:: Vector{<:Number}; ∇f=∇f)=x.-∇f(x)./L
-
-iₓₗ(ωTLx:: Vector{<:Number}, gx:: Vector{Bool}; TL=TL)=argmin(ωTLx.*gx)
-
-jₓₗ(ωTLx:: Vector{<:Number}, gx:: Vector{Bool}; TL=TL)=argmax(ωTLx.*.!gx)

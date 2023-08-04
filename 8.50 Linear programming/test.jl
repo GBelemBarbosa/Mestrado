@@ -7,7 +7,7 @@ f₃(x:: Vector{<:Number})=x'ones(100)
 
 function repeval(f:: Function)
     for i in 1:10000
-        res = f(ones(100))
+        res=f(ones(100))
     end
 end
 

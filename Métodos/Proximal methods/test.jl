@@ -12,7 +12,7 @@ end
 
 function repeval(f:: Function)
     for i in 1:10000
-        res = f(ones(100))
+        res=f(ones(100))
     end
 end
 

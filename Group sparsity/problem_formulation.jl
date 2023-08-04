@@ -101,4 +101,8 @@ include("partial_group_coordinate_descent.jl")
 
 x, p₂=PGCD(F, minimize, Lf, x₀, k_max)
 
-plot(p₁, p₂)
+include("full_group_coordinate_descent.jl")
+
+x, p₃=FGCD(F, minimize, x₀, k_max)
+
+plot(p₁, p₂, p₃)

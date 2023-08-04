@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function PGCD(F:: Function, minimize:: Function, L:: Number, x₀:: Array{<:Number}, k_max:: Int64; I₁=I₁, ω=ω, g=g, s=s)
+function FGCD(F:: Function, minimize:: Function, x₀:: Array{<:Number}, k_max:: Int64; I₁=I₁, I₀=I₀, s=s)
     x=minimize(I₁(x₀))
     Fx=F(x)
     hist=Float64[]
@@ -10,22 +10,21 @@ function PGCD(F:: Function, minimize:: Function, L:: Number, x₀:: Array{<:Numb
         flag=true
         I₁x=I₁(x)
         g₀x=length(I₁x)
-        ωTLx=ω(TL(L, x))
-        gx=g(x)
-        i=argmin(ωTLx.*gx)
         options=[x]
 
         if !iszero(g₀x)
-            push!(options, minimize(filter(x->x!=i, I₁x))) #xᵢ₋
+            append!(options, [minimize(filter(x->x!=i, I₁x)) for i=I₁x]) #xᵢ₋
         end
         if g₀x<=s
-            j=argmax(ωTLx.*.!gx)
+            I₀x=I₀(x)
 
             if g₀x<s
-                push!(options, minimize(vcat(I₁x, j))) #xⱼ₊
+                append!(options, [minimize(vcat(I₁x, j)) for j=I₀x]) #xⱼ₊
             end
             if !iszero(g₀x)
-                push!(options, minimize(vcat(filter(x->x!=i, I₁x), j))) #xᵢⱼ
+                for i=I₁x
+                    append!(options, [minimize(vcat(filter(x->x!=i, I₁x), j)) for j=I₀x]) #xᵢⱼ
+                end
             end
         end
         for xᵢ=options
