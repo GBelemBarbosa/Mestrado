@@ -62,9 +62,9 @@ end
 
 T(ωx:: Vector{<:Number}; s=s)=partialsortperm(ωx, 1:s, rev=true)
 
-function proxₕ(x:: Vector{<:Number}; ω=ω, s=s, λ=λ)
+function proxhL(L:: Number, x:: Vector{<:Number}; ω=ω, s=s, λ=λ)
     ωx=ω(x)
-    R=[i for i=T(ωx) if ωx[i]>2*λ]
+    R=[i for i=T(ωx) if ωx[i]>2*λ/L]
 
     return UATPBTAT(x, R[1:min(s, length(R))])
 end

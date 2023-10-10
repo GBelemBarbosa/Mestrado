@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function dual_projected_subgradient(f:: Function, g:: Function, oracle:: Function, γₖ:: Function, λ₀:: Array{<:Number}, k_max:: Int64, ϵ:: Number) 
+function dual_projected_subgradient(f:: Function, g:: Function, oracle:: Function, γₖ:: Function, λ₀:: Array{<:Number}, k_max:: Int64; ϵ=eps, p=Inf) 
     λ=λ₀
     x=oracle(λ)
     hist=[f(x)]
@@ -9,20 +9,20 @@ function dual_projected_subgradient(f:: Function, g:: Function, oracle:: Functio
     for k=0:k_max        
         gx=g(x)
 
-        push!(hist, norm(max.(gx, 0), 2))
-
-        if norm(gx, Inf)<ϵ
-            break
-        end
+        push!(hist, norm(max.(gx, 0), p))
 
         λ=max.(λ.+(γₖ(k, gx)/norm(gx, 2)).*gx, 0)
         x=oracle(λ)
         
         push!(hist, f(x))
+
+        if norm(gx, p)<ϵ
+            break
+        end
     end 
 
-    println(norm(max.(g(x), 0), 2), " ", f(x))
-    x, scatter(eachindex(hist[begin:2:end]), [hist[begin:2:end], hist[2:2:end]], 
-                title=L"f(x^{(k)})"*" e "*L"||[g(x)]_+||_2",
+    println(norm(max.(g(x), 0), p), " ", hist[end])
+    x, scatter(eachindex(hist[begin:2:end]), [hist[begin:2:end], vcat(hist[2:2:end], 0)], 
+                title=L"f(x^{(k)})"*" e "*L"||[g(x)]_+||_p",
                 label=[L"f(x^{(k)})" L"||[g(x)]_+||_2"])
 end

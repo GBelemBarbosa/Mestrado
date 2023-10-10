@@ -29,4 +29,4 @@ end
 
 include("../Métodos/Projected methods/greedy_projection_plot.jl")
 
-p=greedy_projection(PS, d, x₀, k_max, ϵ)
+p=greedy_projection(PS, d, x₀, k_max)

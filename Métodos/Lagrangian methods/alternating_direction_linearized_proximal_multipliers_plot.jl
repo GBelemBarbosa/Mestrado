@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function AD_LPMM(H:: Function, A:: Array{<:Number, M}, B:: Array{<:Number, M}, c:: Array{<:Number, N}, proxh₁α:: Function, proxh₂β:: Function, ρ:: Number, α:: Number, β:: Number, y₀:: Array{<:Number, N}, k_max:: Int64, ϵ:: Number) where {M, N}
+function AD_LPMM(H:: Function, A:: Array{<:Number, M}, B:: Array{<:Number, M}, c:: Array{<:Number, N}, proxh₁α:: Function, proxh₂β:: Function, ρ:: Number, α:: Number, β:: Number, y₀:: Array{<:Number, N}, k_max:: Int64; ϵ=eps, p=Inf) where {M, N}
     y=y₀
     x=A'*y
     Ax=A*x
@@ -19,7 +19,7 @@ function AD_LPMM(H:: Function, A:: Array{<:Number, M}, B:: Array{<:Number, M}, c
 
         push!(hist, H(x))
 
-        if max(norm(x.-x_, Inf), norm(z.-z_, Inf))<ϵ
+        if max(norm(x.-x_, p), norm(z.-z_, p))<ϵ
             break
         end
 
@@ -27,7 +27,7 @@ function AD_LPMM(H:: Function, A:: Array{<:Number, M}, B:: Array{<:Number, M}, c
         y.+=ρ.*(Aux.-c)
     end 
 
-    println(H(x))
+    println(hist[end])
     x, scatter(eachindex(hist), hist, 
                 title=L"H(x^{(k)})",
                 label=false)

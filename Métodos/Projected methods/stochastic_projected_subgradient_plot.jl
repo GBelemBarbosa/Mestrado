@@ -12,7 +12,7 @@ function stochastic_projected_subgradient(f:: Function, E∂f:: Function, PC:: F
         push!(hist, f(x))
     end 
 
-    println(x, " ", f(x))
+    println(x, " ", hist[end])
     x, scatter(eachindex(hist), hist, 
                 title=L"f(x^{(k)})",
                 label=false)

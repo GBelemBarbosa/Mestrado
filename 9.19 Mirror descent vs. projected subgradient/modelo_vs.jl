@@ -15,7 +15,7 @@ tₖ(k:: Int64, ∂f:: Vector{<:Number})=sqrt(2/(k+1))/norm(∂f, 2) #Stepsize r
 
 include("../Métodos/Projected methods/projected_subgradient_plot.jl")
 
-x, p₁=projected_subgradient(f, ∂f, PC, tₖ, x₀, k_max, ϵ)
+x, p₁=projected_subgradient(f, ∂f, PC, tₖ, x₀, k_max)
 
 ∇ω(x:: Vector{<:Number})=0
 
@@ -38,6 +38,6 @@ tₖ(k:: Int64, ∂f:: Vector{<:Number})=sqrt(2/(k+1))/norm(∂f, Inf) #Stepsize
 
 include("../Métodos/Non-Euclidean methods/mirror_descent_plot.jl")
 
-x, p₂=mirror_descent(f, ∂f, ∇ω, step, tₖ, dual_norm, x₀, k_max, ϵ)
+x, p₂=mirror_descent(f, ∂f, ∇ω, step, tₖ, dual_norm, x₀, k_max)
 
 plot(p₁, p₂)

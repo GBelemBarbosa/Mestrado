@@ -1,12 +1,12 @@
 using Plots
 using LaTeXStrings
 
-function PGCD(F:: Function, minimize:: Function, L:: Number, x₀:: Array{<:Number}, k_max:: Int64; I₁=I₁, ω=ω, g=g, s=s)
+function PGCD(F:: Function, minimize:: Function, L:: Number, x₀:: Array{<:Number}; I₁=I₁, ω=ω, g=g, s=s)
     x=minimize(I₁(x₀))
     Fx=F(x)
     hist=Float64[]
     
-    for k=0:k_max
+    while true
         flag=true
         I₁x=I₁(x)
         g₀x=length(I₁x)

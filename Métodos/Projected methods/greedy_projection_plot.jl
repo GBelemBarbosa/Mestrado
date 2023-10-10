@@ -1,23 +1,24 @@
 using Plots
 using LaTeXStrings
 
-function greedy_projection(PS:: Function, d:: Function, x₀:: Array{<:Number}, k_max:: Int64, ϵ:: Number) 
+function greedy_projection(PS:: Function, d:: Function, x₀:: Array{<:Number}, k_max:: Int64; ϵ=eps) 
     x=x₀
-    hist=Float64[]
+    d_max, iₖ=d(x)
+    hist=Float64[d_max]
     
     for k=0:k_max
-        d_max, iₖ=d(x)
-
+        x=PS(x, iₖ) #Projeta xₖ em Sᵢₖ, sendo iₖ∈argmax(d(xₖ, Sᵢ))
+        
         push!(hist, d_max)
 
         if d_max<ϵ
             break
         end
 
-        x=PS(x, iₖ) #Projeta xₖ em Sᵢₖ, sendo iₖ∈argmax(d(xₖ, Sᵢ))
+        d_max, iₖ=d(x)
     end 
 
-    println(d(x))
+    println(hist[end])
     x, scatter(eachindex(hist), hist, 
                 title=L"d_{max}(x^{(k)})",
                 label=false)

@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function RGBCG(f:: Function, g:: Function, ∂f:: Function, ∂:: Function, tₖ:: Function, x₀:: Array{<:Number}, p:: Int64, block_index:: Vector{UnitRange{Int64}}, k_max:: Int64) 
+function RGBCG(f:: Function, g:: Function, ∂f:: Function, ∂:: Function, tₖ:: Function, x₀:: Array{<:Number}, p:: Int64, block_index:: Vector{UnitRange{Int64}}, k_max:: Int64; p=Inf) 
     x=x₀
     hist=[f(x)+g(x)]
     
@@ -16,7 +16,7 @@ function RGBCG(f:: Function, g:: Function, ∂f:: Function, ∂:: Function, tₖ
         push!(hist, f(x)+g(x))
     end 
 
-    println(max([norm(∂(x, ∂f(x, i), i), Inf) for i=1:p]), " ", f(x)+g(x))
+    println(max([norm(∂(x, ∂f(x, i), i), p) for i=1:p]), " ", hist[end])
     x, scatter(eachindex(hist), hist, 
                 title=L"F(x^{(k)})",
                 label=false)

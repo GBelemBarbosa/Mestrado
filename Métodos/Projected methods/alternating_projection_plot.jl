@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function alternating_projection(PS₁:: Function, PS₂:: Function, d₁:: Function, x₀:: Array{<:Number}, k_max:: Int64, ϵ:: Number)  
+function alternating_projection(PS₁:: Function, PS₂:: Function, d₁:: Function, x₀:: Array{<:Number}, k_max:: Int64; ϵ=eps)  
     x=x₀
     hist=[d₁(x)]
     
@@ -16,7 +16,7 @@ function alternating_projection(PS₁:: Function, PS₂:: Function, d₁:: Funct
         end
     end 
 
-    println(d₁(x))
+    println(hist[end])
     x, scatter(eachindex(hist), hist, 
                 title=L"d_1(x^{(k)})",
                 label=false)

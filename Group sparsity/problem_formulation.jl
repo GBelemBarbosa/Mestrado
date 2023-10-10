@@ -89,11 +89,11 @@ x₀=randn(Float64, n[end])
 
 include("group_sparse_functions.jl")
 
-Lₖ(L:: Number, k:: Int64, x:: Array{<:Number}, fx:: Number, ∂fx:: Array{<:Number})=L, proxₕ(x.-∂fx./L)
+Lₖ(L:: Number, k:: Int64, x:: Array{<:Number}, fx:: Number, ∂fx:: Array{<:Number})=L, proxhL(L, x.-∂fx./L)
 
 include("../Métodos/Proximal methods/proximal_subgradient_plot.jl")
 
-x, p₁=proximal_subgradient(f, h, ∇f, Lₖ, x₀, Lf, k_max, ϵ)
+x, p₁=proximal_subgradient(f, h, ∇f, Lₖ, x₀, Lf, k_max)
 
 minimize(T:: Vector{Int64}; UATPBTAT=UATPBTAT, A=A, d=d)=UATPBTAT(d, T)
 

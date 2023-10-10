@@ -1,12 +1,12 @@
 using Plots
 using LaTeXStrings
 
-function FGCD(F:: Function, minimize:: Function, x₀:: Array{<:Number}, k_max:: Int64; I₁=I₁, I₀=I₀, s=s)
+function FGCD(F:: Function, minimize:: Function, x₀:: Array{<:Number}; I₁=I₁, I₀=I₀, s=s)
     x=minimize(I₁(x₀))
     Fx=F(x)
     hist=Float64[]
     
-    for k=0:k_max
+    while true
         flag=true
         I₁x=I₁(x)
         g₀x=length(I₁x)
@@ -43,7 +43,7 @@ function FGCD(F:: Function, minimize:: Function, x₀:: Array{<:Number}, k_max::
         push!(hist, Fx)
     end 
 
-    println(F(x))
+    println(Fx)
     x, scatter(eachindex(hist), hist, 
                 title=L"F(x^{(k)})",
                 label=false)

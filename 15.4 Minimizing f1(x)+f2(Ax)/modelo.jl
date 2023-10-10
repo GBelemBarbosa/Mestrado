@@ -22,7 +22,7 @@ proxf₂ρ(v:: Vector{<:Number}; Τ=Τ, ρ=ρ)=Τ(ρ, v)
 
 include("../Métodos/Lagrangian methods/alternating_direction_multipliers_plot.jl")
 
-x, p₁=ADMM(H, A, B, c, minimize_x, proxf₂ρ, ρ, copy(y₀), k_max, ϵ)
+x, p₁=ADMM(H, A, B, c, minimize_x, proxf₂ρ, ρ, copy(y₀), k_max)
 
 h₁(x:: Vector{<:Number})=0
 
@@ -38,9 +38,9 @@ proxh₂ρ(v:: Vector{<:Number}; proxf₁ρ=proxf₁ρ, proxf₂ρ=proxf₂ρ, �
 
 y₀₂=randn(Float64, m+n)
 
-x, p₂=ADMM(H, A₂, B₂, c₂, minimize_x₂, proxh₂ρ, ρ, y₀₂, k_max, ϵ)
+x, p₂=ADMM(H, A₂, B₂, c₂, minimize_x₂, proxh₂ρ, ρ, y₀₂, k_max)
 
-α=ρ*opnorm(A, 2)^2 #ρ*λmax(ATA)
+α=ρ*opnorm(A, 2)^2 #ρ*λ_max(ATA)
 
 β=ρ
 
@@ -50,6 +50,6 @@ proxf₂β(v:: Vector{<:Number}; β=β)=Τ(β, v)
 
 include("../Métodos/Lagrangian methods/alternating_direction_linearized_proximal_multipliers_plot.jl")
 
-x, p₃=AD_LPMM(H, A, B, c, proxf₁α, proxf₂β, ρ, α, β, y₀, k_max, ϵ)
+x, p₃=AD_LPMM(H, A, B, c, proxf₁α, proxf₂β, ρ, α, β, y₀, k_max)
 
 plot(p₁, p₂, p₃)

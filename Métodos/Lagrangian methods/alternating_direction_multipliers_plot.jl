@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function ADMM(H:: Function, A:: Array{<:Number, M}, B:: Array{<:Number, M}, c:: Array{<:Number, N}, minimize_x:: Function, minimize_z:: Function, ρ:: Number, y₀:: Array{<:Number, N}, k_max:: Int64, ϵ:: Number) where {M, N}
+function ADMM(H:: Function, A:: Array{<:Number, M}, B:: Array{<:Number, M}, c:: Array{<:Number, N}, minimize_x:: Function, minimize_z:: Function, ρ:: Number, y₀:: Array{<:Number, N}, k_max:: Int64; ϵ=eps, p=Inf) where {M, N}
     y=y₀
     x=A'*y
     z=B'*y
@@ -17,14 +17,14 @@ function ADMM(H:: Function, A:: Array{<:Number, M}, B:: Array{<:Number, M}, c:: 
 
         push!(hist, H(x))
 
-        if max(norm(x.-x_, Inf), norm(z.-z_, Inf))<ϵ
+        if max(norm(x.-x_, p), norm(z.-z_, p))<ϵ
             break
         end
 
         y.+=ρ.*(Ax.+Bz.-c)
     end 
 
-    println(H(x))
+    println(hist[end])
     x, scatter(eachindex(hist), hist, 
                 title=L"H(x^{(k)})",
                 label=false)
