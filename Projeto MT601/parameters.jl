@@ -1,7 +1,7 @@
 n_vec=[2, 10, 100]
 ϵ_vec=[2.0^-i for i=2:10:32]
 norm_vec=[1, 10, 100]
-s_max=1
+s_max=100
 p=Inf
 
 k_max=10000

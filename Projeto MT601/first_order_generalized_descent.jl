@@ -47,22 +47,6 @@ function FOGD(x₀:: Array{<:Number}, distxₒₚₜ:: Array{<:Number}, distfx�
             fx=f(x)
 
             if fx<=fx_+t*∇fxd #Armijo condition
-                #=
-                lst_index=findall(norm(t.*d, p)<i for i=ϵ_vec[threshold+1:end]).+threshold
-                if !isempty(lst_index)
-                    threshold=lst_index[end]
-                    kϵ[lst_index].+=k/s_max
-                end
-
-                if threshold==stop #Stop criteria
-                    distxₒₚₜ[k:end].+=norm(x.-xₒₚₜ, p)/s_max
-                    distfxₒₚₜ[k:end].+=(fx-fxₒₚₜ)/s_max
-                    kϵ[threshold+1:end].+=k/s_max
-                    
-                    return
-                end
-                =#
-
                 break
             end
 
