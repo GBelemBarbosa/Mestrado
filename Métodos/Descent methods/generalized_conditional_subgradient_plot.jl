@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function generalized_conditional_subgradient(f:: Function, g:: Function, ∂f:: Function, ∂:: Function, tₖ:: Function, x₀:: Array{<:Number}, k_max:: Int64; ϵ=eps, q=Inf) 
+function generalized_conditional_subgradient(f:: Function, g:: Function, ∂f:: Function, ∂:: Function, tₖ:: Function, x₀:: Array{<:Number}, k_max:: Int64; ϵ=eps(), q=Inf) 
     x=x₀
     hist=[f(x)+g(x)]
     

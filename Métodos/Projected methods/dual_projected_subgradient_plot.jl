@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function dual_projected_subgradient(f:: Function, g:: Function, oracle:: Function, γₖ:: Function, λ₀:: Array{<:Number}, k_max:: Int64; ϵ=eps, p=Inf) 
+function dual_projected_subgradient(f:: Function, g:: Function, oracle:: Function, γₖ:: Function, λ₀:: Array{<:Number}, k_max:: Int64; ϵ=eps(), p=Inf) 
     λ=λ₀
     x=oracle(λ)
     hist=[f(x)]

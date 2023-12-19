@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function MFISTA(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Number, k_max:: Int64; ϵ=eps, p=Inf) 
+function MFISTA(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
     y=x=x₀
     t=1
     L=s

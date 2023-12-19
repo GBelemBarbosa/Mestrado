@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function FOGD(f:: Function, ∇f:: Function, dₖ:: Function, tₖ:: Function, resize:: Function, x₀:: Array{<:Number}, t₀:: Number, k_max:: Int64; α=0, β=Inf, γ=0, ϵ=eps, p=Inf)
+function FOGD(f:: Function, ∇f:: Function, dₖ:: Function, tₖ:: Function, resize:: Function, x₀:: Array{<:Number}, t₀:: Number, k_max:: Int64; α=0, β=Inf, γ=0, ϵ=eps(), p=Inf)
     x_=x=x₀
     t_=t=t₀
     ∇fx_=∇fx=∇f(x)

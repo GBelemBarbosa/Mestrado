@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function AD_LPMM(H:: Function, A:: Array{<:Number, M}, B:: Array{<:Number, M}, c:: Array{<:Number, N}, proxh₁α:: Function, proxh₂β:: Function, ρ:: Number, α:: Number, β:: Number, y₀:: Array{<:Number, N}, k_max:: Int64; ϵ=eps, p=Inf) where {M, N}
+function AD_LPMM(H:: Function, A:: Array{<:Number, M}, B:: Array{<:Number, M}, c:: Array{<:Number, N}, proxh₁α:: Function, proxh₂β:: Function, ρ:: Number, α:: Number, β:: Number, y₀:: Array{<:Number, N}, k_max:: Int64; ϵ=eps(), p=Inf) where {M, N}
     y=y₀
     x=A'*y
     Ax=A*x

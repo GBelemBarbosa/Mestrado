@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function AD_PMM(H:: Function, A:: Array{<:Number, M}, B:: Array{<:Number, M}, c:: Array{<:Number, N}, minimize_x:: Function, minimize_z:: Function, ρ:: Number, y₀:: Array{<:Number, N}, k_max:: Int64; ϵ=eps, p=Inf) where {M, N}
+function AD_PMM(H:: Function, A:: Array{<:Number, M}, B:: Array{<:Number, M}, c:: Array{<:Number, N}, minimize_x:: Function, minimize_z:: Function, ρ:: Number, y₀:: Array{<:Number, N}, k_max:: Int64; ϵ=eps(), p=Inf) where {M, N}
     y=y₀
     x=A'*y
     z=B'*y

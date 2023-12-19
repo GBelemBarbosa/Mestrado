@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function proximal_point(g:: Function, prox_cg:: Function, c:: Number, x₀:: Array{<:Number}, k_max:: Int64; ϵ=eps, p=Inf) 
+function proximal_point(g:: Function, prox_cg:: Function, c:: Number, x₀:: Array{<:Number}, k_max:: Int64; ϵ=eps(), p=Inf) 
     x=x₀
     hist=[g(x)]
     

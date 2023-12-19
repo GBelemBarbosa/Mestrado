@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function alternating_minimization(F:: Function, minimize:: Function, x₀:: Array{<:Number}, p:: Int64, block_index:: Vector{UnitRange{Int64}}, k_max:: Int64; ϵ=eps, q=Inf) 
+function alternating_minimization(F:: Function, minimize:: Function, x₀:: Array{<:Number}, p:: Int64, block_index:: Vector{UnitRange{Int64}}, k_max:: Int64; ϵ=eps(), q=Inf) 
     x=x₀
     x_=copy(x)
     Fx=F(x)

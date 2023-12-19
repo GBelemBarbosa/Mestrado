@@ -1,7 +1,7 @@
 using Plots
 using LaTeXStrings
 
-function VFISTA(f:: Function, g:: Function, ∇f:: Function, prox_gLf:: Function, Lf:: Number, σ:: Number, x₀:: Array{<:Number}, k_max:: Int64; ϵ=eps, p=Inf) 
+function VFISTA(f:: Function, g:: Function, ∇f:: Function, prox_gLf:: Function, Lf:: Number, σ:: Number, x₀:: Array{<:Number}, k_max:: Int64; ϵ=eps(), p=Inf) 
     y=x=x₀
     rκ=sqrt(Lf/σ)
     step=(rκ-1)/(rκ+1)

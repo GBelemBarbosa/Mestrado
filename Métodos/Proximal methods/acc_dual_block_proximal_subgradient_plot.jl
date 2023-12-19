@@ -2,7 +2,7 @@ using Plots
 using LaTeXStrings
 
 #Versão para operador multiplicação por matriz
-function ADBPS(f̃:: Function, g₂:: Function, step:: Function, Lₖ:: Function, y₀:: Array{<:Number}, s:: Number, k_max:: Int64; ϵ=eps, p=Inf) 
+function ADBPS(f̃:: Function, g₂:: Function, step:: Function, Lₖ:: Function, y₀:: Array{<:Number}, s:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
     w=x=y=y₀
     u_=u=A'*y
     t=1

@@ -1,9 +1,9 @@
 using Plots
 using LaTeXStrings
 
-function proximal_subgradient(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Number, k_max:: Int64; ϵ=eps, p=Inf)
+function proximal_subgradient(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, L₀:: Number, k_max:: Int64; ϵ=eps(), p=Inf)
     x=x₀
-    L=s
+    L=L₀
     hist=[f(x)+g(x)]
     
     for k=0:k_max

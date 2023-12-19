@@ -99,10 +99,10 @@ minimize(T:: Vector{Int64}; UATPBTAT=UATPBTAT, A=A, d=d)=UATPBTAT(d, T)
 
 include("partial_group_coordinate_descent.jl")
 
-x, p₂=PGCD(F, minimize, Lf, x₀, k_max)
+x, p₂=PGCD(F, minimize, Lf, x₀)
 
 include("full_group_coordinate_descent.jl")
 
-x, p₃=FGCD(F, minimize, x₀, k_max)
+x, p₃=FGCD(F, minimize, x₀)
 
 plot(p₁, p₂, p₃)
