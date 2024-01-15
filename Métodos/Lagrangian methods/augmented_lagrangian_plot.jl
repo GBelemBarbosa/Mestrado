@@ -7,7 +7,8 @@ function augmented_lagrangian(H:: Function, A:: Array{<:Number, M}, B:: Array{<:
     z=B'*y
     hist=[H(x)]
     
-    for k=0:k_max        
+    k=1
+    while true        
         x_, z_, x, z=x, z, minimize_Lρ(y)
 
         push!(hist, H(x))

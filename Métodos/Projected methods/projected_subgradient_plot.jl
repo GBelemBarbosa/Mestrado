@@ -5,7 +5,8 @@ function projected_subgradient(f:: Function, ∂f:: Function, PC:: Function, t�
     x=x₀
     hist=[f(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         ∂fx=∂f(x)
         x=PC(x.-tₖ(k, ∂fx).*∂fx)
 

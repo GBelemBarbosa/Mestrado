@@ -7,7 +7,8 @@ function acc_subgradient_descent(f:: Function, ∂f:: Function, β:: Number, x�
     u=0
     hist=[f(x)]
     
-    for k=0:k_max        
+    k=1
+    while true        
         u=x.+a*(1/a₋-1).*(x.-x₋)
         ∂fu=∂f(u)
         x₋, x=x, u.-∂fu./β
@@ -15,7 +16,7 @@ function acc_subgradient_descent(f:: Function, ∂f:: Function, β:: Number, x�
 
         push!(hist, f(x))
 
-        if norm(∂fu, p)if norm(∂fx, p)<ϵ || k==k_max
+        if norm(∂fu, p)<ϵ || k==k_max
             break
         end
         k+=1

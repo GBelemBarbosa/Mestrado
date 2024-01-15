@@ -8,7 +8,8 @@ function randomized_proximal_subgradient(f:: Function, g:: Function, ∂f:: Func
     fx=f(x)
     hist=[fx+g(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         iₖ=rand(1:p)
 
         ∂fxᵢ=∂f(x, iₖ)

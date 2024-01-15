@@ -5,7 +5,8 @@ function mirror_C(f:: Function, ∂f:: Function, ∇ω:: Function, step:: Functi
     x=x₀
     hist=[f(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         ∂fx=∂f(x)
         tₖ=tₖ(k, ∂fx)
         x=step(x, tₖ.*∂fx.-∇ω(x), tₖ)

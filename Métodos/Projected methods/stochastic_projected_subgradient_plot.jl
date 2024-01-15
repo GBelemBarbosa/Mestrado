@@ -5,7 +5,8 @@ function stochastic_projected_subgradient(f:: Function, E∂f:: Function, PC:: F
     x=x₀
     hist=[f(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         E∂fx=E∂f(x)
         x=PC(x.-tₖ(k, E∂fx).*E∂fx)
 

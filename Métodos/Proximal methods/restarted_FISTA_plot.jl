@@ -7,7 +7,8 @@ function restarted_FISTA(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Fun
     z=x₀
     hist=[f(z)+g(z)]
     
-    for k=0:k_max
+    k=1
+    while true
         z=FISTA(∂f, Lₖ, z, s, N)
 
         push!(hist, f(z)+g(z))

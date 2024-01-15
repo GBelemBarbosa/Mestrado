@@ -5,7 +5,8 @@ function RGBCG(f:: Function, g:: Function, ∂f:: Function, ∂:: Function, tₖ
     x=x₀
     hist=[f(x)+g(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         iₖ=rand(1:p)
         ∂fxᵢ=∂f(x, iₖ)
         pᵢ=∂(x, ∂fxᵢ, iₖ)

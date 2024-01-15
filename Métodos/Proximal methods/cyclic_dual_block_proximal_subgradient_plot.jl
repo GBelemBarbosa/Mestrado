@@ -8,7 +8,8 @@ function CDBPG(f:: Function, g:: Function, step:: Function, Lₖ:: Function, y�
     L=s
     hist=[f(x)+g(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         n∂x=0.0
 
         for i=1:p

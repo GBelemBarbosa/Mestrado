@@ -6,7 +6,8 @@ function proximal_subgradient(f:: Function, g:: Function, ∂f:: Function, Lₖ:
     L=L₀
     hist=[f(x)+g(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         ∂fx=∂f(x)
         fx=f(x)
         L, x=Lₖ(L, k, x, fx, ∂fx) #Backtracking mais atualização

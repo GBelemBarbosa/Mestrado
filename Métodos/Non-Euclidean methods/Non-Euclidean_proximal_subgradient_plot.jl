@@ -6,7 +6,8 @@ function NE_proximal_subgradient(f:: Function, g:: Function, ∂f:: Function, �
     L=s
     hist=[f(x)+g(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         ∂fx=∂f(x)
         ∇ωx=∇ω(x)
         fx=f(x)

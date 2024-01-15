@@ -7,7 +7,8 @@ function VFISTA(f:: Function, g:: Function, ∇f:: Function, prox_gLf:: Function
     step=(rκ-1)/(rκ+1)
     hist=[f(x)+g(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         ∇fx=∇f(x)
         x_, x=x, prox_gLf(x.-∇fx./Lf)
         push!(hist, f(x)+g(x))

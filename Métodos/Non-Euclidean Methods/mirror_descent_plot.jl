@@ -5,7 +5,8 @@ function mirror_descent(f:: Function, ∂f:: Function, ∇ω:: Function, step:: 
     x=x₀
     hist=[f(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         ∂fx=∂f(x)
         x=step(x, tₖ(k, ∂fx).*∂fx.-∇ω(x))
 

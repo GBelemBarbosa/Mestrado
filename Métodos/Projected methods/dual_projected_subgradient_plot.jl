@@ -6,7 +6,8 @@ function dual_projected_subgradient(f:: Function, g:: Function, oracle:: Functio
     x=oracle(λ)
     hist=[f(x)]
     
-    for k=0:k_max        
+    k=1
+    while true        
         gx=g(x)
 
         push!(hist, norm(max.(gx, 0), p))

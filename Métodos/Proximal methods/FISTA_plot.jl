@@ -7,7 +7,8 @@ function FISTA(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x�
     L=s
     hist=[f(x)+g(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         ∂fy=∂f(y)
         x_=x
         L, x=Lₖ(L, k, y, ∂fy) #Backtracking mais atualização

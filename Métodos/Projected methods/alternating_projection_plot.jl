@@ -5,7 +5,8 @@ function alternating_projection(PS₁:: Function, PS₂:: Function, d₁:: Funct
     x=x₀
     hist=[d₁(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         x=PS₂(PS₁(x)) #Projeta xₖ em S₁ e S₂ consecutivamente
         dx=d₁(x)
 

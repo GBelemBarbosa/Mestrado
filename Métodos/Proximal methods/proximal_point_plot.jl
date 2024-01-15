@@ -5,7 +5,8 @@ function proximal_point(g:: Function, prox_cg:: Function, c:: Number, x₀:: Arr
     x=x₀
     hist=[g(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         x_, x=x, prox_cg(c, x)
 
         push!(hist, g(x))

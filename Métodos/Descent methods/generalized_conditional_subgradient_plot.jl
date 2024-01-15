@@ -5,14 +5,15 @@ function generalized_conditional_subgradient(f:: Function, g:: Function, ∂f:: 
     x=x₀
     hist=[f(x)+g(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         ∂fx=∂f(x)
         p=∂(x, ∂fx)     
         x.+=tₖ(k, x, p, ∂fx).*(p.-x)
 
         push!(hist, f(x)+g(x))
 
-        if norm(p, q)if norm(∂fx, p)<ϵ || k==k_max
+        if norm(p, q) || k==k_max
             break
         end
         k+=1

@@ -6,7 +6,8 @@ function greedy_projection(PS:: Function, d:: Function, x₀:: Array{<:Number}, 
     d_max, iₖ=d(x)
     hist=Float64[d_max]
     
-    for k=0:k_max
+    k=1
+    while true
         x=PS(x, iₖ) #Projeta xₖ em Sᵢₖ, sendo iₖ∈argmax(d(xₖ, Sᵢ))
         
         push!(hist, d_max)

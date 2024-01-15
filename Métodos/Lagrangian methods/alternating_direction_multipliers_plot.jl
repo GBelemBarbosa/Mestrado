@@ -8,7 +8,8 @@ function ADMM(H:: Function, A:: Array{<:Number, M}, B:: Array{<:Number, M}, c:: 
     Bz=B*z
     hist=[H(x)]
     
-    for k=0:k_max        
+    k=1
+    while true        
         aux=y./ρ.-c
         x_, x=x, minimize_x(Bz.+aux)
         Ax=A*x

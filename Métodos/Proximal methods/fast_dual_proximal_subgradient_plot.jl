@@ -10,7 +10,8 @@ function fast_dual_proximal_subgradient(f:: Function, g:: Function, step:: Funct
     L=s
     hist=[f(x)+g(A*x)]
     
-    for k=0:k_max
+    k=1
+    while true
         u_, u=u, step(Α'*w)
         x=step(Α'*y)
 
@@ -43,7 +44,8 @@ function fast_dual_proximal_subgradient(f:: Function, g:: Function, step:: Funct
     L=s
     hist=[f(x)+g(Α(x))]
     
-    for k=0:k_max
+    k=1
+    while true
         u_, u=u, step(ΑT(w))
         x=step(ΑT(y))
 

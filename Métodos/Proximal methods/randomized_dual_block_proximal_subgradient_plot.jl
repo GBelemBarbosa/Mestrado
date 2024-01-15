@@ -8,7 +8,8 @@ function RDBPG(f:: Function, G:: Function, step:: Function, Lₖ:: Function, y�
     L=s
     hist=[f(x)+G(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         iₖ=rand(1:p)
         x_, x=x, step(sum_y)
 

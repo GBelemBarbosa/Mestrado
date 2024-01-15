@@ -9,7 +9,8 @@ function FOGD(f:: Function, ∇f:: Function, dₖ:: Function, tₖ:: Function, r
     fx_=f(x)
     hist=[fx_]
     
-    for k=0:k_max
+    k=1
+    while true
         while true 
             d=dₖ(k, x_, x, ∇fx_, ∇fx, d)
             nd=norm(d, p)

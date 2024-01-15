@@ -8,7 +8,8 @@ function FOGD(f:: Function, ∇f:: Function, tₖ:: Function, resize:: Function,
     fx_=f(x)
     hist=[fx_]
     
-    for k=0:k_max
+    k=1
+    while true
         ∇fx=∇f(x)
         n∇fx=norm(∇fx, p)
 

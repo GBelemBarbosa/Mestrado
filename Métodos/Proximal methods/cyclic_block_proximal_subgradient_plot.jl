@@ -7,7 +7,8 @@ function CBPG(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀
     fx=f(x)
     hist=[fx+g(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         n∂f=0.0
 
         for i=1:p

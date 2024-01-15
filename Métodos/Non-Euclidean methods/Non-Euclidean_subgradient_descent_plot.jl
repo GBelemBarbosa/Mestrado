@@ -6,7 +6,8 @@ function NE_subgradient_descent(f:: Function, Λ∂f:: Function, Lₖ:: Function
     L=s
     hist=[f(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         ∂fx⃰=Λ∂f(x)
         d∂x=dual_norm(∂fx⃰)
         L, x=Lₖ(L, k, x, ∂fx⃰, d∂x) #Backtracking mais atualização

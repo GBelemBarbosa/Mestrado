@@ -6,7 +6,8 @@ function FISTA(∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Num
     t=1
     L=s
     
-    for k=0:k_max
+    k=1
+    while true
         ∂fy=∂f(y)
         x_=x
         L, x=Lₖ(L, k, y, ∂fy) #Backtracking mais atualização

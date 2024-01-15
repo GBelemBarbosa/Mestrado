@@ -10,7 +10,8 @@ function AD_LPMM(H:: Function, A:: Array{<:Number, M}, B:: Array{<:Number, M}, c
     Aux=Ax.+Bz
     hist=[H(x)]
     
-    for k=0:k_max 
+    k=1
+    while true 
         aux=y./ρ.-c       
         x_, x=x, proxh₁α(x.-(ρ/α).*A'*(Aux.+aux))
         Ax=A*x

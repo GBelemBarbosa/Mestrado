@@ -5,13 +5,14 @@ function subgradient_descent(f:: Function, ∂f:: Function, tₖ:: Function, x�
     x=x₀
     hist=[f(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         ∂fx=∂f(x)
         x.-=tₖ(k, ∂fx).*∂fx
 
         push!(hist, f(x))
 
-        if norm(∂fx, p)if norm(∂fx, p)<ϵ || k==k_max
+        if norm(∂fx, p)<ϵ || k==k_max
             break
         end
         k+=1

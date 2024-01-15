@@ -9,7 +9,8 @@ function ADBPS(f̃:: Function, g₂:: Function, step:: Function, Lₖ:: Function
     L=s
     hist=[f̃(x)+g₂(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         x=step(y)
         u_, u=u, step(w)
 

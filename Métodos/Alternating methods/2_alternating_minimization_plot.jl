@@ -7,7 +7,8 @@ function alternating_minimization(F:: Function, minimize:: Function, x₀:: Arra
     Fx=F(x)
     hist=[Fx]
     
-    for k=0:k_max
+    k=1
+    while true
         index=block_index[1]
         x_, x[index]=x, minimize(x, 1)
         n∂xᵢ=norm(x[index].-x_[index], p)

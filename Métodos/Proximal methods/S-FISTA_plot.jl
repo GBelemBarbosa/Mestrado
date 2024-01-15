@@ -8,7 +8,8 @@ function SFISTA(f:: Function, g:: Function, h:: Function, hμ:: Function, ∇Fμ
     L̃=Lf+α/μ
     hist=[fx+h(x), fx+hμ(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         ∇Fμy=∇Fμ(y)
         x_, x=x, prox_gL(L̃, y.-∇Fμy./L̃)
         t_, t=t, (1+sqrt(1+4*t^2))/2

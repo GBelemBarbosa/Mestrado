@@ -5,7 +5,8 @@ function incremental_projected_subgradient(f:: Function, ∂f:: Function, PC:: F
     x=x₀
     hist=[f(x)]
     
-    for k=0:k_max
+    k=1
+    while true
         n∂f=0.0
 
         for i=1:m
