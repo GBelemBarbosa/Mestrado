@@ -19,9 +19,10 @@ function AD_LPMM(H:: Function, A:: Array{<:Number, M}, B:: Array{<:Number, M}, c
 
         push!(hist, H(x))
 
-        if max(norm(x.-x_, p), norm(z.-z_, p))<ϵ
+        if max(norm(x.-x_, p), norm(z.-z_, p))<ϵ || k==k_max
             break
         end
+        k+=1
 
         Aux=Ax.+Bz
         y.+=ρ.*(Aux.-c)

@@ -14,6 +14,11 @@ function RDBPG(f:: Function, G:: Function, step:: Function, Lₖ:: Function, y�
 
         push!(hist, f(x)+G(x))
 
+        if k==k_max
+            break
+        end
+        k+=1
+
         L[iₖ], proxgᵢ=Lₖ(L[iₖ], iₖ, k, y, x) #Backtracking mais prox computation
         sum_y.-=y[(iₖ-1)*n+1:i*n]
         aux=y[(iₖ-1)*n+1:i*n].+=(proxgᵢ.-x)./L[iₖ]

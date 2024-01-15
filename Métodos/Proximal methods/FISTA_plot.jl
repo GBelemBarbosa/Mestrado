@@ -14,9 +14,10 @@ function FISTA(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x�
         
         push!(hist, f(x)+g(x))
 
-        if norm(∂fy, p)<ϵ
+        if norm(∂fy, p)<ϵ || k==k_max
             break
         end
+        k+=1
 
         t_, t=t, (1+sqrt(1+4*t^2))/2
         y=x.+((t_-1)/t).*(x.-x_)

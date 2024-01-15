@@ -11,9 +11,10 @@ function greedy_projection(PS:: Function, d:: Function, x₀:: Array{<:Number}, 
         
         push!(hist, d_max)
 
-        if d_max<ϵ
+        if d_max<ϵ || k==k_max
             break
         end
+        k+=1
 
         d_max, iₖ=d(x)
     end 

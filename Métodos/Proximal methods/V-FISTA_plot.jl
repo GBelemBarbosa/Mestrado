@@ -12,9 +12,10 @@ function VFISTA(f:: Function, g:: Function, ∇f:: Function, prox_gLf:: Function
         x_, x=x, prox_gLf(x.-∇fx./Lf)
         push!(hist, f(x)+g(x))
 
-        if norm(∇fx, p)<ϵ
+        if norm(∇fx, p)<ϵ || k==k_max
             break
         end
+        k+=1
 
         y=x.+step.*(x.-x_)
     end 

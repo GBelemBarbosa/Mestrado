@@ -17,9 +17,10 @@ function SFISTA(f:: Function, g:: Function, h:: Function, hμ:: Function, ∇Fμ
         push!(hist, fx+h(x))
         push!(hist, fx+hμ(x))
 
-        if norm(∇Fμy, p)<ϵ
+        if norm(∇Fμy, p)<ϵ || k==k_max
             break
         end
+        k+=1
 
         y=x.+((t_-1)/t).*(x.-x_)
     end 

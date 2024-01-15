@@ -11,9 +11,10 @@ function projected_subgradient(f:: Function, ∂f:: Function, PC:: Function, t�
 
         push!(hist, f(x))
 
-        if norm(∂fx, p)<ϵ
+        if norm(∂fx, p)<ϵ || k==k_max
             break
         end
+        k+=1
     end 
 
     println(norm(∂f(x), p), " ", hist[end])

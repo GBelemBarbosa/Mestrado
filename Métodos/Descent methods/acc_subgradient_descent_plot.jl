@@ -15,9 +15,10 @@ function acc_subgradient_descent(f:: Function, ∂f:: Function, β:: Number, x�
 
         push!(hist, f(x))
 
-        if norm(∂fu, p)<ϵ
+        if norm(∂fu, p)if norm(∂fx, p)<ϵ || k==k_max
             break
         end
+        k+=1
     end 
 
     println(norm(∂f(x), p), " ", hist[end])

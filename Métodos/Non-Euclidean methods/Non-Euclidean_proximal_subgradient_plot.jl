@@ -14,9 +14,10 @@ function NE_proximal_subgradient(f:: Function, g:: Function, ∂f:: Function, �
 
         push!(hist, fx+g(x))
 
-        if norm(∂fx, p)<ϵ
+        if norm(∂fx, p)<ϵ || k==k_max
             break
         end
+        k+=1
     end 
 
     println(dual_norm(∂f(x)), " ", hist[end])

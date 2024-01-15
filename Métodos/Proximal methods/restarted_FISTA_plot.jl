@@ -12,9 +12,10 @@ function restarted_FISTA(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Fun
 
         push!(hist, f(z)+g(z))
 
-        if norm(∂f(z), p)<ϵ
+        if norm(∂f(z), p)<ϵ || k==k_max
             break
         end
+        k+=1
     end 
 
     println(norm(∂f(z), p), " ", hist[end])

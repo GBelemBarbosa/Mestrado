@@ -11,9 +11,10 @@ function subgradient_descent(f:: Function, ∂f:: Function, tₖ:: Function, x�
 
         push!(hist, f(x))
 
-        if norm(∂fx, p)<ϵ
+        if norm(∂fx, p)if norm(∂fx, p)<ϵ || k==k_max
             break
         end
+        k+=1
     end 
 
     println(norm(∂f(x), p), " ", hist[end])

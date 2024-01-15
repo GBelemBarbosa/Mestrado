@@ -13,9 +13,10 @@ function FISTA(∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Num
         t_, t=t, (1+sqrt(1+4*t^2))/2
         y=x.+((t_-1)/t).*(x.-x_)
 
-        if norm(∂fy, p)<ϵ
+        if norm(∂fy, p)<ϵ || k==k_max
             break
         end
+        k+=1
     end 
 
     return x

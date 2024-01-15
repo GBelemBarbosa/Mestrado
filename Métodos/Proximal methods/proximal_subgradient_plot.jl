@@ -13,9 +13,10 @@ function proximal_subgradient(f:: Function, g:: Function, ∂f:: Function, Lₖ:
 
         push!(hist, fx+g(x))
 
-        if norm(∂fx, p)<ϵ
+        if norm(∂fx, p)<ϵ || k==k_max
             break
         end
+        k+=1
     end 
 
     println(norm(∂f(x), p), " ", hist[end])

@@ -43,9 +43,10 @@ function FOGD(f:: Function, ∇f:: Function, tₖ:: Function, resize:: Function,
 
         push!(hist, fx)
         
-        if norm(x.-x_, p)<ϵ #Stop criteria
-            break 
+        if norm(x.-x_, p)<ϵ || k==k_max
+            break
         end
+        k+=1
 
         t_, t=t, resize(k, t_, t) #Step resize
         x_, fx_=x, fx

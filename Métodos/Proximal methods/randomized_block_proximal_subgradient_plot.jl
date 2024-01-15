@@ -16,6 +16,11 @@ function randomized_proximal_subgradient(f:: Function, g:: Function, ∂f:: Func
         fx=f(x)
 
         push!(hist, fx+g(x))
+
+        if k==k_max
+            break
+        end
+        k+=1
     end 
 
     println(max([norm(∂f(x, i), q) for i=1:p]), " ", hist[end])

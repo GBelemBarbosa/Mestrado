@@ -16,9 +16,10 @@ function dual_projected_subgradient(f:: Function, g:: Function, oracle:: Functio
         
         push!(hist, f(x))
 
-        if norm(gx, p)<ϵ
+        if norm(gx, p)<ϵ || k==k_max
             break
         end
+        k+=1
     end 
 
     println(norm(max.(g(x), 0), p), " ", hist[end])

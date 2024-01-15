@@ -19,9 +19,10 @@ function incremental_projected_subgradient(f:: Function, ∂f:: Function, PC:: F
             push!(hist, f(x))
         end
 
-        if n∂f<ϵ
+        if n∂f<ϵ || k==k_max
             break
         end
+        k+=1
     end 
 
     println(max([norm(∂f(x, i), q) for i=1:m]), " ", hist[end])

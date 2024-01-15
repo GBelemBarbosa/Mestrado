@@ -15,9 +15,10 @@ function ADBPS(f̃:: Function, g₂:: Function, step:: Function, Lₖ:: Function
 
         push!(hist, f̃(x)+g₂(x))
 
-        if norm(u.-u_, p)<ϵ
+        if norm(u.-u_, p)<ϵ || k==k_max
             break
-        end 
+        end
+        k+=1 
 
         L, prox=Lₖ(L, k, w, u) #Backtracking + prox computation
         y_, y=y, w.+(prox.-u)./L

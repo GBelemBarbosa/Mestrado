@@ -26,9 +26,10 @@ function CDBPG(f:: Function, g:: Function, step:: Function, Lₖ:: Function, y�
             sum_y.+=aux
         end
 
-        if n∂x<ϵ
+        if n∂x<ϵ || k==k_max
             break
         end
+        k+=1
     end 
 
     println(norm(x.-x_, p), " ", hist[end])

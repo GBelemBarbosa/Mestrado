@@ -13,9 +13,10 @@ function NE_subgradient_descent(f:: Function, Λ∂f:: Function, Lₖ:: Function
 
         push!(hist, f(x))
 
-        if d∂x<ϵ
+        if d∂x<ϵ || k==k_max
             break
         end
+        k+=1
     end 
 
     println(norm(Λ∂f(x), p), " ", hist[end])

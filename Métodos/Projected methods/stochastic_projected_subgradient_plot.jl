@@ -10,6 +10,11 @@ function stochastic_projected_subgradient(f:: Function, E∂f:: Function, PC:: F
         x=PC(x.-tₖ(k, E∂fx).*E∂fx)
 
         push!(hist, f(x))
+
+        if k==k_max
+            break
+        end
+        k+=1
     end 
 
     println(x, " ", hist[end])

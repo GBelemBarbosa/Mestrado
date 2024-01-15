@@ -11,9 +11,10 @@ function alternating_projection(PS₁:: Function, PS₂:: Function, d₁:: Funct
 
         push!(hist, dx)
 
-        if dx<ϵ
+        if dx<ϵ || k==k_max
             break
         end
+        k+=1
     end 
 
     println(hist[end])

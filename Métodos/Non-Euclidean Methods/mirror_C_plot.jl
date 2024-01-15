@@ -12,9 +12,10 @@ function mirror_C(f:: Function, ∂f:: Function, ∇ω:: Function, step:: Functi
 
         push!(hist, f(x))
 
-        if dual_norm(∂fx)<ϵ
+        if dual_norm(∂fx)<ϵ || k==k_max
             break
         end
+        k+=1
     end 
 
     println(dual_norm(∂f(x)), " ", hist[end])

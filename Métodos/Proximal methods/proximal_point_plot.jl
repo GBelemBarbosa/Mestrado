@@ -10,9 +10,10 @@ function proximal_point(g:: Function, prox_cg:: Function, c:: Number, x₀:: Arr
 
         push!(hist, g(x))
 
-        if norm(x.-x_, p)<ϵ
+        if norm(x.-x_, p)<ϵ || k==k_max
             break
         end
+        k+=1
     end 
 
     println(norm(x.-x_, p), " ", hist[end])

@@ -12,9 +12,10 @@ function generalized_conditional_subgradient(f:: Function, g:: Function, ∂f:: 
 
         push!(hist, f(x)+g(x))
 
-        if norm(p, q)<ϵ
+        if norm(p, q)if norm(∂fx, p)<ϵ || k==k_max
             break
         end
+        k+=1
     end 
 
     println(norm(∂(x, ∂f(x)), q), " ", hist[end])

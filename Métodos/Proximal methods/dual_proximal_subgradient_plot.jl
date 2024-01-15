@@ -14,9 +14,10 @@ function dual_proximal_subgradient(f:: Function, g:: Function, step:: Function, 
 
         push!(hist, f(x)+g(A*x))
         
-        if norm(x.-x_, p)<ϵ
+        if norm(x.-x_, p)<ϵ || k==k_max
             break
-        end 
+        end
+        k+=1 
 
         Αx=Α*x
         L, prox=Lₖ(L, k, y, Αx) #Backtracking mais prox computation
@@ -42,9 +43,10 @@ function dual_proximal_subgradient(f:: Function, g:: Function, step:: Function, 
 
         push!(hist, f(x)+g(Α(x)))
         
-        if norm(x.-x_, p)<ϵ
+        if norm(x.-x_, p)<ϵ || k==k_max
             break
-        end 
+        end
+        k+=1 
 
         Αx=Α(x)
         L, prox=Lₖ(L, k, y, Αx) #Backtracking mais prox computation

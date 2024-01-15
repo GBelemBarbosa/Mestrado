@@ -22,9 +22,10 @@ function CBPG(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀
             push!(hist, fx+g(x))
         end
 
-        if n∂f<ϵ
+        if n∂f<ϵ || k==k_max
             break
         end
+        k+=1
     end 
 
     println(max([norm(∂f(x, i), q) for i=1:p]), " ", hist[end])

@@ -14,6 +14,11 @@ function RGBCG(f:: Function, g:: Function, ∂f:: Function, ∂:: Function, tₖ
         x[index].+=tₖ(k, x, pᵢ, ∂fxᵢ).*(pᵢ.-x[index])
 
         push!(hist, f(x)+g(x))
+
+        if k==k_max
+            break
+        end
+        k+=1
     end 
 
     println(max([norm(∂(x, ∂f(x, i), i), p) for i=1:p]), " ", hist[end])

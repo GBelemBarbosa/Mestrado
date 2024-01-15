@@ -22,9 +22,10 @@ function alternating_minimization(F:: Function, minimize:: Function, x₀:: Arra
             push!(hist, Fx)
         end
 
-        if n∂xᵢ<ϵ
+        if n∂xᵢif norm(∂fx, p)<ϵ || k==k_max
             break
         end
+        k+=1
     end 
 
     println(max([norm(x[i].-x_[i], q) for i=block_index]), " ", hist[end])
