@@ -49,22 +49,37 @@ function repeval(f:: Function, A:: Matrix{Float64}, y:: Vector{<:Number}, λ:: N
     end
 end
 
+print("f: ")
 @btime repeval(f)
+print("f, A, y, λ: ")
 @btime repeval(f, A, y, λ)
+print("fᵣ: ")
 @btime repeval(fᵣ)
+print("f₂: ")
 @btime repeval(f₂)
+print("f₂, A, y, λ: ")
 @btime repeval(f₂, A, y, λ)
 
+print("g: ")
 @btime repeval(g)
+print("g, A, y, λ: ")
 @btime repeval(g, A, y, λ)
+print("gᵣ: ")
 @btime repeval(gᵣ)
+print("g₂: ")
 @btime repeval(g₂)
+print("g₂, A, y, λ: ")
 @btime repeval(g₂, A, y, λ)
 
+print("h: ")
 @btime repeval(h)
+print("h, A, y, λ: ")
 @btime repeval(h, A, y, λ)
+print("hᵣ: ")
 @btime repeval(hᵣ)
+print("h₂: ")
 @btime repeval(h₂)
+print("h₂, A, y, λ: ")
 @btime repeval(h₂, A, y, λ)
 
 #=

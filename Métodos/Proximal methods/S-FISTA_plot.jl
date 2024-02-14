@@ -2,7 +2,7 @@ using Plots
 using LaTeXStrings
 
 function SFISTA(f:: Function, g:: Function, h:: Function, hμ:: Function, ∇Fμ:: Function, prox_gL:: Function, Lf:: Number, μ:: Number, α:: Number, x₀:: Array{<:Number}, k_max:: Int64; ϵ=eps(), p=Inf) 
-    y=x=x₀
+    y=x_=x=x₀
     t=1
     fx=f(x)+g(x)
     L̃=Lf+α/μ
@@ -11,8 +11,7 @@ function SFISTA(f:: Function, g:: Function, h:: Function, hμ:: Function, ∇Fμ
     k=1
     while true
         ∇Fμy=∇Fμ(y)
-        x_, x=x, prox_gL(L̃, y.-∇Fμy./L̃)
-        t_, t=t, (1+sqrt(1+4*t^2))/2
+        x=prox_gL(L̃, y.-∇Fμy./L̃)
 
         fx=f(x)+g(x)
         push!(hist, fx+h(x))
@@ -23,7 +22,9 @@ function SFISTA(f:: Function, g:: Function, h:: Function, hμ:: Function, ∇Fμ
         end
         k+=1
 
+        t_, t=t, (1+sqrt(1+4*t^2))/2
         y=x.+((t_-1)/t).*(x.-x_)
+        x_=x
     end 
 
     println(norm(∇Fμ(y), p), " ", hist[end-1], " ", hist[end])

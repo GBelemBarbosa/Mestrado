@@ -1,15 +1,17 @@
 using Plots
 using LaTeXStrings
 
-function FISTA(∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
+function FISTA(F:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
     y=x_=x=x₀
     t=1
     L=s
+    hist=[F(x)]
     
     k=1
     while true
         ∂fy=∂f(y)
-        L, x=Lₖ(L, k, y, ∂fy) #Backtracking mais atualização
+        L, x=Lₖ(L, k, y, ∂fy) # Backtracking mais atualização
+        push!(hist, F(x))
 
         if norm(∂fy, p)<ϵ || k==k_max
             break
@@ -21,5 +23,5 @@ function FISTA(∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Num
         x_=x
     end 
 
-    return x
+    return x, hist
 end
