@@ -11,7 +11,7 @@ function FISTA(∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Num
         ∂fy=∂f(y)
         L, x=Lₖ(L, k, y, ∂fy) #Backtracking mais atualização
 
-        if norm(∂fy, p)<ϵ || k==k_max
+        if norm(∂f(x).-∂fy.+(y.-x).*L, p)<ϵ || k==k_max
             break
         end
         k+=1

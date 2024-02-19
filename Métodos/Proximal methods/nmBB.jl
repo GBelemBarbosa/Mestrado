@@ -3,7 +3,7 @@ using LaTeXStrings
 
 function nmBB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:Number}, ρ:: Number, γ:: Number, αmin:: Number, αmax:: Number, M:: Int64, k_max:: Int64; ϵ=eps(), p=Inf) 
     x_=x=x₀
-    ∂fx=∂f(x)
+    ∂fx_=∂fx=∂f(x)
     nsₖ=Φx=αₖ=1.0
     sₖ=zeros(Float64, length(x))
     last_M=[Φ(x) for i=1:M]
@@ -30,7 +30,7 @@ function nmBB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:
             end
         end
 
-        if norm(∂fx, p)<ϵ || k==k_max
+        if norm(∂fx.-∂fx_.+(x_.-x).*αₖ, p)<ϵ || k==k_max
             break
         end
         k+=1

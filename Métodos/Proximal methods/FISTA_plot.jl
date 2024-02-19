@@ -15,7 +15,7 @@ function FISTA(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x�
         
         push!(hist, f(x)+g(x))
 
-        if norm(∂fy, p)<ϵ || k==k_max
+        if norm(∂f(x).-∂fy.+(y.-x).*L, p)<ϵ || k==k_max
             break
         end
         k+=1

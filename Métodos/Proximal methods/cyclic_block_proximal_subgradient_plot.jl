@@ -9,21 +9,22 @@ function CBPG(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀
     
     k=1
     while true
-        n∂f=0.0
+        n∂x=0.0
 
-        for i=1:p
-            ∂fxᵢ=∂f(x, i)
-            aux=norm(∂fxᵢ, q)
-            if n∂f<aux
-                n∂f=aux
-            end
-            L[i], x[block_index[i]]=Lₖ(L[i], i, k, x, fx, ∂fxᵢ) #Backtracking mais atualização
+        for i=1:p    
+            x_=copy(x)        
+            L[i], x[block_index[i]]=Lₖ(L[i], i, k, x, fx, ∂f(x, i)) #Backtracking mais atualização
             fx=f(x)
+
+            aux=norm(x[block_index[i]].-x_[block_index[i]], q)
+            if n∂x<aux
+                n∂x=aux
+            end
 
             push!(hist, fx+g(x))
         end
 
-        if n∂f<ϵ || k==k_max
+        if n∂x<ϵ || k==k_max
             break
         end
         k+=1

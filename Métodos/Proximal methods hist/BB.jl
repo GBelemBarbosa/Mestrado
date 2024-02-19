@@ -3,16 +3,20 @@ using LaTeXStrings
 
 function BB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:Number}, αmin:: Number, αmax:: Number, M:: Int64, k_max:: Int64; ϵ=eps(), p=Inf) 
     x_=x=x₀
-    ∂fx=∂f(x)
+    ∂fx_=∂fx=∂f(x)
     αₖ=1.0
-    hist=[Φ(x)]
+    histF=[Φ(x)]
+    histnψ=[]
     
     k=1
     while true
         x_, x=x, pαₖ(αₖ, x, ∂fx)
-        push!(hist, Φ(x))
 
-        if norm(∂fx, p)<ϵ || k==k_max
+        push!(histF, Φ(x))
+        nψ=norm(∂fx.-∂fx_.+(x_.-x).*αₖ, p)
+        push!(nψ, histnψ)
+
+        if nψ<ϵ || k==k_max
             break
         end
         k+=1
@@ -22,5 +26,5 @@ function BB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:Nu
         αₖ=min(αmax, max(αmin, sₖ'*(∂fx.-∂fx_)/sₖ'sₖ))
     end 
 
-    return x, hist
+    return x, histF, histnψ
 end

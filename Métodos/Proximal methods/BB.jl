@@ -3,14 +3,14 @@ using LaTeXStrings
 
 function BB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:Number}, αmin:: Number, αmax:: Number, M:: Int64, k_max:: Int64; ϵ=eps(), p=Inf) 
     x_=x=x₀
-    ∂fx=∂f(x)
+    ∂fx_=∂fx=∂f(x)
     αₖ=1.0
     
     k=1
     while true
         x_, x=x, pαₖ(αₖ, x, ∂fx)
 
-        if norm(∂fx, p)<ϵ || k==k_max
+        if norm(∂fx.-∂fx_.+(x_.-x).*αₖ, p)<ϵ || k==k_max
             break
         end
         k+=1

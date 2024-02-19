@@ -6,14 +6,18 @@ function FISTA(F:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Nu
     t=1
     L=s
     hist=[F(x)]
+    histnψ=[]
     
     k=1
     while true
         ∂fy=∂f(y)
         L, x=Lₖ(L, k, y, ∂fy) # Backtracking mais atualização
-        push!(hist, F(x))
 
-        if norm(∂fy, p)<ϵ || k==k_max
+        push!(hist, F(x))
+        nψ=norm(∂f(x).-∂fy.+(y.-x).*L, p)
+        push!(nψ, histnψ)
+
+        if nψ<ϵ || k==k_max
             break
         end
         k+=1
@@ -23,5 +27,5 @@ function FISTA(F:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Nu
         x_=x
     end 
 
-    return x, hist
+    return x, hist, histnψ
 end

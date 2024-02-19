@@ -11,7 +11,7 @@ function MFISTA(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x�
     while true
         ∂fy=∂f(y)
         x_=x
-        L, z=Lₖ(L, k, y, ∂fy) #Backtracking mais atualização
+        L, z=Lₖ(L, k, y, ∂fy) # Backtracking mais atualização
         if f(x_)+g(x_)<f(z)+g(z)
             x=x_
         else
@@ -20,7 +20,7 @@ function MFISTA(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x�
 
         push!(hist, f(x)+g(x))
 
-        if norm(∂fy, p)<ϵ || k==k_max
+        if norm(∂f(x).-∂fy.+(y.-x).*L, p)<ϵ || k==k_max
             break
         end
         k+=1

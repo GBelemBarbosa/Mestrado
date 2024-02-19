@@ -2,28 +2,39 @@ using Plots
 using LaTeXStrings
 
 function mAPG(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:Number}, αx:: Number, αy:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
-    y=z=x_=x=x₀
-    t=1
+    y=z=x=x₀
+    ∂fx=∂f(x)
+    t=1.0
     hist=[F(x)]
+    histnψ=[]
     
     k=1
     while true
         ∂fy=∂f(y)
         z=proxα(αy, y, ∂fy)
-        ∂fx=∂f(x)
         v=proxα(αx, x, ∂fx)
         Fz=F(z)
         Fv=F(v)
         if Fz>Fv
             x=v
             Fx=Fv
+            x_2=x
+            ∂fx_=∂fx
+            αx_=αx
         else
             x=z
             Fx=Fz
+            x_2=y
+            ∂fx_=∂fy
+            αx_=αy
         end
-        push!(hist, Fx)
+        ∂fx=∂f(x)
 
-        if norm(∂fy, p)<ϵ || k==k_max
+        push!(hist, Fx)
+        nψ=norm(∂fx.-∂fx_.+(x_2.-x).*αx_, p)
+        push!(nψ, histnψ)
+
+        if nψ<ϵ || k==k_max
             break
         end
         k+=1
@@ -33,5 +44,5 @@ function mAPG(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:N
         x_=x
     end 
 
-    return x, hist
+    return x, hist, histnψ
 end

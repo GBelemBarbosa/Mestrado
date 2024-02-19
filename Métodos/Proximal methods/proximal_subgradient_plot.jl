@@ -1,20 +1,20 @@
 using Plots
 using LaTeXStrings
 
-function proximal_subgradient(f:: Function, g:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, L₀:: Number, k_max:: Int64; ϵ=eps(), p=Inf)
+function proximal_subgradient(F:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, L₀:: Number, k_max:: Int64; ϵ=eps(), p=Inf)
     x=x₀
     L=L₀
-    hist=[f(x)+g(x)]
+    ∂fx=∂f(x)
+    hist=[F(x)]
     
     k=1
     while true
-        ∂fx=∂f(x)
-        fx=f(x)
-        L, x=Lₖ(L, k, x, fx, ∂fx) #Backtracking mais atualização
+        L, x=Lₖ(L, k, x, ∂fx) #Backtracking mais atualização
+        ∂fx_, ∂fx=∂fx, ∂f(x)
 
-        push!(hist, fx+g(x))
+        push!(hist, F(x))
 
-        if norm(∂fx, p)<ϵ || k==k_max
+        if norm(∂fx.-∂fx_.+(x_.-x).*L, p)<ϵ || k==k_max
             break
         end
         k+=1

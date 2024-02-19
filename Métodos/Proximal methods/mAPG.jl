@@ -2,22 +2,30 @@ using Plots
 using LaTeXStrings
 
 function mAPG(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:Number}, αx:: Number, αy:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
-    y=z=x_=x=x₀
-    t=1
+    y=z=x=x₀
+    ∂fx=∂f(x)
+    t=1.0
     
     k=1
     while true
         ∂fy=∂f(y)
         z=proxα(αy, y, ∂fy)
-        ∂fx=∂f(x)
         v=proxα(αx, x, ∂fx)
         if F(z)>F(v)
             x=v
+            x_2=x
+            ∂fx_=∂fx
+            αx_=αx
         else
             x=z
+            x_2=y
+            ∂fx_=∂fy
+            αx_=αy
         end
 
-        if norm(∂fy, p)<ϵ || k==k_max
+        ∂fx=∂f(x)
+        
+        if norm(∂fx.-∂fx_.+(x_2.-x)./αx_, p)<ϵ || k==k_max
             break
         end
         k+=1

@@ -9,11 +9,11 @@ function VFISTA(f:: Function, g:: Function, ∇f:: Function, prox_gLf:: Function
     
     k=1
     while true
-        ∇fx=∇f(x)
-        x_, x=x, prox_gLf(x.-∇fx./Lf)
+        ∇fy=∇f(y)
+        x_, x=x, prox_gLf(y.-∇fy./Lf)
         push!(hist, f(x)+g(x))
 
-        if norm(∇fx, p)<ϵ || k==k_max
+        if norm(∇fy.-∇f(x).+(y.-x).*Lf, p)<ϵ || k==k_max
             break
         end
         k+=1

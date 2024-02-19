@@ -9,6 +9,7 @@ function newAPG_vs(F:: Function, g:: Function, ∂f:: Function, Tλ:: Function, 
     λ=λ₁
     
     k=1
+    k_max-=1
     while true
         if ns<=c*(Fx_-Fx)
             y=x.+γ(k).*s
@@ -47,8 +48,8 @@ function newAPG_vs(F:: Function, g:: Function, ∂f:: Function, Tλ:: Function, 
         
         Fx_, Fx=Fx, F(x)
         ∂fx=∂f(x)
-        aux=nxy/(λ*2*abs(g(x)Fy+g(y)-∂fx'xy-Fx))
-        if 1>μ₀*aux
+        aux=nxy/(2*abs(Fx-g(x)-Fy+g(y)-∂fx'xy))
+        if 1>μ₀*aux/λ
             λ=μ₁*aux
         else
             λ+=min(1, λₖ)*E(k)
