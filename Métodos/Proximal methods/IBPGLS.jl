@@ -19,7 +19,7 @@ function IBPGLS(F:: Function, ∂f:: Function, ℘hλg:: Function, α°ₖ:: Fun
             y=xₐ.+αₖ.*s
             z=x.+βₖ.*s
             ∂fz=∂f(z)
-            x=℘hλg(αₖ, λₖ, k, y, ∂fz) 
+            x=℘hλg(λₖ, k, y, ∂fz) 
 
             nx=norm(x.-x_)^2
             Eδ=F(x)+δ*nx/(4*λₖ)

@@ -2,14 +2,15 @@ using Plots
 using LaTeXStrings
 
 function nmBB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:Number}, ρ:: Number, γ:: Number, αmin:: Number, αmax:: Number, M:: Int64, k_max:: Int64; ϵ=eps(), p=Inf) 
+    start=time()
     x_=x=x₀
     ∂fx_=∂fx=∂f(x)
     nsₖ=Φx=αₖ=1.0
     sₖ=zeros(Float64, length(x))
     last_M=[Φ(x) for i=1:M]
-    hist=[last_M[begin]]
-    histnψ=[]
+    histnψ=Tuple{Float64, Float64}[]
     ls=0
+    histF=[(time()-start, last_M[begin])]
     
     k=1
     while true
@@ -31,25 +32,28 @@ function nmBB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:
             αₖ*=ρ
 
             if αₖ>=αmax || isnan(αₖ)
-                return x_, hist, histnψ, ls
+                return x_, histF, histnψ, ls
             end
         end
+        ∂fx_, ∂fx=∂fx, ∂f(x)
 
-        push!(hist, Φx)
+        t1=time()
+        elapsed=t1-start
         nψ=norm(∂fx.-∂fx_.+(x_.-x).*αₖ, p)
-        push!(nψ, histnψ)
+        push!(histF, (elapsed, Φx))
+        push!(histnψ, (elapsed, nψ))
+        start+=time()-t1
 
         if nψ<ϵ || k==k_max
             break
         end
         k+=1
 
-        popat!(last_M, M)
+        popfirst!(last_M)
         push!(last_M, Φx)
         x_=x
-        ∂fx_, ∂fx=∂fx, ∂f(x)
         αₖ=min(αmax, max(αmin, sₖ'*(∂fx.-∂fx_)/nsₖ))
     end 
 
-    return x, hist, histnψ, ls
+    return x, histF, histnψ, ls
 end

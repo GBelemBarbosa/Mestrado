@@ -48,7 +48,7 @@ function newAPG_vs(F:: Function, g:: Function, ∂f:: Function, Tλ:: Function, 
         
         Fx_, Fx=Fx, F(x)
         ∂fx=∂f(x)
-        aux=nxy/(2*abs(Fx-g(x)-Fy+g(y)-∂fx'xy))
+        aux=nxy/(2*abs(Fy-g(y)-Fx+g(x)+∂fx'xy))
         if 1>μ₀*aux/λ
             λ=μ₁*aux
         else

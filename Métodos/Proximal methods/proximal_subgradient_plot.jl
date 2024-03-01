@@ -18,6 +18,8 @@ function proximal_subgradient(F:: Function, ∂f:: Function, Lₖ:: Function, x�
             break
         end
         k+=1
+
+        x_=x
     end 
 
     println(norm(∂f(x), p), " ", hist[end])

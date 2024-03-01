@@ -2,14 +2,18 @@ using Plots
 using LaTeXStrings
 
 function nmAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:Number}, ρ:: Number, η:: Number, δ:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
-    v=∂fx=y=z=x_=x=x₀
+    t1=time()
+    ∂fx=∂f(x₀)
+    start=time()
+    maybe=t1-start
+    v=y=z=x_2=x_=x=x₀
     Fv=Fz=Fx=c=F(x)
-    ∂fx=∂f(x)
+    ∂fx_=∂fx=∂f(x)
     ∂fy=∂f(y)
-    q=αy=t=1.0
-    hist=[c]
-    histnψ=[]
+    q=αx_=αy=t=1.0
+    histnψ=Tuple{Float64, Float64}[]
     ls=0
+    histF=[(time()-start, c)]
     
     k=1
     while true
@@ -43,6 +47,7 @@ function nmAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{
                     v=proxα(αx, x, ∂fx)
 
                     ls+=1
+                    start+=maybe
 
                     Fv=F(v)
 
@@ -53,7 +58,7 @@ function nmAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{
                     αx*=ρ
 
                     if isnan(αx) || αx<10^-17
-                        return x_, hist, histnψ, ls
+                        return x_, histF, histnψ, ls
                     end
                 end
                 if Fz>Fv
@@ -75,14 +80,18 @@ function nmAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{
             αy*=ρ
 
             if isnan(αy) || αy<10^-17
-                return x_, hist, histnψ, ls
+                return x_, histF, histnψ, ls
             end
         end
+        t1=time()
         ∂fx=∂f(x)
+        maybe=t1-time()
 
-        push!(hist, Fx)
-        nψ=norm(∂fx.-∂fx_.+(x_2.-x)./αx_, p)
-        push!(nψ, histnψ)
+        elapsed=t1-start
+        nψ=norm(∂fx.-∂fx_.+(x_2.-x).*αx_, p)
+        push!(histF, (elapsed, Fx))
+        push!(histnψ, (elapsed, nψ))
+        start+=time()-t1
 
         if nψ<ϵ || k==k_max
             break
@@ -99,5 +108,5 @@ function nmAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{
         αy=ysₖ'ysₖ/(ysₖ'*(∂fy.-∂fy_))
     end 
 
-    return x, hist, histnψ, ls
+    return x, histF, histnψ, ls
 end

@@ -1,10 +1,10 @@
-g(x:: Vector{<:Number}, m:: Int64, group_indexs:: Vector{UnitRange{Int64}})=[!iszero(x[group_indexs[i]]) for i=1:m]
+g(x:: Vector{<:Number}, group_indexs:: Vector{UnitRange{Int64}})=[@inbounds !iszero(x[group_indexs[i]]) for i=eachindex(group_indexs)]
 
 g₀(x:: Vector{<:Number}; g=g)=sum(g(x))
 
 Α(T:: Int64, group_indexs:: Vector{UnitRange{Int64}})=group_indexs[T]
 
-Α(T:: Vector{Int64}, group_indexs:: Vector{UnitRange{Int64}})=reduce(vcat, group_indexs[i] for i=T)
+Α(T:: Vector{Int64}, group_indexs:: Vector{UnitRange{Int64}})=reduce(vcat, @inbounds group_indexs[i] for i=T)
 
 δCₛB(x:: Vector{<:Number}, s:: Int64; B=B)=0+(g₀(x)>s+!all(B(x)))*Inf
 
@@ -19,7 +19,7 @@ end
 
 function UATPBTAT(x:: Vector{<:Number}, T:: Vector{Int64}, n:: Int64, group_indexs:: Vector{UnitRange{Int64}}; A=A)
     y=zeros(Float64, n)
-    for j=T
+    @inbounds for j=T
         y[Α(j, group_indexs)]=PDⱼ(x[Α(j, group_indexs)], j)
     end
 
@@ -35,7 +35,7 @@ end
 
 function UATPBTAT(x:: Vector{<:Number}, T:: Vector{Int64}, n:: Int64)
     y=zeros(Float64, n)
-    for j=T
+    @inbounds for j=T
         y[j]=x[j]
     end
 
@@ -44,11 +44,11 @@ end
 
 PBTAT(x:: Vector{<:Number}, j:: Int64, group_indexs:: Vector{UnitRange{Int64}}; A=A)=PDⱼ(x[Α(j, group_indexs)], j)
 
-PBTAT(x:: Vector{<:Number}, T:: Vector{Int64}, group_indexs:: Vector{UnitRange{Int64}}; A=A)=reduce(vcat, PDⱼ(x[Α(j, group_indexs)], j) for j=T)
+PBTAT(x:: Vector{<:Number}, T:: Vector{Int64}, group_indexs:: Vector{UnitRange{Int64}}; A=A)=reduce(vcat, @inbounds PDⱼ(x[Α(j, group_indexs)], j) for j=T)
 
-ω(x:: Vector{<:Number}, dDⱼ:: Function, m:: Int64, group_indexs:: Vector{UnitRange{Int64}}; A=A)=[norm(x[Α(j, group_indexs)], 2)^2-dDⱼ(x[Α(j, group_indexs)], j)^2 for j=1:m]
+ω(x:: Vector{<:Number}, dDⱼ:: Function, group_indexs:: Vector{UnitRange{Int64}}; A=A)=[@inbounds norm(x[Α(j, group_indexs)])^2-dDⱼ(x[Α(j, group_indexs)], j)^2 for j=eachindex(group_indexs)]
 
-ω(x:: Vector{<:Number})=[norm(x[j], 2)^2 for j=1:length(x)]
+ω(x:: Vector{<:Number})=x.*x
 
 ωₛ(x:: Vector{<:Number}, s=Inf64; ω=ω)=partialsort(ω(x), s, rev=true)
 
@@ -60,19 +60,19 @@ function Sₛ(x:: Vector{<:Number}, s=Inf64; ω=ω)
     return findall(x -> x>=uωxₛ, ωx)
 end
 
-I₁(x:: Vector{<:Number}, m:: Int64, group_indexs:: Vector{UnitRange{Int64}})=findall(!iszero, g(x, m, group_indexs))
+I₁(x:: Vector{<:Number}, m:: Int64, group_indexs:: Vector{UnitRange{Int64}})=findall(!iszero, g(x, group_indexs))
 
-I₀(x:: Vector{<:Number}, m:: Int64, group_indexs:: Vector{UnitRange{Int64}})=findall(iszero, g(x, m, group_indexs))
+I₀(x:: Vector{<:Number}, m:: Int64, group_indexs:: Vector{UnitRange{Int64}})=findall(iszero, g(x, group_indexs))
 
 function I₊(x:: Vector{<:Number}, dDⱼ:: Function, m:: Int64, group_indexs:: Vector{UnitRange{Int64}}, s:: Int64, λ:: Int64)
-    ωx=ω(x, dDⱼ, m, group_indexs)
+    ωx=ω(x, dDⱼ, group_indexs)
     ωxₛ=partialsort(ωx, s, rev=true)
 
     return findall(x->x>max(ωxₛ, 2*λ), ωx)
 end
 
 function Iq(x:: Vector{<:Number}, dDⱼ:: Function, s:: Int64, λ:: Int64)
-    ωx=ω(x, dDⱼ, m, group_indexs)
+    ωx=ω(x, dDⱼ, group_indexs)
     ωxₛ=partialsort(ωx, s, rev=true)
 
     return findall(isequal(max(ωxₛ, 2*λ)), ωx)
@@ -103,7 +103,7 @@ function proxhL(L:: Number, x:: Vector{<:Number}, λ:: Number, n:: Int64; T=T, �
     return UATPBTAT(x, Tωx[1:searchsortedlast(ωx[Tωx], 2*λ/L, rev=true, lt=<=)], n)
 end
 
-function proxhL1(L:: Number, x:: Vector{<:Number}, λ:: Number, n)
+function proxhL1(L:: Number, x:: Vector{<:Number}, λ:: Number)
     λL=λ/L
 
     return [0.0+(x[i]<-λL)*(x[i]+λL)+(x[i]>λL)*(x[i]-λL) for i=eachindex(x)]

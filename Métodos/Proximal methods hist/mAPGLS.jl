@@ -2,13 +2,15 @@ using Plots
 using LaTeXStrings
 
 function mAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:Number}, ρ:: Number, δ:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
+    Fx=F(x₀)
+    start=time()
     v=xsₖ=ysₖ=y=z=x_=x=x₀
     nysₖ=nxsₖ=αy=αx=t=1.0
     Fv=Fz=Fx=F(x)
     ∂fx=∂f(x)
-    hist=[Fx]
-    histnψ=[]
+    histnψ=Tuple{Float64, Float64}[]
     ls=0
+    histF=[(time()-start, Fx)]
     
     k=1
     while true
@@ -31,7 +33,7 @@ function mAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<
             αy*=ρ
 
             if isnan(αy) || αy<10^-17
-                return x_, hist, histnψ, ls
+                return x_, histF, histnψ, ls
             end
         end
 
@@ -51,7 +53,7 @@ function mAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<
             αx*=ρ
 
             if isnan(αx) || αx<10^-17
-                return x_, hist, histnψ, ls
+                return x_, histF, histnψ, ls
             end
         end
         
@@ -59,20 +61,23 @@ function mAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<
             x=v
             Fx=Fv
             x_2=x
-            ∂fx_=∂fx
+            ∂fx_2=∂fx
             αx_=αx
         else
             x=z
             Fx=Fz
             x_2=y
-            ∂fx_=∂fy
+            ∂fx_2=∂fy
             αx_=αy
         end
-        ∂fx=∂f(x)
+        ∂fx_, ∂fx=∂fx, ∂f(x)
 
-        push!(hist, Fx)
-        nψ=norm(∂fx.-∂fx_.+(x_2.-x)./αx_, p)
-        push!(nψ, histnψ)
+        t1=time()
+        elapsed=t1-start
+        nψ=norm(∂fx.-∂fx_2.+(x_2.-x).*αx_, p)
+        push!(histF, (elapsed, Fx))
+        push!(histnψ, (elapsed, nψ))
+        start+=time()-t1
 
         if nψ<ϵ || k==k_max
             break
@@ -83,8 +88,8 @@ function mAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<
         y=x.+(t_/t).*(z.-x).+((t_-1)/t).*(x.-x_)
         x_=x
         αy=nysₖ/(ysₖ'*(∂f(z).-∂fy))
-        αx=nxsₖ/(xsₖ'*(∂f(v).-∂fx))
+        αx=nxsₖ/(xsₖ'*(∂f(v).-∂fx_))
     end 
 
-    return x, hist, histnψ, ls
+    return x, histF, histnψ, ls
 end

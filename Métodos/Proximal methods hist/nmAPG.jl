@@ -2,13 +2,16 @@ using Plots
 using LaTeXStrings
 
 function nmAPG(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:Number}, αx:: Number, αy:: Number, η:: Number, δ:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
-    y=z=x=x₀
+    t1=time()
+    ∂fx=∂f(x₀)
+    maybe=t1-time()
+    start=time()
+    y=z=x_=x=x₀
     c=F(x)
-    ∂fx=∂f(x)
     q=t=1.0
-    hist=[c]
-    histnψ=[]
+    histnψ=Tuple{Float64, Float64}[]
     ls=0
+    histF=[(time()-start, c)]
     
     k=1
     while true
@@ -29,6 +32,7 @@ function nmAPG(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:
             v=proxα(αx, x, ∂fx)
 
             ls+=1
+            start+=maybe
 
             Fv=F(v)
             if Fz>Fv
@@ -45,11 +49,15 @@ function nmAPG(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:
                 αx_=αy
             end
         end
+        t1=time()
         ∂fx=∂f(x)
+        maybe=t1-time()
 
-        push!(hist, Fx)
-        nψ=norm(∂fx.-∂fx_.+(x_2.-x)./αx_, p)
-        push!(nψ, histnψ)
+        elapsed=t1-start
+        nψ=norm(∂fx.-∂fx_.+(x_2.-x).*αx_, p)
+        push!(histF, (elapsed, Fx))
+        push!(histnψ, (elapsed, nψ))
+        start+=time()-t1
 
         if nψ<ϵ || k==k_max
             break
@@ -63,5 +71,5 @@ function nmAPG(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:
         x_=x
     end 
 
-    return x, hist, histnψ, ls
+    return x, histF, histnψ, ls
 end

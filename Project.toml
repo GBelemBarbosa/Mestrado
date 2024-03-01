@@ -1,2 +1,3 @@
 [deps]
+KrylovKit = "0b1a1467-8014-51b9-945f-bf0ae24f4b77"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"

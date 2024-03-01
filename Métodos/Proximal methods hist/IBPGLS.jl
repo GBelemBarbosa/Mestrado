@@ -2,12 +2,13 @@ using Plots
 using LaTeXStrings
 
 function IBPGLS(F:: Function, ∂f:: Function, ℘hλg:: Function, α°ₖ:: Function, β°ₖ:: Function, λ°ₖ:: Function, pₖ:: Function, x₀:: Array{<:Number}, η₁:: Number, η₂:: Number, τ:: Number, d:: Number, δ:: Number, λₘᵢₙ:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
+    start=time()
     y=∂fz=x_=x=x₀
     Eδ=Ẽ=F(x)
     nx=αₖ=βₖ=λₖ=0.0
-    hist=[Eδ]
-    histnψ=[]
+    histnψ=Tuple{Float64, Float64}[]
     ls=0
+    histF=[(time()-start, Eδ)]
     
     k=1
     while true
@@ -21,7 +22,7 @@ function IBPGLS(F:: Function, ∂f:: Function, ℘hλg:: Function, α°ₖ:: Fun
             y=xₐ.+αₖ.*s
             z=xₐ.+βₖ.*s
             ∂fz=∂f(z)
-            x=℘hλg(αₖ, λₖ, k, y, ∂fz) 
+            x=℘hλg(λₖ, k, y, ∂fz) 
 
             ls+=1
 
@@ -36,13 +37,16 @@ function IBPGLS(F:: Function, ∂f:: Function, ℘hλg:: Function, α°ₖ:: Fun
             λₖ=max(τ*λₖ, λₘᵢₙ)
 
             if isnan(αₖ) || isnan(βₖ) || min(αₖ, βₖ)<=ϵ
-                return x_, hist, histnψ, ls
+                return x_, histF, histnψ, ls
             end
         end
 
-        push!(hist, Eδ-δ*nx/(4*λₖ))
+        t1=time()
+        elapsed=t1-start
         nψ=norm(∂f(x).-∂fz.+(y.-x)./λₖ, p)
-        push!(nψ, histnψ)
+        push!(histF, (elapsed, Eδ-δ*nx/(4*λₖ)))
+        push!(histnψ, (elapsed, nψ))
+        start+=time()-t1
 
         if nψ<ϵ || k==k_max
             break
@@ -54,5 +58,5 @@ function IBPGLS(F:: Function, ∂f:: Function, ℘hλg:: Function, α°ₖ:: Fun
         Ẽ=pk*Eδ+(1-pk)*Ẽ
     end 
 
-    return x, hist, histnψ, ls
+    return x, histF, histnψ, ls
 end

@@ -2,7 +2,7 @@ using Plots
 using LaTeXStrings
 
 function nmAPG(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:Number}, αx:: Number, αy:: Number, η:: Number, δ:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
-    y=z=x=x₀
+    y=z=x_=x=x₀
     c=F(x)
     ∂fx=∂f(x)
     q=t=1.0

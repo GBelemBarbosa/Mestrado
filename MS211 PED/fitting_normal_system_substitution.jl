@@ -29,10 +29,10 @@ p=plot(x, y₀, label=L"y_i")
 
 ϕ₂(x:: Number)=exp(-((a-x)/b)^2)
 
-plot!(x, ϕ₂, label=L"aproximação")
+plot!(x, ϕ₂, label="Aproximação")
 
 aux(x:: Number)=log(ϕ₂(x))
 
 q=plot(x, y, label=L"y_i")
 
-plot!(x, aux, label=L"aproximação")
+plot!(x, aux, label="Aproximação")

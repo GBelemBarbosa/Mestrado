@@ -2,7 +2,7 @@ using Plots
 using LaTeXStrings
 
 function mAPG(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:Number}, αx:: Number, αy:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
-    y=z=x=x₀
+    y=z=x_=x=x₀
     ∂fx=∂f(x)
     t=1.0
     

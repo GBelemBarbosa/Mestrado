@@ -1,21 +1,31 @@
 using Plots
 using LaTeXStrings
 
-function BB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:Number}, αmin:: Number, αmax:: Number, M:: Int64, k_max:: Int64; ϵ=eps(), p=Inf) 
-    x_=x=x₀
+function BB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:Number}, α₀:: Number, αmin:: Number, αmax:: Number, M:: Int64, k_max:: Int64; ϵ=eps(), p=Inf)
+    start=time()
+    x_best=x_=x=x₀
     ∂fx_=∂fx=∂f(x)
-    αₖ=1.0
-    histF=[Φ(x)]
-    histnψ=[]
+    Φ_best=Φx=Φ(x₀)
+    αₖ=α₀
+    histnψ=Tuple{Float64, Float64}[]
+    histF=[(time()-start, Φx)]
     
     k=1
     while true
         x_, x=x, pαₖ(αₖ, x, ∂fx)
+        Φx=Φ(x)
+        if Φ_best>Φx
+            x_best=x
+            Φ_best=Φx
+        end
 
-        push!(histF, Φ(x))
+        t1=time()
+        elapsed=t1-start
         nψ=norm(∂fx.-∂fx_.+(x_.-x).*αₖ, p)
-        push!(nψ, histnψ)
-
+        push!(histF, (elapsed, Φx))
+        push!(histnψ, (elapsed, nψ))
+        start+=time()-t1
+        
         if nψ<ϵ || k==k_max
             break
         end
@@ -26,5 +36,5 @@ function BB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:Nu
         αₖ=min(αmax, max(αmin, sₖ'*(∂fx.-∂fx_)/sₖ'sₖ))
     end 
 
-    return x, histF, histnψ
+    return x_best, histF, histnψ
 end
