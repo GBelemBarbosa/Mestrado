@@ -1,6 +1,3 @@
-using Plots
-using LaTeXStrings
-
 function BB(Φ:: Function, ∂f:: Function, dαₖ:: Function, x₀:: Array{<:Number}, ρ:: Number, γ:: Number, αmin:: Number, αmax:: Number, M:: Int64, k_max:: Int64; ϵ=eps(), p=Inf) 
     x=x₀
     ∂fx=∂f(x)

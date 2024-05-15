@@ -96,17 +96,10 @@ function proxhL(L:: Number, x:: Vector{<:Number}, s:: Int64, λ:: Number, n:: In
     return UATPBTAT(x, Tωx[1:searchsortedlast(ωx[Tωx], 2*λ/L, rev=true, lt=<=)], n)
 end
 
-function proxhL(L:: Number, x:: Vector{<:Number}, λ:: Number, n:: Int64; T=T, ω=ω, UATPBTAT=UATPBTAT)
-    ωx=ω(x)
-    Tωx=T(ωx)
+proxhL(L:: Number, x:: Vector{<:Number}, λ:: Number, ω:: Function)=[@inbounds x[i]*(ω(x)[i]>2*λ/L) for i=eachindex(x)]
 
-    return UATPBTAT(x, Tωx[1:searchsortedlast(ωx[Tωx], 2*λ/L, rev=true, lt=<=)], n)
-end
+proxhL(L:: Number, x:: Vector{<:Number}, λ:: Number)=[@inbounds x[i]*(abs(x[i])>sqrt(2*λ/L)) for i=eachindex(x)]
 
-function proxhL1(L:: Number, x:: Vector{<:Number}, λ:: Number)
-    λL=λ/L
-
-    return [0.0+(x[i]<-λL)*(x[i]+λL)+(x[i]>λL)*(x[i]-λL) for i=eachindex(x)]
-end
+proxhL1(L:: Number, x:: Vector{<:Number}, λ:: Number)=[max(x[i]-λ/L, 0)*sign(x[i]) for i=eachindex(x)]
 
 TL(L:: Number, x:: Vector{<:Number}; ∇f=∇f)=x.-∇f(x)./L

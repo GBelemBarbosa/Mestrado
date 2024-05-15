@@ -1,10 +1,7 @@
-using Plots
-using LaTeXStrings
-
 function IBPGLS(F:: Function, ∂f:: Function, ℘hλg:: Function, α°ₖ:: Function, β°ₖ:: Function, λ°ₖ:: Function, pₖ:: Function, x₀:: Array{<:Number}, η₁:: Number, η₂:: Number, τ:: Number, d:: Number, δ:: Number, λₘᵢₙ:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
     start=time()
-    y=∂fz=x_=x=x₀
-    Eδ=Ẽ=F(x)
+    x_best=y=∂fz=x_=x=x₀
+    F_best=Eδ=Ẽ=F(x)
     nx=αₖ=βₖ=λₖ=0.0
     histnψ=Tuple{Float64, Float64}[]
     ls=0
@@ -37,8 +34,17 @@ function IBPGLS(F:: Function, ∂f:: Function, ℘hλg:: Function, α°ₖ:: Fun
             λₖ=max(τ*λₖ, λₘᵢₙ)
 
             if isnan(αₖ) || isnan(βₖ) || min(αₖ, βₖ)<=ϵ
+                if isempty(histnψ)
+                    push!(histnψ, (Inf, Inf))
+                end
+
                 return x_, histF, histnψ, ls
             end
+        end
+
+        if F_best>Eδ-δ*nx/(4*λₖ)
+            x_best=x
+            F_best=Eδ-δ*nx/(4*λₖ)
         end
 
         t1=time()
@@ -58,5 +64,5 @@ function IBPGLS(F:: Function, ∂f:: Function, ℘hλg:: Function, α°ₖ:: Fun
         Ẽ=pk*Eδ+(1-pk)*Ẽ
     end 
 
-    return x, histF, histnψ, ls
+    return x_best, histF, histnψ, ls
 end

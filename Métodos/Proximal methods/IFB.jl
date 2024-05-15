@@ -1,6 +1,3 @@
-using Plots
-using LaTeXStrings
-
 function IFB(∂g:: Function, argmin:: Function, x₀:: Array{<:Number}, n_max:: Int64; ϵ=eps(), p=Inf) 
     x_=x=x₀
     αₙ=βₙ=0

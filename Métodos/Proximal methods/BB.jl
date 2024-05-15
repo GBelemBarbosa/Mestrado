@@ -1,7 +1,4 @@
-using Plots
-using LaTeXStrings
-
-function BB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:Number}, αmin:: Number, αmax:: Number, M:: Int64, k_max:: Int64; ϵ=eps(), p=Inf) 
+function BB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:Number}, αmin:: Number, αmax:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
     x_best=x_=x=x₀
     ∂fx_=∂fx=∂f(x)
     Φ_best=Φ(x)

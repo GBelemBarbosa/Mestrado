@@ -1,6 +1,3 @@
-using Plots
-using LaTeXStrings
-
 function newAPG_vs_y_2(F:: Function, g:: Function, ∂f:: Function, Tλ:: Function, Q:: Function, E:: Function, x₀:: Array{<:Number}, λ₁:: Number, μ₀:: Number, μ₁:: Number, c:: Number, δ:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
     x_, x=x₀, Tλ(λ₁, x₀, 0 .*x₀) #proxλ₁(x₀)
     Fx_, Fx=F(x_), F(x)

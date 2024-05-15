@@ -1,9 +1,6 @@
-using Plots
-using LaTeXStrings
-
 function FISTA(∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, s:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
     y=x_=x=x₀
-    t=1
+    t=1.0
     L=s
     
     k=1

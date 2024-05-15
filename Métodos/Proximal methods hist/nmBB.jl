@@ -1,13 +1,11 @@
-using Plots
-using LaTeXStrings
-
-function nmBB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:Number}, ρ:: Number, γ:: Number, αmin:: Number, αmax:: Number, M:: Int64, k_max:: Int64; ϵ=eps(), p=Inf) 
+function nmBB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:Number}, α₀:: Number, ρ:: Number, γ:: Number, αmin:: Number, αmax:: Number, M:: Int64, k_max:: Int64; ϵ=eps(), p=Inf) 
     start=time()
-    x_=x=x₀
+    x_best=x_=x=x₀
     ∂fx_=∂fx=∂f(x)
-    nsₖ=Φx=αₖ=1.0
+    Φ_best=Φx=Φ(x₀)
+    nsₖ=αₖ=α₀
     sₖ=zeros(Float64, length(x))
-    last_M=[Φ(x) for i=1:M]
+    last_M=[Φx for i=1:M]
     histnψ=Tuple{Float64, Float64}[]
     ls=0
     histF=[(time()-start, last_M[begin])]
@@ -37,6 +35,11 @@ function nmBB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:
         end
         ∂fx_, ∂fx=∂fx, ∂f(x)
 
+        if Φ_best>Φx
+            x_best=x
+            Φ_best=Φx
+        end
+
         t1=time()
         elapsed=t1-start
         nψ=norm(∂fx.-∂fx_.+(x_.-x).*αₖ, p)
@@ -55,5 +58,5 @@ function nmBB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:
         αₖ=min(αmax, max(αmin, sₖ'*(∂fx.-∂fx_)/nsₖ))
     end 
 
-    return x, histF, histnψ, ls
+    return x_best, histF, histnψ, ls
 end

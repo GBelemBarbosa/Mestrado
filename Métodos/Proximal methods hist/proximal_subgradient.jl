@@ -1,6 +1,3 @@
-using Plots
-using LaTeXStrings
-
 function PG(F:: Function, ∂f:: Function, Lₖ:: Function, x₀:: Array{<:Number}, L₀:: Number, k_max:: Int64; ϵ=eps(), p=Inf)
     Fx=F(x₀)
     start=time()

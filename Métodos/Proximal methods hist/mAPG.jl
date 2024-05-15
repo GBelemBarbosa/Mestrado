@@ -1,6 +1,3 @@
-using Plots
-using LaTeXStrings
-
 function mAPG(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:Number}, αx:: Number, αy:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
     Fx=F(x₀)
     start=time()

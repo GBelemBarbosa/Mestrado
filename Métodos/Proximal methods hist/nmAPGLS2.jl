@@ -1,14 +1,12 @@
-using Plots
-using LaTeXStrings
-
-function nmAPGLS2(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:Number}, ρ:: Number, η:: Number, δ:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
+function nmAPGLS2(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:Number}, α₀:: Number, ρ:: Number, η:: Number, δ:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
     t1=time()
     ∂fx_=∂fx=∂f(x₀)
     start=time()
     maybe=t1-start
-    v=ysₖ=y=z=x_2=x_=x=x₀
-    Fv=Fz=Fx=c=F(x)
-    q=nysₖ=αx_=αy=t=1.0
+    x_best=v=ysₖ=y=z=x_2=x_=x=x₀
+    αx_=αy=α₀
+    F_best=Fv=Fz=Fx=c=F(x)
+    q=nysₖ=t=1.0
     histnψ=Tuple{Float64, Float64}[]
     ls=0
     histF=[(time()-start, c)]
@@ -26,7 +24,6 @@ function nmAPGLS2(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array
             Fz=F(z)
             ysₖ=z.-y
             nysₖ=ysₖ'ysₖ
-
             if Fz+δ*nysₖ<=c
                 x=z
                 Fx=Fz
@@ -40,14 +37,15 @@ function nmAPGLS2(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array
                     xsₖ=x.-y
                     αx=xsₖ'xsₖ/(xsₖ'*(∂fx.-∂fy))
                 else
-                    αx=1.0
+                    αx=α₀
                 end
+                
+                start+=maybe
 
                 while true
                     v=proxα(αx, x, ∂fx)
 
                     ls+=1
-                    start+=maybe
                     
                     Fv=F(v)
 
@@ -87,6 +85,11 @@ function nmAPGLS2(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array
         ∂fx=∂f(x)
         maybe=t1-time()
 
+        if F_best>Fx
+            x_best=x
+            F_best=Fx
+        end
+
         elapsed=t1-start
         nψ=norm(∂fx.-∂fx_.+(x_2.-x).*αx_, p)
         push!(histF, (elapsed, Fx))
@@ -106,5 +109,5 @@ function nmAPGLS2(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array
         αy=nysₖ/(ysₖ'*(∂f(z).-∂fy))
     end 
 
-    return x, histF, histnψ, ls
+    return x_best, histF, histnψ, ls
 end

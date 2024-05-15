@@ -1,6 +1,3 @@
-using Plots
-using LaTeXStrings
-
 function newAPG_vs_x_2(F:: Function, g:: Function, ∂f:: Function, Tλ:: Function, γ:: Function, Q:: Function, E:: Function, x₀:: Array{<:Number}, λ₁:: Number, μ₀:: Number, μ₁:: Number, c:: Number, δ:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
     t1=time()
     ∂fx=∂f(x₀)
@@ -13,7 +10,8 @@ function newAPG_vs_x_2(F:: Function, g:: Function, ∂f:: Function, Tλ:: Functi
     Fx_=F(x₀)
     histF=[(time()-start, Fx_)]
     x_, x=x₀, Tλ(λ₁, x₀, 0 .*x₀) # proxλ₁(x₀)
-    Fx=F(x)
+    x_best=x
+    F_best=Fx=F(x)
     s=x.-x_
     ns=norm(s)^2
     push!(histF, (time()-start, Fx))
@@ -79,7 +77,11 @@ function newAPG_vs_x_2(F:: Function, g:: Function, ∂f:: Function, Tλ:: Functi
         ∂fx=∂f(x)
         maybe=t1-time()
 
-        t1=time()
+        if F_best>Fx
+            x_best=x
+            F_best=Fx
+        end
+
         elapsed=t1-start
         nψ=norm(∂fx.-∂fy.+(y.-x)./λ, p)
         push!(histF, (elapsed, Fx))
@@ -99,5 +101,5 @@ function newAPG_vs_x_2(F:: Function, g:: Function, ∂f:: Function, Tλ:: Functi
         end
     end 
 
-    return x, histF, histnψ, ls
+    return x_best, histF, histnψ, ls
 end

@@ -1,13 +1,10 @@
-using Plots
-using LaTeXStrings
-
 function nmAPG(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:Number}, αx:: Number, αy:: Number, η:: Number, δ:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
     t1=time()
     ∂fx=∂f(x₀)
     maybe=t1-time()
     start=time()
-    y=z=x_=x=x₀
-    c=F(x)
+    x_best=y=z=x_=x=x₀
+    F_best=c=F(x)
     q=t=1.0
     histnψ=Tuple{Float64, Float64}[]
     ls=0
@@ -53,6 +50,11 @@ function nmAPG(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:
         ∂fx=∂f(x)
         maybe=t1-time()
 
+        if F_best>Fx
+            x_best=x
+            F_best=Fx
+        end
+
         elapsed=t1-start
         nψ=norm(∂fx.-∂fx_.+(x_2.-x).*αx_, p)
         push!(histF, (elapsed, Fx))
@@ -71,5 +73,5 @@ function nmAPG(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:
         x_=x
     end 
 
-    return x, histF, histnψ, ls
+    return x_best, histF, histnψ, ls
 end

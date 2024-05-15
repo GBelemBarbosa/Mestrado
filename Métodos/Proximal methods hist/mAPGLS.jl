@@ -1,11 +1,9 @@
-using Plots
-using LaTeXStrings
-
-function mAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:Number}, ρ:: Number, δ:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
+function mAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:Number}, α₀:: Number, ρ:: Number, δ:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
     Fx=F(x₀)
     start=time()
     v=xsₖ=ysₖ=y=z=x_=x=x₀
-    nysₖ=nxsₖ=αy=αx=t=1.0
+    αy=αx=α₀
+    nysₖ=nxsₖ=t=1.0
     Fv=Fz=Fx=F(x)
     ∂fx=∂f(x)
     histnψ=Tuple{Float64, Float64}[]

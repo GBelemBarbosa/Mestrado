@@ -1,6 +1,3 @@
-using Plots
-using LaTeXStrings
-
 function IBPGLS(F:: Function, ∂f:: Function, ℘hλg:: Function, α°ₖ:: Function, β°ₖ:: Function, λ°ₖ:: Function, pₖ:: Function, x₀:: Array{<:Number}, η₁:: Number, η₂:: Number, τ::number, d:: Number, δ:: Number, λₘᵢₙ:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
     y=∂fz=x_=x=x₀
     Eδ=Ẽ=F(x)

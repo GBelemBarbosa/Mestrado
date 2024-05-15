@@ -3,7 +3,7 @@ using LaTeXStrings
 
 function SFISTA(f:: Function, g:: Function, h:: Function, hμ:: Function, ∇Fμ:: Function, prox_gL:: Function, Lf:: Number, μ:: Number, α:: Number, x₀:: Array{<:Number}, k_max:: Int64; ϵ=eps(), p=Inf) 
     y=x_=x=x₀
-    t=1
+    t=1.0
     fx=f(x)+g(x)
     L̃=Lf+α/μ
     hist=[fx+h(x), fx+hμ(x)]

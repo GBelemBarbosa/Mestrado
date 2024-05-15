@@ -1,6 +1,3 @@
-using Plots
-using LaTeXStrings
-
 function IBPG(∂f:: Function, ℘hλg:: Function, x₀:: Array{<:Number}, k_max:: Int64; ϵ=eps(), p=Inf) 
     z=x_=x=x₀
     αₖ=βₖ=λₖ=0

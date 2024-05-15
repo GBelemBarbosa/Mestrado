@@ -8,6 +8,9 @@ include("../Group sparsity/group_sparse_functions.jl")
 
 Random.seed!(1)
 
+# Métodos
+methods = ["SPG", "SPGnmLS", "SPGmLS", "PG", "FISTA"]
+
 m       = 250
 n       = 10*m
 k_max   = 60
@@ -36,6 +39,6 @@ Tλ(λₖ:: Number, x:: Array{<:Number}, ∂fx:: Array{<:Number}; proxhL1=proxhL
 x₀  = randn(n)
 F⃰  = F(x⃰)
 pltF  = plot([1, k_max], [F⃰, F⃰], label=L"F_{opt}", title=L"l_1"*" penalty", xlabel="Iteration number", ylabel=L"F(x_k)", yscale=:log10)
-pltnψ = plot(title=L"l_0"*" penalty", xlabel="Iteration number", ylabel=L"\|\|\psi(x_k)\|\|", yscale=:log10)
+pltnψ = plot(title=L"l_0"*" penalty", xlabel="Iteration number", ylabel=L"\|\|\psi_k\|\|", yscale=:log10)
 
 include("experiment.jl")
