@@ -36,7 +36,7 @@ function nmBB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:
         sₖ=x.-x_
         x_=x
         ∂fx_, ∂fx=∂fx, ∂f(x)
-        αₖ=min(αmax, max(αmin, sₖ'(∂fx.-∂fx_)/nsₖ))
+        αₖ=min(αmax, max(αmin, nsₖ/(sₖ'(∂fx.-∂fx_))))
     end 
 
     return x

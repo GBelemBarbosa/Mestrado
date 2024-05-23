@@ -40,7 +40,7 @@ sλ    = @sprintf("%.2e", λ)
 pltF  = plot(title=L"l_0"*" penalty, "*problem*", "*L"\lambda="*sλ, xlabel="CPU time", ylabel=L"F(x_k)", yscale=:log10, dpi=600)
 pltnψ = plot(title=L"l_0"*" penalty, "*problem*", "*L"\lambda="*sλ, xlabel="CPU time", ylabel=L"\|\|\psi_k\|\|", yscale=:log10, dpi=600)
 
-const α₀ = norm(∇f(x₀).-∇f(x₀.+10^-5))/(sqrt(n)*10^-5) # Aproximação de L entre x₀ e x₀.+10^-5
+const α₀ = (sqrt(n)*10^-5)/norm(∇f(x₀).-∇f(x₀.+10^-5)) # Aproximação de 1/L entre x₀ e x₀.+10^-5
 x_BB, histF, histnψ = BB(F, ∇f, proxhL, x₀, α₀, 10^-30, 10^30, k_max; ϵ=ϵ)   
 plot!(pltF, histF, marker=:circle, label="SPG")
 plot!(pltnψ, histnψ, marker=:circle, label="SPG")

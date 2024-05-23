@@ -9,7 +9,7 @@ function BB(Φ:: Function, ∂f:: Function, proxhL:: Function, x₀:: Array{<:Nu
     
     k=1
     while true
-        x_, x=x, proxhL(αₖ, x.-∂fx./αₖ)
+        x_, x=x, proxhL(1/αₖ, x.-αₖ.*∂fx)
         Φx=Φ(x)
         if Φ_best>Φx
             x_best=x
@@ -18,7 +18,7 @@ function BB(Φ:: Function, ∂f:: Function, proxhL:: Function, x₀:: Array{<:Nu
 
         t1=time()
         elapsed=t1-start
-        nψ=norm(∂fx.-∂fx_.+(x_.-x).*αₖ, p)
+        nψ=norm(∂fx.-∂fx_.+(x_.-x)./αₖ, p)
         push!(histF, (elapsed, Φx))
         push!(histnψ, (elapsed, nψ))
         start+=time()-t1
@@ -30,7 +30,7 @@ function BB(Φ:: Function, ∂f:: Function, proxhL:: Function, x₀:: Array{<:Nu
 
         sₖ=x.-x_
         ∂fx_, ∂fx=∂fx, ∂f(x)
-        αₖ=min(αmax, max(αmin, sₖ'*(∂fx.-∂fx_)/sₖ'sₖ))
+        αₖ=min(αmax, max(αmin, sₖ'sₖ/(sₖ'*(∂fx.-∂fx_))))
     end 
 
     return x_best, histF, histnψ

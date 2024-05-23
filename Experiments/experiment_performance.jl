@@ -18,7 +18,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
     converg_T_i = Float64[]
     F_i         = Float64[]
 
-    α₀ = norm(∇f(x₀).-∇f(x₀.+10^-5))/(sqrt(n)*10^-5)
+    α₀ = (sqrt(n)*10^-5)/norm(∇f(x₀).-∇f(x₀.+10^-5))
     if "SPG"∈methods
         x_SPG, histF, histnψ = BB(F, ∇f, pαₖ, x₀, α₀, 10^-30, 10^30, k_max; ϵ=ϵ)   
         println("x_SPG:")
@@ -165,7 +165,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
     end
     Q(k:: Int64)=0.99^k
     E(k:: Int64)=k^-1.1
-    λ₁=1/α₀
+    λ₁ = α₀
     if "newAPG_vs"∈methods
         x_newAPG_vs, histF, histnψ, ls_newAPG_vs = newAPG_vs(F, h, ∇f, Tλ, γ, Q, E, x₀, λ₁, 0.99, 0.95, 10^4, 0.8, k_max; ϵ=ϵ)
         println("x_newAPG_vs:")

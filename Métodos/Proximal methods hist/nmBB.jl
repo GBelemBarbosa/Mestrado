@@ -42,7 +42,7 @@ function nmBB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:
 
         t1=time()
         elapsed=t1-start
-        nψ=norm(∂fx.-∂fx_.+(x_.-x).*αₖ, p)
+        nψ=norm(∂fx.-∂fx_.+(x_.-x)./αₖ, p)
         push!(histF, (elapsed, Φx))
         push!(histnψ, (elapsed, nψ))
         start+=time()-t1
@@ -55,7 +55,7 @@ function nmBB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:
         popfirst!(last_M)
         push!(last_M, Φx)
         x_=x
-        αₖ=min(αmax, max(αmin, sₖ'*(∂fx.-∂fx_)/nsₖ))
+        αₖ=min(αmax, max(αmin, nsₖ/(sₖ'*(∂fx.-∂fx_))))
     end 
 
     return x_best, histF, histnψ, ls

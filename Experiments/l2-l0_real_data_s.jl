@@ -46,7 +46,7 @@ pltnψl1 = plot(histnψ, linestyle=:dash, label="FISTA", title=L"l_1"*" penalty,
 println("l1 FISTA: ", 1-norm(x_FISTA, 0)/n, " & ", f(x_FISTA))
 
 Lₖ(L:: Number, k:: Int64, x:: Array{<:Number}, ∂fx:: Array{<:Number}; proxhL=proxhL, s=s, λ=λ, n=n) = L, proxhL(L, x.-∂fx./L, s, λ, n)
-pαₖ(αₖ:: Number, x:: Array{<:Number}, ∂fx:: Array{<:Number}; proxhL=proxhL, s=s, λ=λ, n=n) = proxhL(αₖ, x.-∂fx./αₖ, s, λ, n)
+pαₖ(αₖ:: Number, x:: Array{<:Number}, ∂fx:: Array{<:Number}; proxhL=proxhL, s=s, λ=λ, n=n) = proxhL(1/αₖ, x.-αₖ.*∂fx, s, λ, n)
 proxα(α:: Number, x:: Array{<:Number}, ∂fx:: Array{<:Number}; proxhL=proxhL, s=s, λ=λ, n=n) = proxhL(1/α, x.-α.*∂fx, s, λ, n)
 ℘hλg(λₖ:: Number, k:: Int64, y:: Array{<:Number}, ∂fz:: Array{<:Number}; proxhL=proxhL, s=s, λ=λ, n=n) = proxhL(1/λₖ, y.-λₖ.*∂fz, s, λ, n)
 Tλ(λₖ:: Number, x:: Array{<:Number}, ∂fx:: Array{<:Number}; proxhL=proxhL, s=s, λ=λ, n=n) = proxhL(1/λₖ, x.-λₖ.*∂fx, s, λ, n)

@@ -31,7 +31,7 @@ F(x:: Array{<:Number}; f=f, h=h)  = f(x)+h(x)
 ∇f(x:: Array{<:Number}; A=A, b=b) = A'*(A*x.-b)
 
 Lₖ(L:: Number, k:: Int64, x:: Array{<:Number}, ∂fx:: Array{<:Number}; proxhL1=proxhL1, n=n, λ=λ) = L, proxhL1(L, x.-∂fx./L, λ)
-pαₖ(αₖ:: Number, x:: Array{<:Number}, ∂fx:: Array{<:Number}; proxhL1=proxhL1, n=n, λ=λ) = proxhL1(αₖ, x.-∂fx./αₖ, λ)
+pαₖ(αₖ:: Number, x:: Array{<:Number}, ∂fx:: Array{<:Number}; proxhL1=proxhL1, n=n, λ=λ) = proxhL1(1/αₖ, x.-αₖ.*∂fx, λ)
 proxα(α:: Number, x:: Array{<:Number}, ∂fx:: Array{<:Number}; proxhL1=proxhL1, n=n, λ=λ) = proxhL1(1/α, x.-α.*∂fx, λ)
 ℘hλg(αₖ:: Number, λₖ:: Number, k:: Int64, y:: Array{<:Number}, ∂fz:: Array{<:Number}; proxhL1=proxhL1, n=n, λ=λ, s=s) = proxhL1(1/λₖ, y.-λₖ.*∂fz, λ)
 Tλ(λₖ:: Number, x:: Array{<:Number}, ∂fx:: Array{<:Number}; proxhL1=proxhL1, n=n, λ=λ) = proxhL1(1/λₖ, x.-λₖ.*∂fx, λ)
