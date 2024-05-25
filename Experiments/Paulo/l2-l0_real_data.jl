@@ -49,7 +49,7 @@ println("nz(x_SPG)=", 1-norm(x_BB, 0)/n, ", f(x_SPG)=", f(x_BB))
 # Não sei a razão, mas o primeiro nmBB rodado tem sempre um atraso, então rodo com 1 iteração e descarto
 nmBB(F, ∇f, proxhL, x₀, 4, 0.01, 10^-30, 10^30, 1, 1; ϵ=ϵ)
 
-x_mBB, histF, histnψ, ls_mBB = nmBB(F, ∇f, proxhL, x₀, α₀, 4, 0.01, 10^-30, 10^30, 1, k_max; ϵ=ϵ)
+x_mBB, histF, histnψ, ls_mBB = nmBB(F, ∇f, proxhL, x₀, α₀, 1/4, 0.01, 10^-30, 10^30, 1, k_max; ϵ=ϵ)
 plot!(pltF, histF, marker=:circle, label="SPGmLS")
 plot!(pltnψ, histnψ, marker=:circle, label="SPGmLS")
 println("nz(x_SPGmLS)=", 1-norm(x_mBB, 0)/n, ", f(x_SPGmLS)=", f(x_mBB), ", #LS=", ls_mBB)
