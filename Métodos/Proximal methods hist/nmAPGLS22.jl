@@ -1,11 +1,10 @@
 function nmAPGLS2(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:Number}, α₀:: Number, ρ:: Number, η:: Number, δ:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
-    t1=time()
-    ∂fx_2=∂fx_=∂fx=∂f(x₀)
+    maybe=0
     start=time()
-    maybe=t1-start
     x_best=v=ysₖ=y=z=x_2=x_=x=x₀
     αx_=αy=α₀
     F_best=Fv=Fz=Fx=c=F(x)
+    ∂fy=∂fx_2=∂fx_=∂fx=∂f(x₀)
     q=nysₖ=t=1.0
     histnψ=Tuple{Float64, Float64}[]
     ls=0
@@ -14,7 +13,6 @@ function nmAPGLS2(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array
     k=1
     while true
         Fy=F(y)
-        ∂fy=∂f(y)
 
         while true
             z=proxα(αy, y, ∂fy)
@@ -60,9 +58,9 @@ function nmAPGLS2(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array
                     end
                 end
                 if Fz>Fv
+                    x_2=x
                     x=v
                     Fx=Fv
-                    x_2=x
                     ∂fx_2=∂fx
                     αx_=αx
                 else
@@ -91,7 +89,7 @@ function nmAPGLS2(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array
         end
 
         elapsed=t1-start
-        nψ=norm(∂fx.-∂fx_2.+(x_2.-x).*αx_, p)
+        nψ=norm(∂fx.-∂fx_2.+(x_2.-x)./αx_, p)
         push!(histF, (elapsed, Fx))
         push!(histnψ, (elapsed, nψ))
         start+=time()-t1
@@ -107,6 +105,7 @@ function nmAPGLS2(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array
         y=x.+(t_/t).*(z.-x).+((t_-1)/t).*(x.-x_)
         x_=x
         αy=nysₖ/(ysₖ'*(∂f(z).-∂fy))
+        ∂fy=∂f(y)
     end 
 
     return x_best, histF, histnψ, ls

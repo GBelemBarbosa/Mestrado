@@ -1,5 +1,12 @@
 include("../Métodos/Proximal methods hist/BB.jl")
 include("../Métodos/Proximal methods hist/nmBB.jl")
+include("../Métodos/Proximal methods hist/nmBBf.jl")
+include("../Métodos/Proximal methods hist/nmBBd.jl")
+include("../Métodos/Proximal methods hist/nmBBa.jl")
+include("../Métodos/Proximal methods hist/NPGLSHZd.jl")
+include("../Métodos/Proximal methods hist/ANSPG.jl")
+include("../Métodos/Proximal methods hist/ANSPGf.jl")
+include("../Métodos/Proximal methods hist/ANSPGd.jl")
 include("../Métodos/Proximal methods hist/FISTA.jl")
 include("../Métodos/Proximal methods hist/proximal_subgradient.jl")
 include("../Métodos/Proximal methods hist/mAPG.jl")
@@ -17,13 +24,13 @@ include("../Métodos/Proximal methods hist/newAPG_vs_y_2.jl")
 function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, Lₖ:: Function, pαₖ:: Function, proxα:: Function, ℘hλg:: Function, Tλ:: Function, x₀:: Array{<:Number}, n:: Int64, L:: Number, k_max:: Int64, ϵ:: Number)
     T_hist_i = Float64[]
     F_i      = Float64[]
-    pr_i     = Int64[]
-    gr_i     = Int64[]
+    pr_i     = Float64[]
+    gr_i     = Float64[]
 
     α₀ = (sqrt(n)*10^-5)/norm(∇f(x₀).-∇f(x₀.+10^-5))
     println("α₀ = ", α₀)
     if "SPG"∈methods
-        x_SPG, histF, histnψ = BB(F, ∇f, pαₖ, x₀, α₀, 10^-30, 10^30, k_max; ϵ=ϵ)   
+        x_SPG, histF, histnψ = BB(F, ∇f, pαₖ, x₀, α₀, α₀/1000, 10^30, k_max; ϵ=ϵ)   
         println("x_SPG:")
         println("k_end, nψ[end], sparsity, f_best: ", length(histnψ), ", ", histnψ[end][2], ", ", 1-norm(x_SPG, 0)/n, ", ", f(x_SPG))
         push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
@@ -31,15 +38,15 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
     end
 
     # Não sei a razão, mas o primeiro nmBB rodado tem sempre um atraso, então rodo com 1 iteração e descarto
-    nmBB(F, ∇f, pαₖ, x₀, α₀, 4, 0.01, 10^-30, 10^30, 1, 1; ϵ=ϵ)
+    nmBB(F, ∇f, pαₖ, x₀, α₀, 1/2, 0.01, α₀/1000, 10^30, 1, 1; ϵ=ϵ)
 
-    if "SPGnmLS"∈methods
-        at = findfirst(x->x=="SPGnmLS", methods)
+    if "NSPG"∈methods
+        at = findfirst(x->x=="NSPG", methods)
         
         for i=at+1:length(methods)
             if occursin("m = ", methods[i]) 
                 m = parse(Int64, methods[i][5:end])
-                ρ = 1/4
+                ρ = 1/2
                 γ = 0.01
             elseif occursin("ρ = ", methods[i])
                 m = 5
@@ -47,20 +54,117 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
                 γ = 0.01
             elseif occursin("γ = ", methods[i])
                 m = 5
-                ρ = 1/4
+                ρ = 1/2
                 γ = parse(Float64, methods[i][5:end])
+            elseif occursin("-", methods[i])
+                m = 5
+                ρ = 1/2
+                γ = 0.01
             else
                 break
             end
+            if occursin("f", methods[i])
+                NSPG = nmBBf
+            elseif occursin("d", methods[i])
+                NSPG = nmBBd
+            elseif occursin("a", methods[i])
+                NSPG = nmBBa
+            else
+                NSPG = nmBB
+            end
 
-            x_nmSPG, histF, histnψ, pr_nmSPG = nmBB(F, ∇f, pαₖ, x₀, α₀, ρ, γ, 10^-30, 10^30, m, k_max; ϵ=ϵ)
-            println("x_SPGnmLS ("*methods[i]*")")
-            println("k_end, ls, nψ[end], sparsity, f_best: ", length(histnψ), ", ", pr_nmSPG, ", ", histnψ[end][2], ", ", 1-norm(x_nmSPG, 0)/n, ", ", f(x_nmSPG))
+            x_NSPG, histF, histnψ, pr_NSPG = NSPG(F, ∇f, pαₖ, x₀, α₀, ρ, γ, α₀/1000, 10^30, m, k_max; ϵ=ϵ)
+            println("x_NSPG ("*methods[i]*")")
+            println("pr, gr, nψ[end], sparsity, f_best: ", pr_NSPG+Inf*(histnψ[end][2]>=ϵ), ", ", length(histnψ)+Inf*(histnψ[end][2]>=ϵ), ", ", histnψ[end][2], ", ", 1-norm(x_NSPG, 0)/n, ", ", f(x_NSPG))
             push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
-            push!(F_i, F(x_nmSPG))
-            push!(pr_i, pr_nmSPG)
-            push!(gr_i, length(histnψ))
+            push!(F_i, F(x_NSPG))
+            push!(pr_i, pr_NSPG+Inf*(histnψ[end][2]>=ϵ))
+            push!(gr_i, length(histnψ)+Inf*(histnψ[end][2]>=ϵ))
         end
+    end
+
+    if "NSPGHZ"∈methods
+        at = findfirst(x->x=="NSPGHZ", methods)
+        
+        for i=at+1:length(methods)
+            if occursin("m = ", methods[i]) 
+                ρ = 1/2
+                γ = 0.01
+                η = 0.8
+            elseif occursin("ρ = ", methods[i])
+                ρ = parse(Float64, methods[i][5:end])
+                γ = 0.01
+                η = 0.5
+            elseif occursin("γ = ", methods[i])
+                ρ = 1/2
+                γ = parse(Float64, methods[i][5:end])
+                η = 0.5
+            elseif occursin("η = ", methods[i])
+                ρ = 1/2
+                γ = 0.01
+                η = parse(Float64, methods[i][5:end])
+            elseif occursin("-", methods[i])
+                ρ = 1/2
+                γ = 0.01
+                η = 0.5
+            else
+                break
+            end
+            if occursin("f", methods[i])
+                NSPG = NSPGHZf
+            elseif occursin("a", methods[i])
+                NSPG = NSPGHZa
+            else
+                NSPG = NSPGHZd
+            end
+
+            x_NSPGHZ, histF, histnψ, pr_NSPGHZ = NSPG(F, ∇f, pαₖ, x₀, α₀, ρ, η, γ, α₀/1000, 10^30, k_max; ϵ=ϵ)
+            println("x_NSPGHZ ("*methods[i]*")")
+            println("pr, gr, nψ[end], sparsity, f_best: ", pr_NSPGHZ+Inf*(histnψ[end][2]>=ϵ), ", ", length(histnψ)+Inf*(histnψ[end][2]>=ϵ), ", ", histnψ[end][2], ", ", 1-norm(x_NSPGHZ, 0)/n, ", ", f(x_NSPGHZ))
+            push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+            push!(F_i, F(x_NSPGHZ))
+            push!(pr_i, pr_NSPGHZ+Inf*(histnψ[end][2]>=ϵ))
+            push!(gr_i, length(histnψ)+Inf*(histnψ[end][2]>=ϵ))
+        end
+    end
+
+    if "ANSPG"∈methods
+        at = findfirst(x->x=="ANSPG", methods)
+        
+        for i=at+1:length(methods)
+            if occursin("-", methods[i])
+                m = n₂ = 5
+                ρ = τ  = 1/2
+                δ = β  = 0.01
+            else
+                break
+            end
+            if occursin("f", methods[i])
+                ANSPGa = ANSPGf
+            elseif occursin("d", methods[i])
+                ANSPGa = ANSPGd
+            else
+                ANSPGa = ANSPG
+            end
+
+            x_ANSPG, histF, histnψ, pr_ANSPG, gr_ANSPG = ANSPGa(F, ∇f, pαₖ, x₀, α₀, ρ, δ, α₀/1000, 10^30, m, α₀, τ, β, α₀/1000, 10^30, n₂, k_max; ϵ=ϵ)
+            println("x_ANSPG ("*methods[i]*")")
+            println("pr, gr, nψ[end], sparsity, f_best: ", pr_ANSPG+Inf*(histnψ[end][2]>=ϵ), ", ", gr_ANSPG+Inf*(histnψ[end][2]>=ϵ), ", ", histnψ[end][2], ", ", 1-norm(x_ANSPG, 0)/n, ", ", f(x_ANSPG))
+            push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+            push!(F_i, F(x_ANSPG))
+            push!(pr_i, pr_ANSPG+Inf*(histnψ[end][2]>=ϵ))
+            push!(gr_i, gr_ANSPG+Inf*(histnψ[end][2]>=ϵ))
+        end
+    end
+
+    if "nmAPGLS"∈methods
+        x_nmAPGLS, histF, histnψ, pr_nmAPGLS, gr_nmAPGLS = nmAPGLS(F, ∇f, proxα, x₀, α₀, 2/5, 0.8, 10^-4, k_max; ϵ=ϵ)
+        println("x_nmAPGLS:")
+        println("pr, gr, nψ[end], sparsity, f_best: ", pr_nmAPGLS+Inf*(histnψ[end][2]>=ϵ), ", ", gr_nmAPGLS+Inf*(histnψ[end][2]>=ϵ), ", ", histnψ[end][2], ", ", 1-norm(x_nmAPGLS, 0)/n, ", ", f(x_nmAPGLS))
+        push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+        push!(F_i, F(x_nmAPGLS))
+        push!(pr_i, pr_nmAPGLS+Inf*(histnψ[end][2]>=ϵ))
+        push!(gr_i, gr_nmAPGLS+Inf*(histnψ[end][2]>=ϵ))
     end
 
     if "mAPG"∈methods
@@ -101,14 +205,6 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         println("k_end, nψ[end], sparsity, f_best: ", length(histnψ), ", ", histnψ[end][2], ", ", 1-norm(x_mAPGLS, 0)/n, ", ", f(x_mAPGLS))
         push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
         push!(F_i, F(x_mAPGLS))
-    end
-
-    if "nmAPGLS"∈methods
-        x_nmAPGLS, histF, histnψ, pr_nmAPGLS = nmAPGLS(F, ∇f, proxα, x₀, α₀, 2/5, 0.8, 10^-4, k_max; ϵ=ϵ)
-        println("x_nmAPGLS:")
-        println("k_end, nψ[end], sparsity, f_best: ", length(histnψ), ", ", histnψ[end][2], ", ", 1-norm(x_nmAPGLS, 0)/n, ", ", f(x_nmAPGLS))
-        push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
-        push!(F_i, F(x_nmAPGLS))
     end
 
     if "nmAPGLS2"∈methods

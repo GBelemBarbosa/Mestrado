@@ -1,4 +1,4 @@
-function nmBB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:Number}, α₀:: Number, ρ:: Number, γ:: Number, αmin:: Number, αmax:: Number, M:: Int64, k_max:: Int64; ϵ=eps(), p=Inf) 
+function nmBBf(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:Number}, α₀:: Number, ρ:: Number, γ:: Number, αmin:: Number, garbage:: Number, M:: Int64, k_max:: Int64; ϵ=eps(), p=Inf) 
     start=time()
     x_best=x_=x=x₀
     ∂fx_=∂fx=∂f(x)
@@ -29,7 +29,7 @@ function nmBB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:
 
             αₖ*=ρ
 
-            if isnan(αₖ) || αₖ<αmin #?
+            if αₖ<αmin || isnan(αₖ)
                 return x_best, histF, histnψ, pr
             end
         end
@@ -55,7 +55,7 @@ function nmBB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:
         popfirst!(last_M)
         push!(last_M, Φx)
         x_=x
-        αₖ=min(αmax, max(αmin, nsₖ/(sₖ'*(∂fx.-∂fx_))))
+        αₖ=nsₖ/(sₖ'*(∂fx.-∂fx_))
     end 
 
     return x_best, histF, histnψ, pr

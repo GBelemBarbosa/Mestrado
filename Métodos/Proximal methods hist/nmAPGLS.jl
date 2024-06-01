@@ -1,16 +1,14 @@
 function nmAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:Number}, α₀:: Number, ρ:: Number, η:: Number, δ:: Number, k_max:: Int64; ϵ=eps(), p=Inf) 
-    t1=time()
-    ∂fx=∂f(x₀)
+    maybe=0
     start=time()
-    maybe=t1-start
     x_best=v=y=z=x_2=x_=x=x₀
     αx_=αy=α₀
     F_best=Fv=Fz=Fx=c=F(x)
-    ∂fx_=∂fx=∂f(x)
-    ∂fy=∂f(y)
+    ∂fy=∂fx_=∂fx=∂f(x)
     q=t=1.0
     histnψ=Tuple{Float64, Float64}[]
-    ls=0
+    pr=0
+    gr=1
     histF=[(time()-start, c)]
     
     k=1
@@ -20,7 +18,7 @@ function nmAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{
         while true
             z=proxα(αy, y, ∂fy)
 
-            ls+=1
+            pr+=1
 
             Fz=F(z)
             nzy=norm(z.-y)^2
@@ -36,7 +34,9 @@ function nmAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{
             elseif Fz+δ*nzy<=Fy 
                 if k>1
                     xsₖ=x.-y
-                    αx=xsₖ'xsₖ/(xsₖ'*(∂fx.-∂fy))
+                    αx=xsₖ'xsₖ/(xsₖ'*(∂fx.-∂fy)) #max/min?
+                    
+                    gr+=1
                 else
                     αx=α₀
                 end
@@ -46,7 +46,7 @@ function nmAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{
                 while true
                     v=proxα(αx, x, ∂fx)
 
-                    ls+=1
+                    pr+=1
 
                     Fv=F(v)
 
@@ -57,13 +57,13 @@ function nmAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{
                     αx*=ρ
 
                     if isnan(αx) || αx<10^-17
-                        return x_, histF, histnψ, ls
+                        return x_best, histF, histnψ, pr, gr
                     end
                 end
                 if Fz>Fv
+                    x_2=x
                     x=v
                     Fx=Fv
-                    x_2=x
                     ∂fx_=∂fx
                     αx_=αx
                 else
@@ -79,7 +79,7 @@ function nmAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{
             αy*=ρ
 
             if isnan(αy) || αy<10^-17
-                return x_, histF, histnψ, ls
+                return x_best, histF, histnψ, pr, gr
             end
         end
         t1=time()
@@ -92,7 +92,7 @@ function nmAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{
         end
 
         elapsed=t1-start
-        nψ=norm(∂fx.-∂fx_.+(x_2.-x).*αx_, p)
+        nψ=norm(∂fx.-∂fx_.+(x_2.-x)./αx_, p)
         push!(histF, (elapsed, Fx))
         push!(histnψ, (elapsed, nψ))
         start+=time()-t1
@@ -101,6 +101,7 @@ function nmAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{
             break
         end
         k+=1
+        gr+=1
         
         t_, t=t, (1+sqrt(1+4*t^2))/2
         q_, q=q, η*q+1
@@ -112,5 +113,5 @@ function nmAPGLS(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{
         αy=ysₖ'ysₖ/(ysₖ'*(∂fy.-∂fy_))
     end 
 
-    return x_best, histF, histnψ, ls
+    return x_best, histF, histnψ, pr, gr
 end
