@@ -12,7 +12,7 @@ include("../Group sparsity/group_sparse_functions.jl")
 include("../Métodos/Proximal methods hist/FISTA.jl")
 include("experiment_performance.jl")
 
-methods = ["NSPG", "-", "NSPGadp", "L = 5", "L = 10", "L = 25"]
+methods = ["NSPG", "-", "NSPGadp2", "M = 6", "M = 10", "M = 20", "M = 40"]
 phantom = count(x->occursin("NSPG", x), methods)
 
 const k_max   = 5000
@@ -87,20 +87,20 @@ deleteat!(methods, At)
 
 pltpr = performance_profile(PlotsBackend(), pr_hist, methods, title="Performance profile of prox calculations")
 plot!(pltpr, dpi=600, legend=:bottomright)
-savefig(pltpr, "Experiments/Plots/Performance/performance_pr_adp_L.png")
-FileIO.save("Experiments/Plots/Performance/data/pr_hist_adp_L.jld2", "pr_hist_nmSPG", pr_hist)
+savefig(pltpr, "Experiments/Plots/Performance/performance_pr_adp2_M_gplus.png")
+FileIO.save("Experiments/Plots/Performance/data/pr_hist_adp2_M_gplus.jld2", "pr_hist_nmSPG", pr_hist)
 
 pltgr = performance_profile(PlotsBackend(), gr_hist, methods, title="Performance profile of gradient evaluations")
 plot!(pltgr, dpi=600, legend=:bottomright)
-savefig(pltgr, "Experiments/Plots/Performance/performance_gr_adp_L.png")
-FileIO.save("Experiments/Plots/Performance/data/gr_hist_adp_L.jld2", "gr_hist_nmSPG", gr_hist)
+savefig(pltgr, "Experiments/Plots/Performance/performance_gr_adp2_M_gplus.png")
+FileIO.save("Experiments/Plots/Performance/data/gr_hist_adp2_M_gplus.jld2", "gr_hist_nmSPG", gr_hist)
 
 pltT = performance_profile(PlotsBackend(), T_hist, methods, title="Performance profile of convergence time")
 plot!(pltT, dpi=600, legend=:bottomright)
-savefig(pltT, "Experiments/Plots/Performance/performance_adp_L.png")
-FileIO.save("Experiments/Plots/Performance/data/T_hist_adp_L.jld2", "T_hist_nmSPG", T_hist)
+savefig(pltT, "Experiments/Plots/Performance/performance_adp2_M_gplus.png")
+FileIO.save("Experiments/Plots/Performance/data/T_hist_adp2_M_gplus.jld2", "T_hist_nmSPG", T_hist)
 
 pltF = performance_profile(PlotsBackend(), F_hist, methods, title="Performance profile of best function value")
 plot!(pltF, dpi=600, legend=:bottomright)
-savefig(pltF, "Experiments/Plots/Performance/performance_F_adp_L.png")
-FileIO.save("Experiments/Plots/Performance/data/F_hist_adp_L.jld2", "F_hist_nmSPG", F_hist)
+savefig(pltF, "Experiments/Plots/Performance/performance_F_adp2_M_gplus.png")
+FileIO.save("Experiments/Plots/Performance/data/F_hist_adp2_M_gplus.jld2", "F_hist_nmSPG", F_hist)

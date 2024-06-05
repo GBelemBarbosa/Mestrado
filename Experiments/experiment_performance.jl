@@ -25,10 +25,10 @@ include("../Métodos/Proximal methods hist/newAPG_vs_x_2.jl")
 include("../Métodos/Proximal methods hist/newAPG_vs_y_2.jl")
 
 function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, Lₖ:: Function, pαₖ:: Function, proxα:: Function, ℘hλg:: Function, Tλ:: Function, x₀:: Array{<:Number}, n:: Int64, L:: Number, k_max:: Int64, ϵ:: Number)
-    T_hist_i = Float64[]
-    F_i      = Float64[]
-    pr_i     = Float64[]
-    gr_i     = Float64[]
+    T_i  = Float64[]
+    F_i  = Float64[]
+    pr_i = Float64[]
+    gr_i = Float64[]
 
     α₀ = (sqrt(n)*10^-5)/norm(∇f(x₀).-∇f(x₀.+10^-5))
     println("α₀ = ", α₀)
@@ -36,7 +36,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         x_SPG, histF, histnψ = BB(F, ∇f, pαₖ, x₀, α₀, α₀/1000, 10^30, k_max; ϵ=ϵ)   
         println("x_SPG:")
         println("k_end, nψ[end], sparsity, f_best: ", length(histnψ), ", ", histnψ[end][2], ", ", 1-norm(x_SPG, 0)/n, ", ", f(x_SPG))
-        push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+        push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
         push!(F_i, F(x_SPG))
     end
 
@@ -57,9 +57,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
                 ρ = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
             elseif occursin("γ = ", methods[i])
                 γ = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
-            elseif occursin("-", methods[i])
-                continue
-            else
+            elseif !occursin("-", methods[i])
                 break
             end
             if occursin("f", methods[i])
@@ -75,7 +73,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
             x_NSPG, histF, histnψ, pr_NSPG = NSPG(F, ∇f, pαₖ, x₀, α₀, ρ, γ, α₀/1000, 10^30, m, k_max; ϵ=ϵ)
             println("x_NSPG ("*methods[i]*")")
             println("pr, gr, nψ[end], sparsity, f_best: ", pr_NSPG+Inf*(histnψ[end][2]>=ϵ), ", ", length(histnψ)+Inf*(histnψ[end][2]>=ϵ), ", ", histnψ[end][2], ", ", 1-norm(x_NSPG, 0)/n, ", ", f(x_NSPG))
-            push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+            push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
             push!(F_i, F(x_NSPG))
             push!(pr_i, pr_NSPG+Inf*(histnψ[end][2]>=ϵ))
             push!(gr_i, length(histnψ)+Inf*(histnψ[end][2]>=ϵ))
@@ -96,15 +94,14 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
                 ρ = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
             elseif occursin("γ = ", methods[i])
                 γ = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
-            elseif occursin("-", methods[i])
-            else
+            elseif !occursin("-", methods[i])
                 break
             end
 
             x_NSPGadp, histF, histnψ, pr_NSPGadp = nmBBadp(F, ∇f, pαₖ, x₀, α₀, ρ, γ, α₀/1000, 10^30, L, k_max; ϵ=ϵ)
             println("x_NSPGadp ("*methods[i]*")")
             println("pr, gr, nψ[end], sparsity, f_best: ", pr_NSPGadp+Inf*(histnψ[end][2]>=ϵ), ", ", length(histnψ)+Inf*(histnψ[end][2]>=ϵ), ", ", histnψ[end][2], ", ", 1-norm(x_NSPGadp, 0)/n, ", ", f(x_NSPGadp))
-            push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+            push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
             push!(F_i, F(x_NSPGadp))
             push!(pr_i, pr_NSPGadp+Inf*(histnψ[end][2]>=ϵ))
             push!(gr_i, length(histnψ)+Inf*(histnψ[end][2]>=ϵ))
@@ -115,13 +112,13 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         at = findfirst(x->x=="NSPGadp2", methods)
         
         for i=at+1:length(methods)
-            m = 5
+            m = 6
             L = 5
-            P = 5
+            P = 4*m
             ρ = 1/2
             γ = 0.01
 
-            if occursin("m = ", methods[i]) 
+            if occursin("M = ", methods[i]) 
                 m = parse(Int64, methods[i][findfirst("=", methods[i])[1]+2:end])
             elseif occursin("L = ", methods[i]) 
                 L = parse(Int64, methods[i][findfirst("=", methods[i])[1]+2:end])
@@ -131,9 +128,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
                 ρ = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
             elseif occursin("γ = ", methods[i])
                 γ = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
-            elseif occursin("-", methods[i])
-                continue
-            else
+            elseif !occursin("-", methods[i])
                 break
             end
             γ₁ = m/L
@@ -142,9 +137,9 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
             x_NSPGadp2, histF, histnψ, pr_NSPGadp2 = nmBBadp2(F, ∇f, pαₖ, x₀, α₀, ρ, γ, α₀/1000, 10^30, m, L, P, γ₁, γ₂, k_max; ϵ=ϵ)
             println("x_NSPGadp2 ("*methods[i]*")")
             println("pr, gr, nψ[end], sparsity, f_best: ", pr_NSPGadp2+Inf*(histnψ[end][2]>=ϵ), ", ", length(histnψ)+Inf*(histnψ[end][2]>=ϵ), ", ", histnψ[end][2], ", ", 1-norm(x_NSPGadp2, 0)/n, ", ", f(x_NSPGadp2))
-            push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
-            push!(F_i, F(x_NSPG))
-            push!(pr_i, pr_NSPG+Inf*(histnψ[end][2]>=ϵ))
+            push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+            push!(F_i, F(x_NSPGadp2))
+            push!(pr_i, pr_NSPGadp2+Inf*(histnψ[end][2]>=ϵ))
             push!(gr_i, length(histnψ)+Inf*(histnψ[end][2]>=ϵ))
         end
     end
@@ -174,9 +169,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
                 γ = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
             elseif occursin("θ = ", methods[i])
                 θ  = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
-            elseif occursin("-", methods[i])
-                continue
-            else
+            elseif !occursin("-", methods[i])
                 break
             end
             γ₁ = m/L
@@ -185,9 +178,9 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
             x_CBB, histF, histnψ, pr_CBB = CBB(F, ∇f, pαₖ, x₀, α₀, ρ, γ, α₀/1000, 10^30, m, L, P, N, γ₁, γ₂, θ, k_max; ϵ=ϵ)
             println("x_CBB ("*methods[i]*")")
             println("pr, gr, nψ[end], sparsity, f_best: ", pr_CBB+Inf*(histnψ[end][2]>=ϵ), ", ", length(histnψ)+Inf*(histnψ[end][2]>=ϵ), ", ", histnψ[end][2], ", ", 1-norm(x_CBB, 0)/n, ", ", f(x_CBB))
-            push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
-            push!(F_i, F(x_NSPG))
-            push!(pr_i, pr_NSPG+Inf*(histnψ[end][2]>=ϵ))
+            push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+            push!(F_i, F(x_CBB))
+            push!(pr_i, pr_CBB+Inf*(histnψ[end][2]>=ϵ))
             push!(gr_i, length(histnψ)+Inf*(histnψ[end][2]>=ϵ))
         end
     end
@@ -206,9 +199,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
                 γ = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
             elseif occursin("η = ", methods[i])
                 η = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
-            elseif occursin("-", methods[i])
-                continue
-            else
+            elseif !occursin("-", methods[i])
                 break
             end
             if occursin("f", methods[i])
@@ -222,7 +213,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
             x_NSPGHZ, histF, histnψ, pr_NSPGHZ = NSPG(F, ∇f, pαₖ, x₀, α₀, ρ, η, γ, α₀/1000, 10^30, k_max; ϵ=ϵ)
             println("x_NSPGHZ ("*methods[i]*")")
             println("pr, gr, nψ[end], sparsity, f_best: ", pr_NSPGHZ+Inf*(histnψ[end][2]>=ϵ), ", ", length(histnψ)+Inf*(histnψ[end][2]>=ϵ), ", ", histnψ[end][2], ", ", 1-norm(x_NSPGHZ, 0)/n, ", ", f(x_NSPGHZ))
-            push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+            push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
             push!(F_i, F(x_NSPGHZ))
             push!(pr_i, pr_NSPGHZ+Inf*(histnψ[end][2]>=ϵ))
             push!(gr_i, length(histnψ)+Inf*(histnψ[end][2]>=ϵ))
@@ -239,9 +230,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
 
             if occursin("n =", methods[i])
                 n₂     = parse(Int64, methods[i][findfirst("=", methods[i])[1]+2:end])
-            elseif occursin("-", methods[i])
-                continue
-            else
+            elseif !occursin("-", methods[i])
                 break
             end
             if occursin("f", methods[i])
@@ -255,7 +244,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
             x_ANSPG, histF, histnψ, pr_ANSPG, gr_ANSPG = ANSPGa(F, ∇f, pαₖ, x₀, α₀, ρ, δ, α₀/1000, 10^30, m, α₀, τ, β, α₀/1000, 10^30, n₂, k_max; ϵ=ϵ)
             println("x_ANSPG ("*methods[i]*")")
             println("pr, gr, nψ[end], sparsity, f_best: ", pr_ANSPG+Inf*(histnψ[end][2]>=ϵ), ", ", gr_ANSPG+Inf*(histnψ[end][2]>=ϵ), ", ", histnψ[end][2], ", ", 1-norm(x_ANSPG, 0)/n, ", ", f(x_ANSPG))
-            push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+            push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
             push!(F_i, F(x_ANSPG))
             push!(pr_i, pr_ANSPG+Inf*(histnψ[end][2]>=ϵ))
             push!(gr_i, gr_ANSPG+Inf*(histnψ[end][2]>=ϵ))
@@ -266,7 +255,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         x_nmAPGLS, histF, histnψ, pr_nmAPGLS, gr_nmAPGLS = nmAPGLS(F, ∇f, proxα, x₀, α₀, 2/5, 0.8, 10^-4, k_max; ϵ=ϵ)
         println("x_nmAPGLS:")
         println("pr, gr, nψ[end], sparsity, f_best: ", pr_nmAPGLS+Inf*(histnψ[end][2]>=ϵ), ", ", gr_nmAPGLS+Inf*(histnψ[end][2]>=ϵ), ", ", histnψ[end][2], ", ", 1-norm(x_nmAPGLS, 0)/n, ", ", f(x_nmAPGLS))
-        push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+        push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
         push!(F_i, F(x_nmAPGLS))
         push!(pr_i, pr_nmAPGLS+Inf*(histnψ[end][2]>=ϵ))
         push!(gr_i, gr_nmAPGLS+Inf*(histnψ[end][2]>=ϵ))
@@ -276,7 +265,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         x_mAPG, histF, histnψ = mAPG(F, ∇f, proxα, x₀, 1/L, 1/L, k_max; ϵ=ϵ) # 2 prox steps per iteration
         println("x_mAPG:")
         println("k_end, nψ[end], sparsity, f_best: ", length(histnψ), ", ", histnψ[end][2], ", ", 1-norm(x_mAPG, 0)/n, ", ", f(x_mAPG))
-        push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+        push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
         push!(F_i, F(x_mAPG))
     end
 
@@ -284,7 +273,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         x_nmAPG, histF, histnψ, pr_nmAPG = nmAPG(F, ∇f, proxα, x₀, 1/L, 1/L, 0.8, 10^-4, k_max; ϵ=ϵ)
         println("x_nmAPG:")
         println("k_end, nψ[end], sparsity, f_best: ", length(histnψ), ", ", histnψ[end][2], ", ", 1-norm(x_nmAPG, 0)/n, ", ", f(x_nmAPG))
-        push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+        push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
         push!(F_i, F(x_nmAPG))
     end
 
@@ -292,7 +281,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         x_nmAPGSPG, histF, histnψ, pr_nmAPGSPG = nmAPGSPG(F, ∇f, proxα, x₀, α₀, 0.8, 10^-4, k_max; ϵ=ϵ)
         println("x_nmAPGSPG:")
         println("k_end, nψ[end], sparsity, f_best: ", length(histnψ), ", ", histnψ[end][2], ", ", 1-norm(x_nmAPGSPG, 0)/n, ", ", f(x_nmAPGSPG))
-        push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+        push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
         push!(F_i, F(x_nmAPGSPG))
     end
 
@@ -300,7 +289,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         x_nmAPGSPG2, histF, histnψ, pr_nmAPGSPG2 = nmAPGSPG2(F, ∇f, proxα, x₀, α₀, 0.8, 10^-4, k_max; ϵ=ϵ)
         println("x_nmAPGSPG2:")
         println("k_end, nψ[end], sparsity, f_best: ", length(histnψ), ", ", histnψ[end][2], ", ", 1-norm(x_nmAPGSPG2, 0)/n, ", ", f(x_nmAPGSPG2))
-        push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+        push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
         push!(F_i, F(x_nmAPGSPG2))
     end
 
@@ -308,7 +297,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         x_mAPGLS, histF, histnψ, pr_mAPGLS = mAPGLS(F, ∇f, proxα, x₀, α₀, 2/5, 10^-4, k_max; ϵ=ϵ)
         println("x_mAPGLS:")
         println("k_end, nψ[end], sparsity, f_best: ", length(histnψ), ", ", histnψ[end][2], ", ", 1-norm(x_mAPGLS, 0)/n, ", ", f(x_mAPGLS))
-        push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+        push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
         push!(F_i, F(x_mAPGLS))
     end
 
@@ -316,7 +305,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         x_nmAPGLS2, histF, histnψ, pr_nmAPGLS2 = nmAPGLS2(F, ∇f, proxα, x₀, α₀, 2/5, 0.8, 10^-4, k_max; ϵ=ϵ)
         println("x_nmAPGLS2:")
         println("k_end, nψ[end], sparsity, f_best: ", length(histnψ), ", ", histnψ[end][2], ", ", 1-norm(x_nmAPGLS2, 0)/n, ", ", f(x_nmAPGLS2))
-        push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+        push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
         push!(F_i, F(x_nmAPGLS2))
     end
 
@@ -324,7 +313,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         x_PG, histF, histnψ = PG(F, ∇f, Lₖ, x₀, L, k_max; ϵ=ϵ)
         println("x_PG:")
         println("k_end, nψ[end], sparsity, f_best: ", length(histnψ), ", ", histnψ[end][2], ", ", 1-norm(x_PG, 0)/n, ", ", f(x_PG))
-        push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+        push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
         push!(F_i, F(x_PG))
     end
 
@@ -332,7 +321,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         x_FISTA, histF, histnψ = FISTA(F, ∇f, Lₖ, x₀, L, k_max; ϵ=ϵ)
         println("x_FISTA:")
         println("k_end, nψ[end], sparsity, f_best: ", length(histnψ), ", ", histnψ[end][2], ", ", 1-norm(x_FISTA, 0)/n, ", ", f(x_FISTA))
-        push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+        push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
         push!(F_i, F(x_FISTA))
     end
 
@@ -346,7 +335,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         x_IBPGmLS, histF, histnψ, pr_IBPGmLS = IBPGLS(F, ∇f, ℘hλg, α°ₖ, β°ₖ, λ°ₖ, pₖ, x₀, 0.4, 0.35, 0.45, d, 0.1, λₘᵢₙ, k_max; ϵ=ϵ)
         println("x_IBPGmLS:")
         println("k_end, nψ[end], sparsity, f_best: ", length(histnψ), ", ", histnψ[end][2], ", ", 1-norm(x_IBPGmLS, 0)/n, ", ", f(x_IBPGmLS))
-        push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+        push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
         push!(F_i, F(x_IBPGmLS))
     end
 
@@ -355,7 +344,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         x_IBPGmLSL, histF, histnψ, pr_IBPGmLSL = IBPGLS(F, ∇f, ℘hλg, α°ₖ, β°ₖ, λ°ₖL, pₖ, x₀, 0.4, 0.35, 0.45, d, 0.1, λₘᵢₙ, k_max; ϵ=ϵ)
         println("x_IBPGmLSL:")
         println("k_end, nψ[end], sparsity, f_best: ", length(histnψ), ", ", histnψ[end][2], ", ", 1-norm(x_IBPGmLSL, 0)/n, ", ", f(x_IBPGmLSL))
-        push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+        push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
         push!(F_i, F(x_IBPGmLSL))
     end
 
@@ -364,7 +353,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         x_IBPGnmLS, histF, histnψ, pr_IBPGnmLS = IBPGLS(F, ∇f, ℘hλg, α°ₖ, β°ₖ, λ°ₖ, pₖ, x₀, 0.4, 0.35, 0.45, d, 0.1, λₘᵢₙ, k_max; ϵ=ϵ)
         println("x_IBPGnmLS:")
         println("k_end, nψ[end], sparsity, f_best: ", length(histnψ), ", ", histnψ[end][2], ", ", 1-norm(x_IBPGnmLS, 0)/n, ", ", f(x_IBPGnmLS))
-        push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+        push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
         push!(F_i, F(x_IBPGnmLS))
     end
 
@@ -372,7 +361,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         x_IBPGnmLSL, histF, histnψ, pr_IBPGnmLSL = IBPGLS(F, ∇f, ℘hλg, α°ₖ, β°ₖ, λ°ₖL, pₖ, x₀, 0.4, 0.35, 0.45, d, 0.1, λₘᵢₙ, k_max; ϵ=ϵ)
         println("x_IBPGnmLSL:")
         println("k_end, nψ[end], sparsity, f_best: ", length(histnψ), ", ", histnψ[end][2], ", ", 1-norm(x_IBPGnmLSL, 0)/n, ", ", f(x_IBPGnmLSL))
-        push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+        push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
         push!(F_i, F(x_IBPGnmLSL))
     end
 
@@ -388,7 +377,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         x_newAPG_vs, histF, histnψ, pr_newAPG_vs = newAPG_vs(F, h, ∇f, Tλ, γ, Q, E, x₀, λ₁, 0.99, 0.95, 10^4, 0.8, k_max; ϵ=ϵ)
         println("x_newAPG_vs:")
         println("k_end, nψ[end], sparsity, f_best: ", length(histnψ), ", ", histnψ[end][2], ", ", 1-norm(x_newAPG_vs, 0)/n, ", ", f(x_newAPG_vs))
-        push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+        push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
         push!(F_i, F(x_newAPG_vs))
     end
 
@@ -396,7 +385,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         x_newAPG_vs_x_2, histF, histnψ, pr_newAPG_vs_x_2 = newAPG_vs_x_2(F, h, ∇f, Tλ, γ, Q, E, x₀, λ₁, 0.99, 0.95, 10^4, 0.8, k_max; ϵ=ϵ)
         println("x_newAPG_vs_x_2:")
         println("k_end, nψ[end], sparsity, f_best: ", length(histnψ), ", ", histnψ[end][2], ", ", 1-norm(x_newAPG_vs_x_2, 0)/n, ", ", f(x_newAPG_vs_x_2))
-        push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+        push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
         push!(F_i, F(x_newAPG_vs_x_2))
     end
 
@@ -404,9 +393,9 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         x_newAPG_vs_y_2, histF, histnψ, pr_newAPG_vs_y_2 = newAPG_vs_y_2(F, h, ∇f, Tλ, γ, Q, E, x₀, λ₁, 0.99, 0.95, 10^4, 0.8, k_max; ϵ=ϵ)
         println("x_newAPG_vs_y_2:")
         println("k_end, nψ[end], sparsity, f_best: ", length(histnψ), ", ", histnψ[end][2], ", ", 1-norm(x_newAPG_vs_y_2, 0)/n, ", ", f(x_newAPG_vs_y_2))
-        push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+        push!(T_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
         push!(F_i, F(x_newAPG_vs_y_2))
     end
 
-    return T_hist_i, F_i, pr_i, gr_i
+    return T_i, F_i, pr_i, gr_i
 end

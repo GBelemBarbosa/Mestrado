@@ -24,6 +24,8 @@ function nmBBadp2(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Arra
         if Φx+αₖ*γ*nsₖ/2<=Φ_r
             p+=1
         else
+            p=0
+            
             while true
                 αₖ*=ρ
 
@@ -40,8 +42,6 @@ function nmBBadp2(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Arra
                 nsₖ=sₖ'sₖ
 
                 if Φx+αₖ*γ*nsₖ/2<=min(Φ_r, Φ_max) 
-                    p=0
-
                     break
                 end
             end
