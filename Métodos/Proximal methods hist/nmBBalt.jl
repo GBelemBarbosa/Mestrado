@@ -1,4 +1,4 @@
-function nmBBa(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:Number}, α₀:: Number, ρ:: Number, γ:: Number, αmin:: Number, αmax:: Number, M:: Int64, k_max:: Int64; ϵ=eps(), p=Inf) 
+function nmBBalt(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:Number}, α₀:: Number, ρ:: Number, γ:: Number, αmin:: Number, αmax:: Number, M:: Int64, k_max:: Int64; ϵ=eps(), p=Inf) 
     start=time()
     x_best=x_=x=x₀
     ∂fx_=∂fx=∂f(x)
@@ -29,7 +29,7 @@ function nmBBa(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<
 
             αₖ*=ρ
 
-            if isnan(αₖ) || αₖ<αmin #?
+            if isnan(αₖ) || αₖ<αmin 
                 return x_best, histF, histnψ, pr
             end
         end

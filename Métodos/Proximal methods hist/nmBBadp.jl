@@ -1,19 +1,17 @@
-function nmBB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:Number}, α₀:: Number, ρ:: Number, γ:: Number, αmin:: Number, αmax:: Number, M:: Int64, k_max:: Int64; ϵ=eps(), p=Inf) 
+function nmBBadp(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:Number}, α₀:: Number, ρ:: Number, γ:: Number, αmin:: Number, αmax:: Number, L:: Int64, k_max:: Int64; ϵ=eps(), p=Inf) 
     start=time()
     x_best=x_=x=x₀
     ∂fx_=∂fx=∂f(x)
-    Φ_best=Φx=Φ(x₀)
+    Φ_c=Φ_best=Φx=Φ(x₀)
+    Φ_r=Inf
     nsₖ=αₖ=α₀
     sₖ=zeros(Float64, length(x))
-    last_M=[Φx for i=1:M]
     histnψ=Tuple{Float64, Float64}[]
-    pr=0
-    histF=[(time()-start, last_M[begin])]
+    l=pr=0
+    histF=[(time()-start, Φx)]
     
     k=1
     while true
-        max_M=maximum(last_M)
-
         while true
             x=pαₖ(αₖ, x_, ∂fx)
 
@@ -23,7 +21,7 @@ function nmBB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:
             sₖ=x.-x_
             nsₖ=sₖ'sₖ
 
-            if Φx+αₖ*γ*nsₖ/2<=max_M 
+            if Φx+αₖ*γ*nsₖ/2<=Φ_r 
                 break
             end
 
@@ -37,7 +35,17 @@ function nmBB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:
 
         if Φ_best>Φx
             x_best=x
-            Φ_best=Φx
+            Φ_best=Φ_c=Φx
+            l=0
+        else
+            Φ_c=max(Φ_c, Φx)
+            l+=1
+            
+            if l==L
+                Φ_r=Φ_c 
+                Φ_c=Φx
+                l=0
+            end
         end
 
         t1=time()
@@ -52,8 +60,6 @@ function nmBB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:
         end
         k+=1
 
-        popfirst!(last_M)
-        push!(last_M, Φx)
         x_=x
         αₖ=min(αmax, max(αmin, nsₖ/(sₖ'*(∂fx.-∂fx_))))
     end 

@@ -2,7 +2,10 @@ include("../Métodos/Proximal methods hist/BB.jl")
 include("../Métodos/Proximal methods hist/nmBB.jl")
 include("../Métodos/Proximal methods hist/nmBBf.jl")
 include("../Métodos/Proximal methods hist/nmBBd.jl")
-include("../Métodos/Proximal methods hist/nmBBa.jl")
+include("../Métodos/Proximal methods hist/nmBBalt.jl")
+include("../Métodos/Proximal methods hist/nmBBadp.jl")
+include("../Métodos/Proximal methods hist/nmBBadp2.jl")
+include("../Métodos/Proximal methods hist/CBB.jl")
 include("../Métodos/Proximal methods hist/NPGLSHZd.jl")
 include("../Métodos/Proximal methods hist/ANSPG.jl")
 include("../Métodos/Proximal methods hist/ANSPGf.jl")
@@ -44,22 +47,18 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         at = findfirst(x->x=="NSPG", methods)
         
         for i=at+1:length(methods)
+            m = 5
+            ρ = 1/2
+            γ = 0.01
+
             if occursin("m = ", methods[i]) 
-                m = parse(Int64, methods[i][5:end])
-                ρ = 1/2
-                γ = 0.01
+                m = parse(Int64, methods[i][findfirst("=", methods[i])[1]+2:end])
             elseif occursin("ρ = ", methods[i])
-                m = 5
-                ρ = parse(Float64, methods[i][5:end])
-                γ = 0.01
+                ρ = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
             elseif occursin("γ = ", methods[i])
-                m = 5
-                ρ = 1/2
-                γ = parse(Float64, methods[i][5:end])
+                γ = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
             elseif occursin("-", methods[i])
-                m = 5
-                ρ = 1/2
-                γ = 0.01
+                continue
             else
                 break
             end
@@ -68,7 +67,7 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
             elseif occursin("d", methods[i])
                 NSPG = nmBBd
             elseif occursin("a", methods[i])
-                NSPG = nmBBa
+                NSPG = nmBBalt
             else
                 NSPG = nmBB
             end
@@ -83,30 +82,132 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         end
     end
 
+    if "NSPGadp"∈methods
+        at = findfirst(x->x=="NSPGadp", methods)
+        
+        for i=at+1:length(methods)
+            L = 5
+            ρ = 1/2
+            γ = 0.01
+
+            if occursin("L = ", methods[i]) 
+                L = parse(Int64, methods[i][findfirst("=", methods[i])[1]+2:end])
+            elseif occursin("ρ = ", methods[i])
+                ρ = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
+            elseif occursin("γ = ", methods[i])
+                γ = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
+            elseif occursin("-", methods[i])
+            else
+                break
+            end
+
+            x_NSPGadp, histF, histnψ, pr_NSPGadp = nmBBadp(F, ∇f, pαₖ, x₀, α₀, ρ, γ, α₀/1000, 10^30, L, k_max; ϵ=ϵ)
+            println("x_NSPGadp ("*methods[i]*")")
+            println("pr, gr, nψ[end], sparsity, f_best: ", pr_NSPGadp+Inf*(histnψ[end][2]>=ϵ), ", ", length(histnψ)+Inf*(histnψ[end][2]>=ϵ), ", ", histnψ[end][2], ", ", 1-norm(x_NSPGadp, 0)/n, ", ", f(x_NSPGadp))
+            push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+            push!(F_i, F(x_NSPGadp))
+            push!(pr_i, pr_NSPGadp+Inf*(histnψ[end][2]>=ϵ))
+            push!(gr_i, length(histnψ)+Inf*(histnψ[end][2]>=ϵ))
+        end
+    end
+
+    if "NSPGadp2"∈methods
+        at = findfirst(x->x=="NSPGadp2", methods)
+        
+        for i=at+1:length(methods)
+            m = 5
+            L = 5
+            P = 5
+            ρ = 1/2
+            γ = 0.01
+
+            if occursin("m = ", methods[i]) 
+                m = parse(Int64, methods[i][findfirst("=", methods[i])[1]+2:end])
+            elseif occursin("L = ", methods[i]) 
+                L = parse(Int64, methods[i][findfirst("=", methods[i])[1]+2:end])
+            elseif occursin("P = ", methods[i]) 
+                P = parse(Int64, methods[i][findfirst("=", methods[i])[1]+2:end])
+            elseif occursin("ρ = ", methods[i])
+                ρ = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
+            elseif occursin("γ = ", methods[i])
+                γ = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
+            elseif occursin("-", methods[i])
+                continue
+            else
+                break
+            end
+            γ₁ = m/L
+            γ₂ = P/m
+
+            x_NSPGadp2, histF, histnψ, pr_NSPGadp2 = nmBBadp2(F, ∇f, pαₖ, x₀, α₀, ρ, γ, α₀/1000, 10^30, m, L, P, γ₁, γ₂, k_max; ϵ=ϵ)
+            println("x_NSPGadp2 ("*methods[i]*")")
+            println("pr, gr, nψ[end], sparsity, f_best: ", pr_NSPGadp2+Inf*(histnψ[end][2]>=ϵ), ", ", length(histnψ)+Inf*(histnψ[end][2]>=ϵ), ", ", histnψ[end][2], ", ", 1-norm(x_NSPGadp2, 0)/n, ", ", f(x_NSPGadp2))
+            push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+            push!(F_i, F(x_NSPG))
+            push!(pr_i, pr_NSPG+Inf*(histnψ[end][2]>=ϵ))
+            push!(gr_i, length(histnψ)+Inf*(histnψ[end][2]>=ϵ))
+        end
+    end
+
+    if "CBB"∈methods
+        at = findfirst(x->x=="CBB", methods)
+        
+        for i=at+1:length(methods)
+            m = 5
+            L = 5
+            P = 5
+            N = 4
+            ρ = 1/2
+            γ = 0.01
+
+            if occursin("m = ", methods[i]) 
+                m = parse(Int64, methods[i][findfirst("=", methods[i])[1]+2:end])
+            elseif occursin("L = ", methods[i]) 
+                L = parse(Int64, methods[i][findfirst("=", methods[i])[1]+2:end])
+            elseif occursin("P = ", methods[i]) 
+                P = parse(Int64, methods[i][findfirst("=", methods[i])[1]+2:end])
+            elseif occursin("N = ", methods[i]) 
+                N = parse(Int64, methods[i][findfirst("=", methods[i])[1]+2:end])
+            elseif occursin("ρ = ", methods[i])
+                ρ = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
+            elseif occursin("γ = ", methods[i])
+                γ = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
+            elseif occursin("θ = ", methods[i])
+                θ  = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
+            elseif occursin("-", methods[i])
+                continue
+            else
+                break
+            end
+            γ₁ = m/L
+            γ₂ = P/m
+
+            x_CBB, histF, histnψ, pr_CBB = CBB(F, ∇f, pαₖ, x₀, α₀, ρ, γ, α₀/1000, 10^30, m, L, P, N, γ₁, γ₂, θ, k_max; ϵ=ϵ)
+            println("x_CBB ("*methods[i]*")")
+            println("pr, gr, nψ[end], sparsity, f_best: ", pr_CBB+Inf*(histnψ[end][2]>=ϵ), ", ", length(histnψ)+Inf*(histnψ[end][2]>=ϵ), ", ", histnψ[end][2], ", ", 1-norm(x_CBB, 0)/n, ", ", f(x_CBB))
+            push!(T_hist_i, histnψ[end][1]+Inf*(histnψ[end][2]>=ϵ))
+            push!(F_i, F(x_NSPG))
+            push!(pr_i, pr_NSPG+Inf*(histnψ[end][2]>=ϵ))
+            push!(gr_i, length(histnψ)+Inf*(histnψ[end][2]>=ϵ))
+        end
+    end
+
     if "NSPGHZ"∈methods
         at = findfirst(x->x=="NSPGHZ", methods)
         
         for i=at+1:length(methods)
-            if occursin("m = ", methods[i]) 
-                ρ = 1/2
-                γ = 0.01
-                η = 0.8
-            elseif occursin("ρ = ", methods[i])
-                ρ = parse(Float64, methods[i][5:end])
-                γ = 0.01
-                η = 0.5
+            ρ = 1/2
+            γ = 0.01
+            η = 0.5
+
+            if occursin("ρ = ", methods[i])
+                ρ = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
             elseif occursin("γ = ", methods[i])
-                ρ = 1/2
-                γ = parse(Float64, methods[i][5:end])
-                η = 0.5
+                γ = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
             elseif occursin("η = ", methods[i])
-                ρ = 1/2
-                γ = 0.01
-                η = parse(Float64, methods[i][5:end])
+                η = parse(Float64, methods[i][findfirst("=", methods[i])[1]+2:end])
             elseif occursin("-", methods[i])
-                ρ = 1/2
-                γ = 0.01
-                η = 0.5
+                continue
             else
                 break
             end
@@ -132,10 +233,14 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         at = findfirst(x->x=="ANSPG", methods)
         
         for i=at+1:length(methods)
-            if occursin("-", methods[i])
-                m = n₂ = 5
-                ρ = τ  = 1/2
-                δ = β  = 0.01
+            m = n₂ = 5
+            ρ = τ  = 1/2
+            δ = β  = 0.01
+
+            if occursin("n =", methods[i])
+                n₂     = parse(Int64, methods[i][findfirst("=", methods[i])[1]+2:end])
+            elseif occursin("-", methods[i])
+                continue
             else
                 break
             end
