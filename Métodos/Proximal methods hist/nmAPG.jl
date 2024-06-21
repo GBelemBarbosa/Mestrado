@@ -56,7 +56,7 @@ function nmAPG(F:: Function, ∂f:: Function, proxα:: Function, x₀:: Array{<:
         end
 
         elapsed=t1-start
-        nψ=norm(∂fx.-∂fx_.+(x_2.-x).*αx_, p)
+        nψ=norm(∂fx.-∂fx_.+(x_2.-x)./αx_, p)
         push!(histF, (elapsed, Fx))
         push!(histnψ, (elapsed, nψ))
         start+=time()-t1

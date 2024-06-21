@@ -12,7 +12,7 @@ include("../Group sparsity/group_sparse_functions.jl")
 include("../Métodos/Proximal methods hist/FISTA.jl")
 include("experiment_performance.jl")
 
-methods = ["NSPG", "-", "NSPGadp2", "M = 6", "M = 10", "M = 20", "M = 40"]
+methods = ["NSPG", "d-"]
 phantom = count(x->occursin("NSPG", x), methods)
 
 const k_max   = 5000
@@ -80,27 +80,27 @@ for at∈At
 end
 deleteat!(methods, At)
 
-#T_hist  = FileIO.load("Experiments/Plots/Performance/data/T_hist_nmSPG_.jld2", "T_hist_nmSPG")
-#F_hist  = FileIO.load("Experiments/Plots/Performance/data/F_hist_nmSPG_.jld2", "F_hist_nmSPG")
-#pr_hist = FileIO.load("Experiments/Plots/Performance/data/pr_hist_nmSPG_.jld2", "pr_hist_nmSPG")
-#gr_hist = FileIO.load("Experiments/Plots/Performance/data/gr_hist_nmSPG_.jld2", "gr_hist_nmSPG")
+T_hist  = FileIO.load("Experiments/Plots/Performance/data/T_hist_ANSPG_n1.jld2", "T_hist_nmSPG")
+F_hist  = FileIO.load("Experiments/Plots/Performance/data/F_hist_ANSPG_n1.jld2", "F_hist_nmSPG")
+pr_hist = FileIO.load("Experiments/Plots/Performance/data/pr_hist_ANSPG_n1.jld2", "pr_hist_nmSPG")
+gr_hist = FileIO.load("Experiments/Plots/Performance/data/gr_hist_ANSPG_n1.jld2", "gr_hist_nmSPG")
 
 pltpr = performance_profile(PlotsBackend(), pr_hist, methods, title="Performance profile of prox calculations")
 plot!(pltpr, dpi=600, legend=:bottomright)
-savefig(pltpr, "Experiments/Plots/Performance/performance_pr_adp2_M_gplus.png")
-FileIO.save("Experiments/Plots/Performance/data/pr_hist_adp2_M_gplus.jld2", "pr_hist_nmSPG", pr_hist)
+savefig(pltpr, "Experiments/Plots/Performance/performance_pr_ANSPG_n.png")
+#FileIO.save("Experiments/Plots/Performance/data/pr_hist_ANSPG_n.jld2", "pr_hist_nmSPG", pr_hist)
 
 pltgr = performance_profile(PlotsBackend(), gr_hist, methods, title="Performance profile of gradient evaluations")
 plot!(pltgr, dpi=600, legend=:bottomright)
-savefig(pltgr, "Experiments/Plots/Performance/performance_gr_adp2_M_gplus.png")
-FileIO.save("Experiments/Plots/Performance/data/gr_hist_adp2_M_gplus.jld2", "gr_hist_nmSPG", gr_hist)
+savefig(pltgr, "Experiments/Plots/Performance/performance_gr_ANSPG_n.png")
+#FileIO.save("Experiments/Plots/Performance/data/gr_hist_ANSPG_n.jld2", "gr_hist_nmSPG", gr_hist)
 
 pltT = performance_profile(PlotsBackend(), T_hist, methods, title="Performance profile of convergence time")
 plot!(pltT, dpi=600, legend=:bottomright)
-savefig(pltT, "Experiments/Plots/Performance/performance_adp2_M_gplus.png")
-FileIO.save("Experiments/Plots/Performance/data/T_hist_adp2_M_gplus.jld2", "T_hist_nmSPG", T_hist)
+savefig(pltT, "Experiments/Plots/Performance/performance_ANSPG_n.png")
+#FileIO.save("Experiments/Plots/Performance/data/T_hist_ANSPG_n.jld2", "T_hist_nmSPG", T_hist)
 
 pltF = performance_profile(PlotsBackend(), F_hist, methods, title="Performance profile of best function value")
 plot!(pltF, dpi=600, legend=:bottomright)
-savefig(pltF, "Experiments/Plots/Performance/performance_F_adp2_M_gplus.png")
-FileIO.save("Experiments/Plots/Performance/data/F_hist_adp2_M_gplus.jld2", "F_hist_nmSPG", F_hist)
+savefig(pltF, "Experiments/Plots/Performance/performance_F_ANSPG_n.png")
+#FileIO.save("Experiments/Plots/Performance/data/F_hist_ANSPG_n.jld2", "F_hist_nmSPG", F_hist)

@@ -1,6 +1,4 @@
 function ANSPG(F:: Function, ∂f:: Function, prox:: Function, x₀:: Array{<:Number}, α₀:: Number, ρ:: Number, δ:: Number, αmin:: Number, αmax:: Number, m:: Int64, γ₀:: Number, τ:: Number, β:: Number, γmin:: Number, γmax:: Number, n:: Int64, k_max:: Int64; ϵ=eps(), p=Inf)
-    t1=time()
-    ∂fx=∂f(x₀)
     start=time()
     maybe=t1-start
     x_best=v=y=z=x_2=x_=x=x₀

@@ -365,10 +365,10 @@ function experiment(f:: Function, h:: Function, F:: Function, ∇f:: Function, L
         push!(F_i, F(x_IBPGnmLSL))
     end
 
-    function γ(k:: Int64, t_:: Number)
-        t=(1+sqrt(1+4*t_^2))/2
+    function γ(k:: Int64, tₖ₋₁:: Number)
+        tₖ=(1+sqrt(1+4*tₖ₋₁^2))/2
 
-        return t, (t_-1)/t
+        return tₖ, (tₖ₋₁-1)/tₖ
     end
     Q(k:: Int64)=0.99^k
     E(k:: Int64)=k^-1.1

@@ -6,8 +6,8 @@ function nmBB(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array{<:
     nsₖ=αₖ=α₀
     sₖ=zeros(Float64, length(x))
     last_M=[Φx for i=1:M]
-    histnψ=Tuple{Float64, Float64}[]
     pr=0
+    histnψ=Tuple{Float64, Float64}[]
     histF=[(time()-start, last_M[begin])]
     
     k=1

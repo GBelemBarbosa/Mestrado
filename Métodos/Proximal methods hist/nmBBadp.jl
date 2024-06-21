@@ -6,8 +6,8 @@ function nmBBadp(Φ:: Function, ∂f:: Function, pαₖ:: Function, x₀:: Array
     Φ_r=Inf
     nsₖ=αₖ=α₀
     sₖ=zeros(Float64, length(x))
-    histnψ=Tuple{Float64, Float64}[]
     l=pr=0
+    histnψ=Tuple{Float64, Float64}[]
     histF=[(time()-start, Φx)]
     
     k=1
